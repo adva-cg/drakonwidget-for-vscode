@@ -11,7 +11,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:drakonwidget.start"
   ],
   "main": "./extension.js",
   "contributes": {
