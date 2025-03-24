@@ -1,20 +1,23 @@
 {
   "name": "drakonwidget-for-vscode",
   "displayName": "Drakonwidget for vscode",
-  "description": "Редактор дракон-схем",
+  "description": "Расширение для работы с диаграммами Drakon в VS Code",
   "version": "0.0.1",
+  "publisher": "Vitaly Adadurov",
   "engines": {
     "vscode": "^1.98.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:drakonwidget.start"
+  ],
   "main": "./extension.js",
   "contributes": {
     "commands": [{
-      "command": "drakonwidget-for-vscode.helloWorld",
-      "title": "Hello World"
+      "command": "drakonwidget.start",
+      "title": "Open DrakonWidget"
     }]
   },
   "scripts": {
