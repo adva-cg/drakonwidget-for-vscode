@@ -1,0 +1,49 @@
+{
+    "name": "ar12",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "74",
+            "body": [
+                {
+                    "id": "74",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "4",
+                            "content": {
+                                "operator": "or",
+                                "left": "3",
+                                "right": "5"
+                            },
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "68",
+                                    "type": "action",
+                                    "content": "4"
+                                },
+                                {
+                                    "id": "arrow-stub-74",
+                                    "type": "loopend",
+                                    "start": "74"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+Procedure "06. Багровый"
+
+Algorithm:
+If 3
+    4
+
+Else
+    5
+
+End of procedure

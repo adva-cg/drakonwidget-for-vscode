@@ -1,0 +1,29 @@
+Procedure "Find pointing nodes"
+
+Algorithm:
+Start with an empty list
+
+If node.prev
+    For each id in node.prev
+        get the prev node by id
+
+        If prev node is poisoned
+            break
+        Else
+            If The parent loop of prev node == parent loop
+                add prev node to list
+
+                If list length > 10
+                    If extra check
+                        fine
+
+                    Else
+                        for each hair
+                            raise the hair
+
+                            If not (raised?)
+                                break
+                    break
+Return the list
+
+End of procedure

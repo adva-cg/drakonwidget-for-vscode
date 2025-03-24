@@ -1,0 +1,16 @@
+Procedure "10. Розовый"
+
+Algorithm:
+If 3
+    If 4
+        6
+
+    Else
+        7
+
+Else
+    5
+
+    7
+
+End of procedure

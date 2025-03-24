@@ -1,0 +1,25 @@
+Procedure "Comments"
+
+Algorithm:
+If Choose color == red
+    Insertion one
+
+    Red color chosen
+
+Else
+    If Choose color == green
+        Insertion two
+
+        Green color chosen
+
+    Else
+        If not (Choose color == blue)
+            Error:
+            Unexpected case value
+            Choose color
+
+        Insertion three
+
+        Blue color chosen
+
+End of procedure

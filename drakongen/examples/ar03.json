@@ -1,0 +1,44 @@
+{
+    "name": "ar03",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "20",
+            "body": [
+                {
+                    "id": "20",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "4",
+                            "content": {
+                                "operator": "and",
+                                "left": "3",
+                                "right": "5"
+                            },
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "arrow-stub-20",
+                                    "type": "loopend",
+                                    "start": "20"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

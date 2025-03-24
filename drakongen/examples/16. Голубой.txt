@@ -1,0 +1,13 @@
+Procedure "16. Голубой"
+
+Algorithm:
+If 3
+    If not (4)
+        5
+
+        6
+
+Else
+    6
+
+End of procedure

@@ -1,0 +1,19 @@
+Procedure "18. Стальной"
+
+Algorithm:
+If 3
+    If 4
+        If not (5)
+            8
+
+    Else
+        7
+
+        8
+
+Else
+    6
+
+    8
+
+End of procedure

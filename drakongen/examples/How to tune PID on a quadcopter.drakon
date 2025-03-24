@@ -1,0 +1,488 @@
+{
+    "items": {
+        "8": {
+            "type": "branch",
+            "branchId": 1,
+            "one": "824",
+            "content": "Prepare"
+        },
+        "10": {
+            "type": "branch",
+            "branchId": 11,
+            "one": "787",
+            "content": "I on Yaw"
+        },
+        "16": {
+            "type": "end"
+        },
+        "32": {
+            "type": "action",
+            "one": "35",
+            "content": "Backup your current PID values"
+        },
+        "35": {
+            "type": "action",
+            "one": "38",
+            "content": "Switch to Rate Mode (aka Acro Mode)"
+        },
+        "38": {
+            "type": "action",
+            "one": "239",
+            "content": "Make sure your quadcopter’s CG (centre of gravity) is right in the middle"
+        },
+        "41": {
+            "type": "comment",
+            "one": "32",
+            "content": "Remember, PID tuning is subjective!"
+        },
+        "70": {
+            "type": "branch",
+            "branchId": 3,
+            "one": "87",
+            "content": "P on Roll"
+        },
+        "80": {
+            "type": "action",
+            "one": "90",
+            "content": "Cruise around"
+        },
+        "87": {
+            "type": "comment",
+            "one": "213",
+            "content": "With good P, the control should feel precise"
+        },
+        "90": {
+            "type": "action",
+            "one": "93",
+            "content": "Do some sharp turns"
+        },
+        "93": {
+            "type": "question",
+            "flag1": 0,
+            "one": "131",
+            "two": "153",
+            "content": "Does the quad dip to one side (like a wobble)?"
+        },
+        "131": {
+            "type": "question",
+            "flag1": 0,
+            "one": "168",
+            "two": "153",
+            "content": "Do slow oscillations occur?"
+        },
+        "150": {
+            "type": "comment",
+            "one": "221",
+            "content": "When P is right, you should get minimum oscillations when doing sharp turns."
+        },
+        "153": {
+            "type": "action",
+            "one": "213",
+            "content": "Increase P on Roll"
+        },
+        "168": {
+            "type": "question",
+            "flag1": 0,
+            "one": "150",
+            "two": "197",
+            "content": "Do fast oscilations occur?"
+        },
+        "197": {
+            "type": "action",
+            "one": "213",
+            "content": "Decrease P on Roll"
+        },
+        "213": {
+            "type": "arrow-loop",
+            "one": "80",
+            "content": ""
+        },
+        "221": {
+            "type": "branch",
+            "branchId": 4,
+            "one": "303",
+            "content": "P on Pitch"
+        },
+        "239": {
+            "type": "branch",
+            "branchId": 2,
+            "one": "251",
+            "content": "Set initial values"
+        },
+        "251": {
+            "type": "insertion",
+            "one": "254",
+            "content": "Set RC rates, super rates and expo"
+        },
+        "254": {
+            "type": "action",
+            "one": "257",
+            "content": "Set default PID values"
+        },
+        "257": {
+            "type": "action",
+            "one": "70",
+            "content": "Lower all the values by at least half"
+        },
+        "260": {
+            "type": "action",
+            "one": "263",
+            "content": "Do a split-S (where you move both the throttle and pitch sticks)"
+        },
+        "263": {
+            "type": "action",
+            "one": "266",
+            "content": "Increase throttle to recover, pay attention to the pitch movement"
+        },
+        "266": {
+            "type": "question",
+            "flag1": 0,
+            "one": "276",
+            "two": "286",
+            "content": "Does the quad pitch up more than it should?"
+        },
+        "276": {
+            "type": "question",
+            "flag1": 0,
+            "one": "323",
+            "two": "289",
+            "content": "Do fast oscilations occur?"
+        },
+        "286": {
+            "type": "action",
+            "one": "303",
+            "content": "Increase P on Pitch"
+        },
+        "289": {
+            "type": "action",
+            "one": "303",
+            "content": "Decrease P on Pitch"
+        },
+        "303": {
+            "type": "arrow-loop",
+            "one": "260",
+            "content": ""
+        },
+        "320": {
+            "type": "comment",
+            "one": "342",
+            "content": "The quad feels very responsive and nimble"
+        },
+        "323": {
+            "type": "question",
+            "flag1": 0,
+            "one": "320",
+            "two": "289",
+            "content": "Are the motors making a twitching sound?"
+        },
+        "342": {
+            "type": "branch",
+            "branchId": 5,
+            "one": "374",
+            "content": "TPA"
+        },
+        "352": {
+            "type": "question",
+            "flag1": 0,
+            "one": "382",
+            "two": "365",
+            "content": "Does the quad get oscillations with high throttle?"
+        },
+        "362": {
+            "type": "action",
+            "one": "352",
+            "content": "Do a punch out"
+        },
+        "365": {
+            "type": "action",
+            "one": "368",
+            "content": "Increase TPA"
+        },
+        "368": {
+            "type": "comment",
+            "one": "374",
+            "content": "Do not increase TPA higher than 0.4"
+        },
+        "374": {
+            "type": "arrow-loop",
+            "one": "362",
+            "content": ""
+        },
+        "382": {
+            "type": "branch",
+            "branchId": 6,
+            "one": "451",
+            "content": "D on Roll and Pitch"
+        },
+        "392": {
+            "type": "action",
+            "one": "395",
+            "content": "Do aggressive maneuvers like flips and rolls"
+        },
+        "395": {
+            "type": "question",
+            "flag1": 0,
+            "one": "408",
+            "two": "405",
+            "content": "Does the quad overshoot at the end of the move then bounce back?"
+        },
+        "405": {
+            "type": "action",
+            "one": "451",
+            "content": "Increase D on the affected axis"
+        },
+        "408": {
+            "type": "question",
+            "flag1": 0,
+            "one": "427",
+            "two": "405",
+            "content": "Does prop wash happen? (oscillation when you descent)"
+        },
+        "427": {
+            "type": "question",
+            "flag1": 0,
+            "one": "465",
+            "two": "437",
+            "content": "Do fast oscillation happen at the end of a roll or flip?"
+        },
+        "437": {
+            "type": "action",
+            "one": "451",
+            "content": "Decrease D on the affected axis"
+        },
+        "451": {
+            "type": "arrow-loop",
+            "one": "392",
+            "content": ""
+        },
+        "465": {
+            "type": "comment",
+            "one": "468",
+            "content": "Note that to eliminate bounces at the end of a flip or roll, you can also use Setpoint Transition"
+        },
+        "468": {
+            "type": "branch",
+            "branchId": 7,
+            "one": "536",
+            "content": "I on Roll"
+        },
+        "478": {
+            "type": "action",
+            "one": "481",
+            "content": "Bank your quad to the left and right"
+        },
+        "481": {
+            "type": "action",
+            "one": "484",
+            "content": "Release stick"
+        },
+        "484": {
+            "type": "question",
+            "flag1": 1,
+            "one": "501",
+            "two": "553",
+            "content": "Is the quad holding the angle well?"
+        },
+        "501": {
+            "type": "question",
+            "flag1": 0,
+            "one": "559",
+            "two": "550",
+            "content": "Does the quad have stiff, robotic feeling?"
+        },
+        "536": {
+            "type": "arrow-loop",
+            "one": "478",
+            "content": ""
+        },
+        "550": {
+            "type": "action",
+            "one": "536",
+            "content": "Decrease I on Roll"
+        },
+        "553": {
+            "type": "action",
+            "one": "536",
+            "content": "Increase I on Roll"
+        },
+        "556": {
+            "type": "comment",
+            "one": "578",
+            "content": "You might want to increase I a bit more on a windy day"
+        },
+        "559": {
+            "type": "question",
+            "flag1": 0,
+            "one": "556",
+            "two": "550",
+            "content": "Does the quad have oscilations?"
+        },
+        "578": {
+            "type": "branch",
+            "branchId": 8,
+            "one": "594",
+            "content": "I on Pitch"
+        },
+        "588": {
+            "type": "action",
+            "one": "590",
+            "content": "Fly forward, do not increase throttle"
+        },
+        "590": {
+            "type": "question",
+            "flag1": 1,
+            "one": "810",
+            "two": "600",
+            "content": "Does the nose keep the same angle?"
+        },
+        "594": {
+            "type": "arrow-loop",
+            "one": "588",
+            "content": ""
+        },
+        "600": {
+            "type": "action",
+            "one": "594",
+            "content": "Increase I on Pitch"
+        },
+        "666": {
+            "type": "branch",
+            "branchId": 10,
+            "one": "719",
+            "content": "P on Yaw"
+        },
+        "676": {
+            "type": "action",
+            "one": "679",
+            "content": "Spin quickly on the yaw axis"
+        },
+        "679": {
+            "type": "action",
+            "one": "682",
+            "content": "Stop spinning"
+        },
+        "682": {
+            "type": "question",
+            "flag1": 0,
+            "one": "695",
+            "two": "692",
+            "content": "Does the quad dip one side?"
+        },
+        "692": {
+            "type": "action",
+            "one": "719",
+            "content": "Increase P on Yaw"
+        },
+        "695": {
+            "type": "question",
+            "flag1": 0,
+            "one": "733",
+            "two": "705",
+            "content": "Do you get fast oscilations?"
+        },
+        "705": {
+            "type": "action",
+            "one": "719",
+            "content": "Decrease P on Yaw"
+        },
+        "719": {
+            "type": "arrow-loop",
+            "one": "676",
+            "content": ""
+        },
+        "733": {
+            "type": "comment",
+            "one": "10",
+            "content": "When Yaw P is right the spin should be clean and snappy"
+        },
+        "782": {
+            "type": "action",
+            "one": "783",
+            "content": "Fly straight"
+        },
+        "783": {
+            "type": "action",
+            "one": "784",
+            "content": "Make a turn"
+        },
+        "784": {
+            "type": "question",
+            "flag1": 0,
+            "one": "791",
+            "two": "786",
+            "content": "Is there drift, does the quad slide out?"
+        },
+        "786": {
+            "type": "action",
+            "one": "787",
+            "content": "Increase I on Yaw"
+        },
+        "787": {
+            "type": "arrow-loop",
+            "one": "782",
+            "content": ""
+        },
+        "791": {
+            "type": "comment",
+            "one": "16",
+            "content": "Yaw I should not be higher than just enough to prevent drift."
+        },
+        "807": {
+            "type": "text",
+            "left": 470,
+            "top": -25,
+            "width": 200,
+            "height": 40,
+            "content": "DrakonFlow.com",
+            "style": "{\"borderWidth\":0,\"textAlign\":\"center\",\"lineWidth\":0,\"font\":\"18px Arimo\"}",
+            "zIndex": 1
+        },
+        "810": {
+            "type": "branch",
+            "branchId": 9,
+            "one": "819",
+            "content": "Anti Gravity Gain"
+        },
+        "814": {
+            "type": "action",
+            "one": "815",
+            "content": "Fly in a straight line"
+        },
+        "815": {
+            "type": "action",
+            "one": "816",
+            "content": "Do some rapid punchouts"
+        },
+        "816": {
+            "type": "question",
+            "flag1": 1,
+            "one": "823",
+            "two": "818",
+            "content": "Does pitch stay at the same angle?"
+        },
+        "818": {
+            "type": "action",
+            "one": "819",
+            "content": "Increase Anti Gravity"
+        },
+        "819": {
+            "type": "arrow-loop",
+            "one": "814",
+            "content": ""
+        },
+        "823": {
+            "type": "comment",
+            "one": "666",
+            "content": "3 to 5 is a good range"
+        },
+        "824": {
+            "type": "input",
+            "content": "<p>To the motor sound</p>",
+            "one": "41",
+            "secondary": "<p>Listen</p>"
+        }
+    },
+    "params": "By Oscar Liang",
+    "type": "drakon",
+    "id": "How to tune PID on a quadcopter.drakon"
+}

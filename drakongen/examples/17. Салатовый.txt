@@ -1,0 +1,10 @@
+Procedure "17. Салатовый"
+
+Algorithm:
+If 3
+    If 4 and 5
+        Pass
+Else
+    6
+
+End of procedure

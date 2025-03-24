@@ -1,0 +1,137 @@
+{
+    "name": "Find pointing nodes",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "3",
+            "body": [
+                {
+                    "id": "3",
+                    "type": "action",
+                    "content": "<p>Start with an empty list</p>"
+                },
+                {
+                    "type": "question",
+                    "id": "11",
+                    "content": "<p>node.prev</p>",
+                    "yes": [
+                        {
+                            "id": "5",
+                            "type": "loop",
+                            "content": "<p>For each id in node.prev</p>",
+                            "body": [
+                                {
+                                    "id": "7",
+                                    "type": "action",
+                                    "content": "<p>get the prev node by id</p>"
+                                },
+                                {
+                                    "type": "question",
+                                    "id": "12",
+                                    "content": "<p>prev node is poisoned</p>",
+                                    "yes": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "type": "question",
+                                            "id": "8",
+                                            "content": "<p>The parent loop of prev node == parent loop</p>",
+                                            "yes": [
+                                                {
+                                                    "id": "9",
+                                                    "type": "action",
+                                                    "content": "<p>add prev node to list</p>"
+                                                },
+                                                {
+                                                    "type": "question",
+                                                    "id": "10",
+                                                    "content": "<p>list length &gt; 10</p>",
+                                                    "yes": [
+                                                        {
+                                                            "type": "question",
+                                                            "id": "13",
+                                                            "content": "<p>extra check</p>",
+                                                            "yes": [
+                                                                {
+                                                                    "id": "14",
+                                                                    "type": "action",
+                                                                    "content": "<p>fine</p>"
+                                                                }
+                                                            ],
+                                                            "no": [
+                                                                {
+                                                                    "id": "16",
+                                                                    "type": "loop",
+                                                                    "content": "<p>for each hair</p>",
+                                                                    "body": [
+                                                                        {
+                                                                            "id": "17",
+                                                                            "type": "action",
+                                                                            "content": "<p>raise the hair</p>"
+                                                                        },
+                                                                        {
+                                                                            "type": "question",
+                                                                            "id": "18",
+                                                                            "content": "<p>raised?</p>",
+                                                                            "yes": [
+                                                                                {
+                                                                                    "id": "15",
+                                                                                    "type": "loopend",
+                                                                                    "start": "16"
+                                                                                }
+                                                                            ],
+                                                                            "no": [
+                                                                                {
+                                                                                    "type": "break"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "break"
+                                                        }
+                                                    ],
+                                                    "no": [
+                                                        {
+                                                            "id": "4",
+                                                            "type": "loopend",
+                                                            "start": "5"
+                                                        }
+                                                    ]
+                                                }
+                                            ],
+                                            "no": [
+                                                {
+                                                    "id": "4",
+                                                    "type": "loopend",
+                                                    "start": "5"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "no": []
+                },
+                {
+                    "id": "6",
+                    "type": "action",
+                    "content": "<p>Return the list</p>"
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+It's a nice function
+
+Parameters:
+
+- hello
+- bye
+- foo
+
+
+Procedure "tmp"
+
+Algorithm:
+Call subroutine: "Branch1"
+
+Subroutine: "Branch1"
+If AAAAAAA
+    Call subroutine "Branch2"
+Else
+    Call subroutine "Exit"
+End of subroutine
+
+Subroutine: "Branch2"
+If BBBB
+    CCCC
+
+Call subroutine "Exit"
+End of subroutine
+
+Subroutine: "Exit"
+End of subroutine
+End of procedure
+
+line one
+line two
+line three

@@ -1,0 +1,6 @@
+Procedure "03. Серый"
+
+Algorithm:
+If 3
+    Pass
+End of procedure

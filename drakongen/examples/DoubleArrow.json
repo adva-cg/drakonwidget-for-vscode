@@ -1,0 +1,86 @@
+{
+    "name": "DoubleArrow",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "15",
+            "body": [
+                {
+                    "id": "15",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "5",
+                            "content": "<p>CCCCC</p>",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "question",
+                                    "id": "7",
+                                    "content": "<p>EEEEEE</p>",
+                                    "yes": [
+                                        {
+                                            "id": "17",
+                                            "type": "action",
+                                            "content": "<p>qqq</p>"
+                                        },
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "14",
+                                            "type": "loop",
+                                            "content": "",
+                                            "body": [
+                                                {
+                                                    "type": "question",
+                                                    "id": "13",
+                                                    "content": "<p>JJJJ</p>",
+                                                    "yes": [
+                                                        {
+                                                            "type": "break"
+                                                        }
+                                                    ],
+                                                    "no": [
+                                                        {
+                                                            "id": "arrow-stub-14",
+                                                            "type": "loopend",
+                                                            "start": "14"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "arrow-stub-15",
+                                            "type": "loopend",
+                                            "start": "15"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "16",
+                    "type": "action",
+                    "content": "<p>KKKK</p>"
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+Procedure "Arrow - double exit"
+
+Algorithm:
+Loop forever
+    If CCCCC
+        break
+    Else
+        If EEEEEE
+            HHHHH
+
+            break
+KKKK
+
+End of procedure

@@ -1,0 +1,28 @@
+{
+    "type": "drakon",
+    "items": {
+        "2": {
+            "type": "end"
+        },
+        "4": {
+            "type": "action",
+            "one": "7",
+            "content": "3"
+        },
+        "7": {
+            "type": "action",
+            "one": "10",
+            "content": "4"
+        },
+        "10": {
+            "type": "action",
+            "one": "2",
+            "content": "5"
+        },
+        "13": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4"
+        }
+    }
+}

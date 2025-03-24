@@ -1,0 +1,189 @@
+By Oscar Liang
+
+Procedure "How to tune PID on a quadcopter"
+
+Algorithm:
+Call subroutine: "Prepare"
+
+Subroutine: "Prepare"
+Listen
+To the motor sound
+
+Remember, PID tuning is subjective!
+
+Backup your current PID values
+
+Switch to Rate Mode (aka Acro Mode)
+
+Make sure your quadcopter’s CG (centre of gravity) is right in the middle
+
+Call subroutine "Set initial values"
+End of subroutine
+
+Subroutine: "Set initial values"
+Set RC rates, super rates and expo
+
+Set default PID values
+
+Lower all the values by at least half
+
+Call subroutine "P on Roll"
+End of subroutine
+
+Subroutine: "P on Roll"
+With good P, the control should feel precise
+
+Loop forever
+    Cruise around
+
+    Do some sharp turns
+
+    If not (Does the quad dip to one side (like a wobble)?) and not (Do slow oscillations occur?)
+        If Do fast oscilations occur?
+            Decrease P on Roll
+
+        Else
+            break
+    Else
+        Increase P on Roll
+
+When P is right, you should get minimum oscillations when doing sharp turns.
+
+Call subroutine "P on Pitch"
+End of subroutine
+
+Subroutine: "P on Pitch"
+Loop forever
+    Do a split-S (where you move both the throttle and pitch sticks)
+
+    Increase throttle to recover, pay attention to the pitch movement
+
+    If Does the quad pitch up more than it should?
+        Increase P on Pitch
+
+    Else
+        If not (Do fast oscilations occur?) and not (Are the motors making a twitching sound?)
+            break
+        Else
+            Decrease P on Pitch
+
+The quad feels very responsive and nimble
+
+Call subroutine "TPA"
+End of subroutine
+
+Subroutine: "TPA"
+Loop forever
+    Do a punch out
+
+    If Does the quad get oscillations with high throttle?
+        Increase TPA
+
+        Do not increase TPA higher than 0.4
+
+    Else
+        break
+Call subroutine "D on Roll and Pitch"
+End of subroutine
+
+Subroutine: "D on Roll and Pitch"
+Loop forever
+    Do aggressive maneuvers like flips and rolls
+
+    If not (Does the quad overshoot at the end of the move then bounce back?) and not (Does prop wash happen? (oscillation when you descent))
+        If Do fast oscillation happen at the end of a roll or flip?
+            Decrease D on the affected axis
+
+        Else
+            break
+    Else
+        Increase D on the affected axis
+
+Note that to eliminate bounces at the end of a flip or roll, you can also use Setpoint Transition
+
+Call subroutine "I on Roll"
+End of subroutine
+
+Subroutine: "I on Roll"
+Loop forever
+    Bank your quad to the left and right
+
+    Release stick
+
+    If Is the quad holding the angle well?
+        If not (Does the quad have stiff, robotic feeling?) and not (Does the quad have oscilations?)
+            break
+        Else
+            Decrease I on Roll
+
+    Else
+        Increase I on Roll
+
+You might want to increase I a bit more on a windy day
+
+Call subroutine "I on Pitch"
+End of subroutine
+
+Subroutine: "I on Pitch"
+Loop forever
+    Fly forward, do not increase throttle
+
+    If Does the nose keep the same angle?
+        break
+    Else
+        Increase I on Pitch
+
+Call subroutine "Anti Gravity Gain"
+End of subroutine
+
+Subroutine: "Anti Gravity Gain"
+Loop forever
+    Fly in a straight line
+
+    Do some rapid punchouts
+
+    If Does pitch stay at the same angle?
+        break
+    Else
+        Increase Anti Gravity
+
+3 to 5 is a good range
+
+Call subroutine "P on Yaw"
+End of subroutine
+
+Subroutine: "P on Yaw"
+Loop forever
+    Spin quickly on the yaw axis
+
+    Stop spinning
+
+    If Does the quad dip one side?
+        Increase P on Yaw
+
+    Else
+        If Do you get fast oscilations?
+            Decrease P on Yaw
+
+        Else
+            break
+When Yaw P is right the spin should be clean and snappy
+
+Call subroutine "I on Yaw"
+End of subroutine
+
+Subroutine: "I on Yaw"
+Loop forever
+    Fly straight
+
+    Make a turn
+
+    If Is there drift, does the quad slide out?
+        Increase I on Yaw
+
+    Else
+        break
+Yaw I should not be higher than just enough to prevent drift.
+
+End of subroutine
+End of procedure

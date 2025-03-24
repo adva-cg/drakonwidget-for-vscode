@@ -1,0 +1,139 @@
+Write a JavaScript module in CommonJs format that impements function drakonToPrompt.
+Export the function.
+
+The function arguments:
+
+- drakonJson: a JSON string that contains a drakon-graph.
+- filename: the full filename where drakonJson was read from.
+
+The function returns a textual representation of the drakon-graph.
+
+Here is the structure of the drakon-graph.
+
+The "items" property contains a map. The keys are node ids. The values are nodes themselves.
+The first node is the one that has its "type" property equal to "branch" with the lowest "branchId".
+
+The function's algorithm:
+
+- Parse the JSON in drakonJson. If there is an error, add the filename to the description.
+- Start with an empty output list of strings.
+- Add a string: Procedure "<name>". The <name> is the base filename without extension.
+- Add an empty string.
+- If the drakon-graph object has "params" property, add a string: Description:
+  Then, convert the HTML value of the "params" property into a string and add that string to the list.
+  Add an empty string.
+- Build the array of work nodes.
+- Add a string: The algorithm of the procedure is expressed as a graph of steps.
+- Add a string: The id of the first step is <the id of the first node in the array of work nodes>
+- Add an empty string.
+- For each work node, print it to the output list.
+- Add a string: End of procedure.
+- Join the list of strings with the end-of-line separator.
+- Return the result string.
+
+How to build the array of work nodes.
+- Preprocess the select nodes
+- Preprocess the insertion nodes
+- Create an empty set of visited nodes.
+- Create an empty array of work nodes.
+- Call the processBranch procedure with this set, the first node, and the output nodes.
+
+How to preprocess the insertion nodes:
+- For each node in the drakon-graph where node.type === "insertion"
+    Set node.type = "action"
+
+How to preprocess the select nodes:
+- For each node in the drakon-graph where node.type === "select"
+    - build the array of cases and save it in the "cases" property of the node.
+
+How to build the array of cases of a "select" node:
+- Create an empty array
+- Call the visitSelect procedure with the this array and the id stored in the node.one property.
+
+visitSelect procedure takes a node id and the output array as arguments.
+Algorithm of visitSelect procedure:
+- if node id is empty, exit
+- get the node by id
+- add an object to the output array: {value:node.content, next:node.one}
+- recursively call visitSelect with node.two
+
+
+The processBranch procedure traverses the drakon-graph this way:
+- processBranch re-uses the set of visited nodes in recursion
+- If node is in the set of visited nodes, exit.
+- Add the node to the visited nodes.
+- Write the node id in "id" property of the node object.
+- If node.type === "branch", go to the next node.
+- If node.type === "end", exit.
+- If node.type === "comment", go to the next node.
+- If node.type === "arrow-loop":
+    - add the node to the array of work nodes
+    - Go to the next node.
+- If node.type === "action":
+    - if node.content does not have a value, go to the next node.
+    - add the node to the array of work nodes
+    - Go to the next node.
+- if node.type === "question"
+    - If node.content does not have a value, throw an error: A Question icon must have content.
+    - add the node to the array of work nodes
+    - Run processBranch with the node specified in node.one
+    - Run processBranch with the node specified in node.two
+- if node.type === "select"
+    - If node.content does not have a value, throw an error: A Select icon must have content.
+    - add the node to the array of work 
+    - for each item in node.items:
+        - Run processBranch with the node specified in item.next
+- The id of the next node is in the property "one".
+
+How to print a node to the output list of string:
+- If node.type === "action":
+    - if node.content does not have a value, go to the next node.
+    - Add a string: Step id: <node.id>
+    - Convert HTML in node.content into a string and add it to the output list.
+    - Add a string: Next step: <node.one>
+    - Add a string: End of step.
+    - Add an empty string.
+- if node.type === "question"
+    - Add a string: Step id: <node.id>
+    - Convert HTML in node.content into a string and add it to the output list.
+    - Add a string: If yes, next step: the id of the "yes" node.
+    - Add a string: If no, next step: the id of the "no" node.
+    - Add a string: End of step.
+    - Add an empty string.    
+- if node.type === "select"
+    - Add a string: Step id: <node.id>
+    - For each item in node.cases
+        - If item.value is not empty,
+            leftValue = Convert HTML in node.content into a string
+            rightValue = Convert HTML in item.content into a string
+            then, add a string: If <leftValue> = <rightValue>, next step: <item.next>
+        - Otherwise, add a string: Else, next step: <item.next>
+        - If item.value is empty and item is not the last element, throw an error: Only last Case icon can be empty.
+    - Add a string: End of step.
+    - Add an empty string.
+- if node.type === "arrow-loop"
+    - Add a string: Step id: <node.id>
+    - Add a string: Next step: <node.one>
+    - Add a string: End of step.
+    - Add an empty string.
+
+
+In a "question" node, the id of the "yes" node is in "one" property if node.flag1 === 1.
+Otherwise it is in the "two" property.
+
+In a "question" node, the id of the "no" node is in "two" property if node.flag1 === 1.
+Otherwise it is in the "one" property.
+
+When throwing an error, add the filename to the description and the node id if available.
+
+Here is how to convert HTML into string.
+- If the input string is falsish, return an empty string.
+- If the input string does not start and end with HTML tags, return it as it is.
+- Take the text content of each <p> tag into a separate line.
+- Take the text content of each unnumbered list item into a separate line, preceded with a hyphen.
+- Take the text content of each unnumbered list item into a separate line, preceded with the item number.
+- Put an empty line before and after the list.
+- Ignore all other tags.
+
+When generating code, avoid too deeply nested expressions.
+Choose an extra variable over compactness. Prefer readability.

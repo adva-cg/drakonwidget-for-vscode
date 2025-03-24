@@ -1,0 +1,17 @@
+Procedure "ar11"
+
+Algorithm:
+Loop forever
+    If 3 == 4
+        break
+    Else
+        If 3 == 5
+            If 7
+                Pass
+        Else
+            If not (3 == 6)
+                Error:
+                Unexpected case value
+                3
+
+End of procedure

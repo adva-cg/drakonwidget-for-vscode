@@ -1,0 +1,53 @@
+{
+    "items": {
+        "1": {
+            "type": "end"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "15"
+        },
+        "5": {
+            "type": "question",
+            "content": "<p>CCCCC</p>",
+            "one": "16",
+            "two": "7",
+            "flag1": 1
+        },
+        "7": {
+            "type": "question",
+            "content": "<p>EEEEEE</p>",
+            "one": "17",
+            "two": "14",
+            "flag1": 1
+        },
+        "13": {
+            "type": "question",
+            "content": "<p>JJJJ</p>",
+            "one": "15",
+            "two": "14",
+            "flag1": 1
+        },
+        "14": {
+            "type": "arrow-loop",
+            "one": "13"
+        },
+        "15": {
+            "type": "arrow-loop",
+            "one": "5"
+        },
+        "16": {
+            "type": "action",
+            "content": "<p>KKKK</p>",
+            "one": "1"
+        },
+        "17": {
+            "type": "action",
+            "content": "<p>qqq</p>",
+            "one": "16"
+        }
+    },
+    "type": "drakon",
+    "id": "tmp.drakon"
+}

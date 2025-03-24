@@ -1,0 +1,63 @@
+{
+    "name": "13. Салатовый",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "27",
+                            "content": "8",
+                            "yes": [
+                                {
+                                    "id": "11",
+                                    "type": "action",
+                                    "content": "5"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "43",
+                                    "type": "action",
+                                    "content": "9"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "type": "question",
+                            "id": "8",
+                            "content": "4",
+                            "yes": [
+                                {
+                                    "id": "12",
+                                    "type": "action",
+                                    "content": "6"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "13",
+                                    "type": "action",
+                                    "content": "7"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

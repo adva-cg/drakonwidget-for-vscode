@@ -1,0 +1,10 @@
+Procedure "ar04"
+
+Algorithm:
+Loop forever
+    If 3 and 5
+        break
+    Else
+        4
+
+End of procedure

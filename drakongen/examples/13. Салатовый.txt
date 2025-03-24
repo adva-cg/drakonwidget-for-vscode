@@ -1,0 +1,18 @@
+Procedure "13. Салатовый"
+
+Algorithm:
+If 3
+    If 8
+        5
+
+    Else
+        9
+
+Else
+    If 4
+        6
+
+    Else
+        7
+
+End of procedure

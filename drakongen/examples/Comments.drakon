@@ -1,0 +1,81 @@
+{
+    "items": {
+        "1": {
+            "type": "end"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "6"
+        },
+        "3": {
+            "type": "case",
+            "one": "12",
+            "content": "<p>blue</p>"
+        },
+        "4": {
+            "type": "case",
+            "one": "11",
+            "two": "3",
+            "content": "<p>green</p>"
+        },
+        "5": {
+            "type": "case",
+            "one": "10",
+            "two": "4",
+            "content": "<p>red</p>"
+        },
+        "6": {
+            "type": "select",
+            "one": "5",
+            "content": "<p>Choose color</p>"
+        },
+        "7": {
+            "type": "comment",
+            "content": "<p>Red color chosen</p>",
+            "one": "13"
+        },
+        "8": {
+            "type": "comment",
+            "content": "<p>Green color chosen</p>",
+            "one": "14"
+        },
+        "9": {
+            "type": "comment",
+            "content": "<p>Blue color chosen</p>",
+            "one": "15"
+        },
+        "10": {
+            "type": "insertion",
+            "content": "<p>Insertion one</p>",
+            "one": "7"
+        },
+        "11": {
+            "type": "insertion",
+            "content": "<p>Insertion two</p>",
+            "one": "8"
+        },
+        "12": {
+            "type": "insertion",
+            "content": "<p>Insertion three</p>",
+            "one": "9"
+        },
+        "13": {
+            "type": "comment",
+            "content": "",
+            "one": "1"
+        },
+        "14": {
+            "type": "comment",
+            "content": "",
+            "one": "1"
+        },
+        "15": {
+            "type": "comment",
+            "content": "",
+            "one": "1"
+        }
+    },
+    "type": "drakon",
+    "id": "Comments.drakon"
+}

@@ -1,0 +1,47 @@
+Procedure "Adaptive design"
+
+Algorithm:
+If The device type == Large screen
+    Use large background image
+
+    Use grid layout
+
+    Use small UI elements
+
+    Put full main menu
+
+Else
+    If The device type == Laptop
+        Use medium background image
+
+        Use grid layout
+
+        Use small UI elements
+
+        Put full main menu
+
+    Else
+        If The device type == Tablet
+            Use medium background image
+
+            Use plain layout
+
+            Use large UI elements
+
+            Put full main menu
+
+        Else
+            If not (The device type == Phone)
+                Error:
+                Unexpected case value
+                The device type
+
+            Use small background image
+
+            Use plain layout
+
+            Use large UI elements
+
+            Put minimal main menu
+
+End of procedure

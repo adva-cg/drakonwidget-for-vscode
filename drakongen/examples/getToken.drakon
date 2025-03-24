@@ -1,0 +1,76 @@
+{
+    "items": {
+        "1": {
+            "type": "end"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3"
+        },
+        "3": {
+            "type": "action",
+            "content": "<p>Find an existing connection in context.connections by URL</p>",
+            "one": "4"
+        },
+        "4": {
+            "type": "question",
+            "content": "<p>Connection found?</p>",
+            "one": "13",
+            "two": "6",
+            "flag1": 1
+        },
+        "5": {
+            "type": "action",
+            "content": "<p>Try to get an access token using the connection in non-interactive mode.</p>",
+            "one": "8"
+        },
+        "6": {
+            "type": "action",
+            "content": "<p>Create a new MSAL connection object.</p><p>Use the following information to initialize the object:</p><ul><li>context.config.redirectUri is the redirect URI</li><li>context.config.authority is the authority</li><li>context.config.clientId is the client id</li></ul>",
+            "one": "7"
+        },
+        "7": {
+            "type": "action",
+            "content": "<p>Put the connection in context.connections using the URL as the key.</p>",
+            "one": "5"
+        },
+        "8": {
+            "type": "question",
+            "content": "<p>Got exception?</p>",
+            "one": "12",
+            "two": "9",
+            "flag1": 0
+        },
+        "9": {
+            "type": "action",
+            "content": "<p>Get a token in interactive mode.</p>",
+            "one": "10"
+        },
+        "10": {
+            "type": "question",
+            "content": "<p>Did the user cancel the logon?</p>",
+            "one": "12",
+            "two": "11",
+            "flag1": 0
+        },
+        "11": {
+            "type": "action",
+            "content": "<p>Return an empty string</p>",
+            "one": "1"
+        },
+        "12": {
+            "type": "action",
+            "content": "<p>Return the access token</p>",
+            "one": "1"
+        },
+        "13": {
+            "type": "comment",
+            "content": "<p>Some comment</p>",
+            "one": "5"
+        }
+    },
+    "params": "<p>Obtains an access token. Connects to the dataverse if necessary.</p><p>Returns a JWT token as a string.</p><p>An empty return value means the user has cancelled the logon.</p><p><br /></p><p>Parameters:</p><ul><li>context: ServerContext</li><li>url: a string with the address of the dataverse instance</li></ul>",
+    "type": "drakon",
+    "id": "getToken.drakon"
+}

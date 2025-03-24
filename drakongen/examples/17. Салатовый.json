@@ -1,0 +1,41 @@
+{
+    "name": "17. Салатовый",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "14",
+                            "content": {
+                                "operator": "and",
+                                "left": "4",
+                                "right": "5"
+                            },
+                            "yes": [],
+                            "no": []
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "30",
+                            "type": "action",
+                            "content": "6"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

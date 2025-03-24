@@ -1,0 +1,5 @@
+Procedure "00.Empty"
+
+Algorithm:
+Empty
+End of procedure

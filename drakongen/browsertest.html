@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <style>
+    *, *:before, *:after {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    </style>
+    <style>
+        .main {
+            max-width: 100%;
+            width: 1200px;
+            margin: auto;
+        }
+        #input {
+            width: 100%;
+        }
+    </style>
+    
+    <title>Drakongen browser test</title>
+</head>
+<body>
+    <div class="main">
+        <h1>Drakongen browser test</h1>
+        <textarea id="input" rows="30" autocorrect="false" placeholder="Enter drakon Json here" spellcheck="false"></textarea>
+        <div><select id="format">
+            <option value="pseudo">Pseudocode</option>
+            <option value="tree">Tree</option>
+        </select></div>
+        <div><select id="language">
+            <option value="en">English</option>
+            <option value="no">Norsk</option>
+            <option value="ru">Русский</option>
+        </select></div> 
+        <button onclick="convert()">Convert to pseudocode</button>
+        <div></div>
+        <pre id="output"></pre>
+    </div>
+    <script src="browser/drakongen.js"></script>
+    <script>
+        function clear(node) {
+            while (node.firstChild) {
+                node.removeChild(node.lastChild);
+            }
+        }
+
+        function setText(element, text) {
+            clear(element)
+            var newNode = document.createTextNode(text)
+            element.appendChild(newNode)
+        }
+
+        function get(id) {
+            return document.getElementById(id)
+        }
+
+        function convert() {
+            var input = get("input")
+            var output = get("output")
+            var format = get("format")
+            var language = get("language")
+            try {
+                var content
+                if (format.value === "pseudo") {
+                    content = drakongen.toPseudocode(input.value, "Drakongen browser test", "Drakongen browser test.drakon", language.value)
+                } else {
+                    content = drakongen.toTree(input.value, "Drakongen browser test", "Drakongen browser test.drakon", language.value)
+                }
+                setText(output, content)
+            } catch (ex) {
+                var message = ex.message + "\n" + ex.filename + "\n" + ex.nodeId
+                setText(output, message)
+            }
+        }
+
+        var format = get("format")
+        format.value = "pseudo"
+    </script>
+</body>
+</html>

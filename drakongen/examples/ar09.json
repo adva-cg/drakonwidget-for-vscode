@@ -1,0 +1,87 @@
+{
+    "name": "ar09",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "29",
+            "body": [
+                {
+                    "id": "29",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "5",
+                            "content": {
+                                "operator": "equal",
+                                "left": "3",
+                                "right": "4"
+                            },
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "question",
+                                    "id": "8",
+                                    "content": {
+                                        "operator": "equal",
+                                        "left": "3",
+                                        "right": "5"
+                                    },
+                                    "yes": [],
+                                    "no": [
+                                        {
+                                            "type": "question",
+                                            "id": "9",
+                                            "content": {
+                                                "operator": "equal",
+                                                "left": "3",
+                                                "right": "6"
+                                            },
+                                            "yes": [],
+                                            "no": [
+                                                {
+                                                    "id": "9-unexpected",
+                                                    "type": "error",
+                                                    "content": "3",
+                                                    "message": "Unexpected case value"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "question",
+                                            "id": "42",
+                                            "content": "7",
+                                            "yes": [],
+                                            "no": [
+                                                {
+                                                    "id": "58",
+                                                    "type": "action",
+                                                    "content": "8"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "arrow-stub-29",
+                                    "type": "loopend",
+                                    "start": "29"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

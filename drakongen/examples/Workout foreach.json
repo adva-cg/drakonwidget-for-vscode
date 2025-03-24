@@ -1,0 +1,62 @@
+{
+    "name": "Workout foreach",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "id": "4",
+                    "type": "action",
+                    "content": "Warm up"
+                },
+                {
+                    "id": "59",
+                    "type": "loop",
+                    "content": "<p>For each exercize in the program</p>",
+                    "body": [
+                        {
+                            "id": "60",
+                            "type": "loop",
+                            "content": "Repeat 10 times",
+                            "body": [
+                                {
+                                    "id": "62",
+                                    "type": "action",
+                                    "content": "Lift the weight"
+                                },
+                                {
+                                    "type": "question",
+                                    "id": "63",
+                                    "content": "Tired?",
+                                    "yes": [
+                                        {
+                                            "id": "64",
+                                            "type": "action",
+                                            "content": "<p>Say: huff da</p>"
+                                        },
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "61",
+                                            "type": "loopend",
+                                            "start": "60"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

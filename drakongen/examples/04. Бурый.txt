@@ -1,0 +1,7 @@
+Procedure "04. Бурый"
+
+Algorithm:
+If 3
+    4
+
+End of procedure

@@ -1,0 +1,10 @@
+Procedure "09. Оранжевый"
+
+Algorithm:
+If 3 and 4
+    6
+
+Else
+    5
+
+End of procedure

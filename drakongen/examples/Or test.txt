@@ -1,0 +1,10 @@
+Procedure "Or test"
+
+Algorithm:
+If (One or not (Two)) or Three
+    Do it!
+
+Else
+    Do not do it
+
+End of procedure

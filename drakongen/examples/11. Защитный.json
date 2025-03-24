@@ -1,0 +1,39 @@
+{
+    "name": "11. Защитный",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "7",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "7",
+                    "content": {
+                        "operator": "or",
+                        "left": "3",
+                        "right": "4"
+                    },
+                    "yes": [
+                        {
+                            "id": "4",
+                            "type": "action",
+                            "content": "5"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "35",
+                            "type": "action",
+                            "content": "6"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+{
+    "type": "drakon",
+    "items": {
+        "2": {
+            "type": "end"
+        },
+        "4": {
+            "type": "question",
+            "flag1": 1,
+            "one": "14",
+            "two": "8",
+            "content": "3"
+        },
+        "8": {
+            "type": "question",
+            "flag1": 1,
+            "one": "12",
+            "two": "13",
+            "content": "4"
+        },
+        "11": {
+            "type": "action",
+            "one": "44",
+            "content": "5"
+        },
+        "12": {
+            "type": "action",
+            "one": "47",
+            "content": "6"
+        },
+        "13": {
+            "type": "action",
+            "one": "47",
+            "content": "7"
+        },
+        "14": {
+            "type": "question",
+            "flag1": 1,
+            "one": "11",
+            "two": "17",
+            "content": "8"
+        },
+        "17": {
+            "type": "action",
+            "one": "44",
+            "content": "9"
+        },
+        "44": {
+            "type": "action",
+            "one": "2",
+            "content": "10"
+        },
+        "47": {
+            "type": "action",
+            "one": "2",
+            "content": "11"
+        },
+        "57": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4"
+        }
+    }
+}

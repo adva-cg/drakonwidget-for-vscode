@@ -1,0 +1,116 @@
+Write a JavaScript function printPseudo(algorithm, translations) that prints an algorithm as pseudo code
+and returns it as a string.
+
+"algorithm" is an object these properties:
+- name: string, the name of the algorithm
+- params: string, some textual description of the algorithm in HTML
+- body: array, the steps of the algorithm
+
+Types of steps:
+- question
+- non-question
+
+A non-question step contains properties:
+- id: string
+- content: string with HTML
+- secondary: string with HTML
+- message: string with plain text
+
+A question step contains properties:
+- id: string
+- content: either string with HTML or a structured object
+- yes: an array with child nodes
+- no: an array with child nodes
+
+Examples of structured objects in the "content" property.
+"operator" property is mandatory.
+"operand", "left", "right" properties contain either an HTML string or another structured object
+
+{operator:"not",operand:"<p>Hello</p>"}
+{
+    "operator": "and",
+    "left": {
+        "operator": "and",
+        "left": "<p>One</p>",
+        "right": {
+            "operator": "not",
+            "operand": "<p>Two</p>"
+        }
+    }
+    "right": "<p>Three</p>"
+}
+
+The algorithm of printPseudo:
+- start with an empty output list of lines
+- run printPseudoSteps(algorithm.body, 0, output)
+- joint the output with newline as separator and return it
+
+printPseudoSteps(body, depth, output)
+    for each node in body
+        print node with indentation
+        
+
+Indentation contains "depth" * 4 spaces. Every line in the printed node should have the indentation.
+
+how to print a non-question node
+    if neither node.secondary or node.content have a value, do not print the node
+    if node.type === "branch" or node.type === "comment", do not print the node
+    Else            
+        if node.type === "error"
+            print a string: translated "Error" + ":"
+            print node.message
+        print node.secondary if it has a value
+        print node.content if it has a value
+        print an empty line
+
+how to print a question node
+    if both node.yes and node.no are empty, do not print the node
+    if node.yes is empty
+        content = {operator:"not", operand:node.content}
+    print the translated string "If 
+    print the structured content
+    if node.yes is empty
+        print the node.no using printPseudoSteps and incremented depth
+    Else
+        print the node.yes using printPseudoSteps and incremented depth
+        if node.no is not empty
+            print the translated string "Else"
+            print the node.no using printPseudoSteps and incremented depth
+
+How to translate strings:
+If a string is in "translations", take it. Otherwise do not translate the string, leave it as it is.
+
+How to print structured content:
+    If the content is a string
+        convert the HTML to text
+    Else
+        if content.operator === "not"
+            print content.operand as operand, but prepend the first line with this string: tranlated "not" + " "
+        else if content.operator === "and"
+            print content.left as operand
+            print the translated string "and"
+            print content.right as operand
+        else if content.operator === "or"
+            print content.left as operand
+            print the translated string "or"
+            print content.right as operand
+
+How to print content as operand:
+    if the content is a string
+        convert the HTML to text and print line by line, prepend each line with indentation
+    else
+        convert the HTML to text and print line by line, prepend each line with indentation, but prepend the first line with "(" (after indentation), and append the last line with ")"
+
+How to convert HTML to string
+    if the string is empty, return the translated string "empty".
+    if the string is not HTML, split it by line end
+    else
+        ignore <script> tags alltogether
+        for every <p> tag create a line from the text content of the tag
+        for every <li> tag in an unordred list, create a line from the text content of the tag, prepend the line with "- "
+        for every <li> tag in an ordred list, create a line from the text content of the tag, prepend the line with the ordinal number: "1. ", "2. ", "3. ", etc.
+        skip all other tags
+
+The code with run in Node Js.
+Do not use the ... operator.
+Use node-html-parser for HTML parsing.

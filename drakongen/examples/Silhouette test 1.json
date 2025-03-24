@@ -1,0 +1,82 @@
+{
+    "name": "Silhouette test 1",
+    "params": "",
+    "branches": [
+        {
+            "name": "Branch1",
+            "branchId": 1,
+            "start": "5",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "5",
+                    "content": "<p>AAAAAAA</p>",
+                    "yes": [
+                        {
+                            "id": "ad-1000",
+                            "type": "address",
+                            "content": "Branch2"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "ad-1001",
+                            "type": "address",
+                            "content": "Exit"
+                        }
+                    ]
+                },
+                {
+                    "id": "2-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "Branch2",
+            "branchId": 2,
+            "start": "6",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "6",
+                    "content": "<p>BBBB</p>",
+                    "yes": [
+                        {
+                            "id": "7",
+                            "type": "action",
+                            "content": "<p>CCCC</p>"
+                        },
+                        {
+                            "id": "ad-1002",
+                            "type": "address",
+                            "content": "Exit"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "ad-1002",
+                            "type": "address",
+                            "content": "Exit"
+                        }
+                    ]
+                },
+                {
+                    "id": "4-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "Exit",
+            "branchId": 3,
+            "start": "1",
+            "body": [
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

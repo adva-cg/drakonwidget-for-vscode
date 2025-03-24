@@ -1,0 +1,45 @@
+{
+    "name": "Work out action-check",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "5",
+            "body": [
+                {
+                    "id": "5",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "3",
+                            "type": "action",
+                            "content": "<p>Lift weight</p>"
+                        },
+                        {
+                            "type": "question",
+                            "id": "4",
+                            "content": "<p>Tired?</p>",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "arrow-stub-5",
+                                    "type": "loopend",
+                                    "start": "5"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

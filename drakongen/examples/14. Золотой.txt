@@ -1,0 +1,22 @@
+Procedure "14. Золотой"
+
+Algorithm:
+If 3
+    If 8
+        5
+
+    Else
+        9
+
+    10
+
+Else
+    If 4
+        6
+
+    Else
+        7
+
+    11
+
+End of procedure

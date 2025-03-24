@@ -1,0 +1,18 @@
+Procedure "DoubleArrow"
+
+Algorithm:
+Loop forever
+    If CCCCC
+        break
+    Else
+        If EEEEEE
+            qqq
+
+            break
+        Else
+            Loop forever
+                If JJJJ
+                    break
+KKKK
+
+End of procedure

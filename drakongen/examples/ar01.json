@@ -1,0 +1,40 @@
+{
+    "name": "ar01",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "17",
+            "body": [
+                {
+                    "id": "17",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "4",
+                            "content": "3",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "arrow-stub-17",
+                                    "type": "loopend",
+                                    "start": "17"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

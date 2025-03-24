@@ -1,0 +1,87 @@
+{
+    "name": "15. Синий",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "id": "63",
+                            "type": "action",
+                            "content": "5"
+                        },
+                        {
+                            "type": "question",
+                            "id": "14",
+                            "content": "7",
+                            "yes": [
+                                {
+                                    "id": "60",
+                                    "type": "action",
+                                    "content": "8"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "24",
+                                    "type": "action",
+                                    "content": "9"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "type": "question",
+                            "id": "47",
+                            "content": "4",
+                            "yes": [
+                                {
+                                    "id": "66",
+                                    "type": "action",
+                                    "content": "6"
+                                },
+                                {
+                                    "type": "question",
+                                    "id": "14",
+                                    "content": "7",
+                                    "yes": [
+                                        {
+                                            "id": "60",
+                                            "type": "action",
+                                            "content": "8"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "24",
+                                            "type": "action",
+                                            "content": "9"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "24",
+                                    "type": "action",
+                                    "content": "9"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

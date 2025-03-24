@@ -1,0 +1,734 @@
+{
+    "name": "How to tune PID on a quadcopter",
+    "params": "By Oscar Liang",
+    "branches": [
+        {
+            "name": "Prepare",
+            "branchId": 1,
+            "start": "824",
+            "body": [
+                {
+                    "id": "824",
+                    "type": "input",
+                    "content": "<p>To the motor sound</p>",
+                    "secondary": "<p>Listen</p>"
+                },
+                {
+                    "id": "41",
+                    "type": "comment",
+                    "content": "Remember, PID tuning is subjective!"
+                },
+                {
+                    "id": "32",
+                    "type": "action",
+                    "content": "Backup your current PID values"
+                },
+                {
+                    "id": "35",
+                    "type": "action",
+                    "content": "Switch to Rate Mode (aka Acro Mode)"
+                },
+                {
+                    "id": "38",
+                    "type": "action",
+                    "content": "Make sure your quadcopter’s CG (centre of gravity) is right in the middle"
+                },
+                {
+                    "id": "ad-1000",
+                    "type": "address",
+                    "content": "Set initial values"
+                },
+                {
+                    "id": "8-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "Set initial values",
+            "branchId": 2,
+            "start": "251",
+            "body": [
+                {
+                    "id": "251",
+                    "type": "insertion",
+                    "content": "Set RC rates, super rates and expo"
+                },
+                {
+                    "id": "254",
+                    "type": "action",
+                    "content": "Set default PID values"
+                },
+                {
+                    "id": "257",
+                    "type": "action",
+                    "content": "Lower all the values by at least half"
+                },
+                {
+                    "id": "ad-1003",
+                    "type": "address",
+                    "content": "P on Roll"
+                },
+                {
+                    "id": "239-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "P on Roll",
+            "branchId": 3,
+            "start": "87",
+            "body": [
+                {
+                    "id": "87",
+                    "type": "comment",
+                    "content": "With good P, the control should feel precise"
+                },
+                {
+                    "id": "213",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "80",
+                            "type": "action",
+                            "content": "Cruise around"
+                        },
+                        {
+                            "id": "90",
+                            "type": "action",
+                            "content": "Do some sharp turns"
+                        },
+                        {
+                            "type": "question",
+                            "id": "93",
+                            "content": {
+                                "operator": "and",
+                                "left": {
+                                    "operator": "not",
+                                    "operand": "Does the quad dip to one side (like a wobble)?"
+                                },
+                                "right": {
+                                    "operator": "not",
+                                    "operand": "Do slow oscillations occur?"
+                                }
+                            },
+                            "yes": [
+                                {
+                                    "type": "question",
+                                    "id": "168",
+                                    "content": "Do fast oscilations occur?",
+                                    "yes": [
+                                        {
+                                            "id": "197",
+                                            "type": "action",
+                                            "content": "Decrease P on Roll"
+                                        },
+                                        {
+                                            "id": "arrow-stub-213",
+                                            "type": "loopend",
+                                            "start": "213"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "153",
+                                    "type": "action",
+                                    "content": "Increase P on Roll"
+                                },
+                                {
+                                    "id": "arrow-stub-213",
+                                    "type": "loopend",
+                                    "start": "213"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "150",
+                    "type": "comment",
+                    "content": "When P is right, you should get minimum oscillations when doing sharp turns."
+                },
+                {
+                    "id": "ad-1001",
+                    "type": "address",
+                    "content": "P on Pitch"
+                },
+                {
+                    "id": "70-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "P on Pitch",
+            "branchId": 4,
+            "start": "303",
+            "body": [
+                {
+                    "id": "303",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "260",
+                            "type": "action",
+                            "content": "Do a split-S (where you move both the throttle and pitch sticks)"
+                        },
+                        {
+                            "id": "263",
+                            "type": "action",
+                            "content": "Increase throttle to recover, pay attention to the pitch movement"
+                        },
+                        {
+                            "type": "question",
+                            "id": "266",
+                            "content": "Does the quad pitch up more than it should?",
+                            "yes": [
+                                {
+                                    "id": "286",
+                                    "type": "action",
+                                    "content": "Increase P on Pitch"
+                                },
+                                {
+                                    "id": "arrow-stub-303",
+                                    "type": "loopend",
+                                    "start": "303"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "question",
+                                    "id": "276",
+                                    "content": {
+                                        "operator": "and",
+                                        "left": {
+                                            "operator": "not",
+                                            "operand": "Do fast oscilations occur?"
+                                        },
+                                        "right": {
+                                            "operator": "not",
+                                            "operand": "Are the motors making a twitching sound?"
+                                        }
+                                    },
+                                    "yes": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "289",
+                                            "type": "action",
+                                            "content": "Decrease P on Pitch"
+                                        },
+                                        {
+                                            "id": "arrow-stub-303",
+                                            "type": "loopend",
+                                            "start": "303"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "320",
+                    "type": "comment",
+                    "content": "The quad feels very responsive and nimble"
+                },
+                {
+                    "id": "ad-1002",
+                    "type": "address",
+                    "content": "TPA"
+                },
+                {
+                    "id": "221-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "TPA",
+            "branchId": 5,
+            "start": "374",
+            "body": [
+                {
+                    "id": "374",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "362",
+                            "type": "action",
+                            "content": "Do a punch out"
+                        },
+                        {
+                            "type": "question",
+                            "id": "352",
+                            "content": "Does the quad get oscillations with high throttle?",
+                            "yes": [
+                                {
+                                    "id": "365",
+                                    "type": "action",
+                                    "content": "Increase TPA"
+                                },
+                                {
+                                    "id": "368",
+                                    "type": "comment",
+                                    "content": "Do not increase TPA higher than 0.4"
+                                },
+                                {
+                                    "id": "arrow-stub-374",
+                                    "type": "loopend",
+                                    "start": "374"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "break"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "ad-1004",
+                    "type": "address",
+                    "content": "D on Roll and Pitch"
+                },
+                {
+                    "id": "342-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "D on Roll and Pitch",
+            "branchId": 6,
+            "start": "451",
+            "body": [
+                {
+                    "id": "451",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "392",
+                            "type": "action",
+                            "content": "Do aggressive maneuvers like flips and rolls"
+                        },
+                        {
+                            "type": "question",
+                            "id": "395",
+                            "content": {
+                                "operator": "and",
+                                "left": {
+                                    "operator": "not",
+                                    "operand": "Does the quad overshoot at the end of the move then bounce back?"
+                                },
+                                "right": {
+                                    "operator": "not",
+                                    "operand": "Does prop wash happen? (oscillation when you descent)"
+                                }
+                            },
+                            "yes": [
+                                {
+                                    "type": "question",
+                                    "id": "427",
+                                    "content": "Do fast oscillation happen at the end of a roll or flip?",
+                                    "yes": [
+                                        {
+                                            "id": "437",
+                                            "type": "action",
+                                            "content": "Decrease D on the affected axis"
+                                        },
+                                        {
+                                            "id": "arrow-stub-451",
+                                            "type": "loopend",
+                                            "start": "451"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "405",
+                                    "type": "action",
+                                    "content": "Increase D on the affected axis"
+                                },
+                                {
+                                    "id": "arrow-stub-451",
+                                    "type": "loopend",
+                                    "start": "451"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "465",
+                    "type": "comment",
+                    "content": "Note that to eliminate bounces at the end of a flip or roll, you can also use Setpoint Transition"
+                },
+                {
+                    "id": "ad-1005",
+                    "type": "address",
+                    "content": "I on Roll"
+                },
+                {
+                    "id": "382-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "I on Roll",
+            "branchId": 7,
+            "start": "536",
+            "body": [
+                {
+                    "id": "536",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "478",
+                            "type": "action",
+                            "content": "Bank your quad to the left and right"
+                        },
+                        {
+                            "id": "481",
+                            "type": "action",
+                            "content": "Release stick"
+                        },
+                        {
+                            "type": "question",
+                            "id": "484",
+                            "content": "Is the quad holding the angle well?",
+                            "yes": [
+                                {
+                                    "type": "question",
+                                    "id": "501",
+                                    "content": {
+                                        "operator": "and",
+                                        "left": {
+                                            "operator": "not",
+                                            "operand": "Does the quad have stiff, robotic feeling?"
+                                        },
+                                        "right": {
+                                            "operator": "not",
+                                            "operand": "Does the quad have oscilations?"
+                                        }
+                                    },
+                                    "yes": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "550",
+                                            "type": "action",
+                                            "content": "Decrease I on Roll"
+                                        },
+                                        {
+                                            "id": "arrow-stub-536",
+                                            "type": "loopend",
+                                            "start": "536"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "553",
+                                    "type": "action",
+                                    "content": "Increase I on Roll"
+                                },
+                                {
+                                    "id": "arrow-stub-536",
+                                    "type": "loopend",
+                                    "start": "536"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "556",
+                    "type": "comment",
+                    "content": "You might want to increase I a bit more on a windy day"
+                },
+                {
+                    "id": "ad-1006",
+                    "type": "address",
+                    "content": "I on Pitch"
+                },
+                {
+                    "id": "468-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "I on Pitch",
+            "branchId": 8,
+            "start": "594",
+            "body": [
+                {
+                    "id": "594",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "588",
+                            "type": "action",
+                            "content": "Fly forward, do not increase throttle"
+                        },
+                        {
+                            "type": "question",
+                            "id": "590",
+                            "content": "Does the nose keep the same angle?",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "600",
+                                    "type": "action",
+                                    "content": "Increase I on Pitch"
+                                },
+                                {
+                                    "id": "arrow-stub-594",
+                                    "type": "loopend",
+                                    "start": "594"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "ad-1007",
+                    "type": "address",
+                    "content": "Anti Gravity Gain"
+                },
+                {
+                    "id": "578-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "Anti Gravity Gain",
+            "branchId": 9,
+            "start": "819",
+            "body": [
+                {
+                    "id": "819",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "814",
+                            "type": "action",
+                            "content": "Fly in a straight line"
+                        },
+                        {
+                            "id": "815",
+                            "type": "action",
+                            "content": "Do some rapid punchouts"
+                        },
+                        {
+                            "type": "question",
+                            "id": "816",
+                            "content": "Does pitch stay at the same angle?",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "818",
+                                    "type": "action",
+                                    "content": "Increase Anti Gravity"
+                                },
+                                {
+                                    "id": "arrow-stub-819",
+                                    "type": "loopend",
+                                    "start": "819"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "823",
+                    "type": "comment",
+                    "content": "3 to 5 is a good range"
+                },
+                {
+                    "id": "ad-1009",
+                    "type": "address",
+                    "content": "P on Yaw"
+                },
+                {
+                    "id": "810-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "P on Yaw",
+            "branchId": 10,
+            "start": "719",
+            "body": [
+                {
+                    "id": "719",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "676",
+                            "type": "action",
+                            "content": "Spin quickly on the yaw axis"
+                        },
+                        {
+                            "id": "679",
+                            "type": "action",
+                            "content": "Stop spinning"
+                        },
+                        {
+                            "type": "question",
+                            "id": "682",
+                            "content": "Does the quad dip one side?",
+                            "yes": [
+                                {
+                                    "id": "692",
+                                    "type": "action",
+                                    "content": "Increase P on Yaw"
+                                },
+                                {
+                                    "id": "arrow-stub-719",
+                                    "type": "loopend",
+                                    "start": "719"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "question",
+                                    "id": "695",
+                                    "content": "Do you get fast oscilations?",
+                                    "yes": [
+                                        {
+                                            "id": "705",
+                                            "type": "action",
+                                            "content": "Decrease P on Yaw"
+                                        },
+                                        {
+                                            "id": "arrow-stub-719",
+                                            "type": "loopend",
+                                            "start": "719"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "type": "break"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "733",
+                    "type": "comment",
+                    "content": "When Yaw P is right the spin should be clean and snappy"
+                },
+                {
+                    "id": "ad-1008",
+                    "type": "address",
+                    "content": "I on Yaw"
+                },
+                {
+                    "id": "666-end",
+                    "type": "end"
+                }
+            ]
+        },
+        {
+            "name": "I on Yaw",
+            "branchId": 11,
+            "start": "787",
+            "body": [
+                {
+                    "id": "787",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "782",
+                            "type": "action",
+                            "content": "Fly straight"
+                        },
+                        {
+                            "id": "783",
+                            "type": "action",
+                            "content": "Make a turn"
+                        },
+                        {
+                            "type": "question",
+                            "id": "784",
+                            "content": "Is there drift, does the quad slide out?",
+                            "yes": [
+                                {
+                                    "id": "786",
+                                    "type": "action",
+                                    "content": "Increase I on Yaw"
+                                },
+                                {
+                                    "id": "arrow-stub-787",
+                                    "type": "loopend",
+                                    "start": "787"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "break"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "791",
+                    "type": "comment",
+                    "content": "Yaw I should not be higher than just enough to prevent drift."
+                },
+                {
+                    "id": "16",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

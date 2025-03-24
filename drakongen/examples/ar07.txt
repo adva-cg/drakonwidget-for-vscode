@@ -1,0 +1,13 @@
+Procedure "ar07"
+
+Algorithm:
+Loop forever
+    If 3 == 4
+        break
+    Else
+        If not ((3 == 5) or (3 == 6))
+            Error:
+            Unexpected case value
+            3
+
+End of procedure

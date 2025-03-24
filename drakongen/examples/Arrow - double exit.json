@@ -1,0 +1,62 @@
+{
+    "name": "Arrow - double exit",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "15",
+            "body": [
+                {
+                    "id": "15",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "type": "question",
+                            "id": "5",
+                            "content": "<p>CCCCC</p>",
+                            "yes": [
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "type": "question",
+                                    "id": "7",
+                                    "content": "<p>EEEEEE</p>",
+                                    "yes": [
+                                        {
+                                            "id": "11",
+                                            "type": "action",
+                                            "content": "<p>HHHHH</p>"
+                                        },
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "arrow-stub-15",
+                                            "type": "loopend",
+                                            "start": "15"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "16",
+                    "type": "action",
+                    "content": "<p>KKKK</p>"
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

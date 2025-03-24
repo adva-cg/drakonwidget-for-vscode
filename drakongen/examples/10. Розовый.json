@@ -1,0 +1,54 @@
+{
+    "name": "10. Розовый",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "8",
+                            "content": "4",
+                            "yes": [
+                                {
+                                    "id": "12",
+                                    "type": "action",
+                                    "content": "6"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "10",
+                                    "type": "action",
+                                    "content": "7"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "11",
+                            "type": "action",
+                            "content": "5"
+                        },
+                        {
+                            "id": "10",
+                            "type": "action",
+                            "content": "7"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "type": "drakon",
+    "items": {
+        "2": {
+            "type": "end"
+        },
+        "4": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "2"
+        }
+    }
+}

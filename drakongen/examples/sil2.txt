@@ -1,0 +1,32 @@
+value
+
+Procedure "sil2"
+
+Algorithm:
+Call subroutine: "Ветка1"
+
+Subroutine: "Ветка1"
+If value >= 0
+    If value % 10 === 0
+        foo = value * 10
+
+    Else
+        foo = value * 10
+
+Else
+    foo = value * 10
+
+Call subroutine "Ветка2"
+End of subroutine
+
+Subroutine: "Ветка2"
+foo += 5
+
+Call subroutine "Exit"
+End of subroutine
+
+Subroutine: "Exit"
+return foo
+
+End of subroutine
+End of procedure

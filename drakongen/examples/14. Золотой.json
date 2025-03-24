@@ -1,0 +1,73 @@
+{
+    "name": "14. Золотой",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "14",
+                            "content": "8",
+                            "yes": [
+                                {
+                                    "id": "11",
+                                    "type": "action",
+                                    "content": "5"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "17",
+                                    "type": "action",
+                                    "content": "9"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "44",
+                            "type": "action",
+                            "content": "10"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "type": "question",
+                            "id": "8",
+                            "content": "4",
+                            "yes": [
+                                {
+                                    "id": "12",
+                                    "type": "action",
+                                    "content": "6"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "13",
+                                    "type": "action",
+                                    "content": "7"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "47",
+                            "type": "action",
+                            "content": "11"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+Write JavaScript code for a NodeJs application.
+The application is a command line tool that accepts one required command line parameter - the path to a file.
+
+Here is the algorithm of the application:
+
+- Read the content of the file into a string. The file is in UTF-8 encoding.
+- Call the function drakonToPrompt(content, filename). Send the content and the full path to that function. The function will return a string.
+- Write the string to disc in UTF-8 encoding. The filename is like the path to the file from the command line,
+but replace its extension to .txt
+
+Use await for async operations.
+Import drakonToPrompt function from ./drakonToPrompt
+
+The format of application is CommonJs.
+If there is an uncaught exception, print both the message and the stacktrace.
+
+If the application has completed its task without errors, do not print anything in the console.

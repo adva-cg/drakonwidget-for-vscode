@@ -1,0 +1,45 @@
+{
+    "name": "19. Lilla",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "4",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "8",
+                            "content": "4",
+                            "yes": [
+                                {
+                                    "type": "question",
+                                    "id": "12",
+                                    "content": "5",
+                                    "yes": [],
+                                    "no": []
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "29",
+                                    "type": "action",
+                                    "content": "6"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": []
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

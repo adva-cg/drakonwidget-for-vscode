@@ -1,0 +1,49 @@
+{
+    "items": {
+        "1": {
+            "type": "end"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 1,
+            "one": "5",
+            "content": "Branch1"
+        },
+        "3": {
+            "type": "branch",
+            "content": "Exit",
+            "one": "1",
+            "branchId": 3
+        },
+        "4": {
+            "type": "branch",
+            "content": "Branch2",
+            "one": "6",
+            "branchId": 2
+        },
+        "5": {
+            "type": "question",
+            "content": "<p>AAAAAAA</p>",
+            "one": "4",
+            "two": "3",
+            "flag1": 1
+        },
+        "6": {
+            "type": "question",
+            "content": "<p>BBBB</p>",
+            "one": "7",
+            "two": "3",
+            "flag1": 1
+        },
+        "7": {
+            "type": "action",
+            "content": "<p>CCCC</p>",
+            "one": "3"
+        }
+    },
+    "type": "drakon",
+    "style": "{\"maxWidth\":160}",
+    "id": "tmp.drakon",
+    "params": "<p>It's a nice function</p><p><br /></p><p>Parameters:</p><ul><li>hello</li><li>bye</li><li>foo</li></ul>",
+    "description": "<p>line one</p><p>line two</p><p>line three</p>"
+}

@@ -1,0 +1,43 @@
+{
+    "name": "12. Болотный",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "5",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "5",
+                    "content": {
+                        "operator": "or",
+                        "left": {
+                            "operator": "or",
+                            "left": "3",
+                            "right": "4"
+                        },
+                        "right": "7"
+                    },
+                    "yes": [
+                        {
+                            "id": "4",
+                            "type": "action",
+                            "content": "5"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "46",
+                            "type": "action",
+                            "content": "6"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

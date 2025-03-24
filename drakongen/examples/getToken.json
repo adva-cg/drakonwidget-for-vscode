@@ -1,0 +1,88 @@
+{
+    "name": "getToken",
+    "params": "<p>Obtains an access token. Connects to the dataverse if necessary.</p><p>Returns a JWT token as a string.</p><p>An empty return value means the user has cancelled the logon.</p><p><br /></p><p>Parameters:</p><ul><li>context: ServerContext</li><li>url: a string with the address of the dataverse instance</li></ul>",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "3",
+            "body": [
+                {
+                    "id": "3",
+                    "type": "action",
+                    "content": "<p>Find an existing connection in context.connections by URL</p>"
+                },
+                {
+                    "type": "question",
+                    "id": "4",
+                    "content": "<p>Connection found?</p>",
+                    "yes": [
+                        {
+                            "id": "13",
+                            "type": "comment",
+                            "content": "<p>Some comment</p>"
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "6",
+                            "type": "action",
+                            "content": "<p>Create a new MSAL connection object.</p><p>Use the following information to initialize the object:</p><ul><li>context.config.redirectUri is the redirect URI</li><li>context.config.authority is the authority</li><li>context.config.clientId is the client id</li></ul>"
+                        },
+                        {
+                            "id": "7",
+                            "type": "action",
+                            "content": "<p>Put the connection in context.connections using the URL as the key.</p>"
+                        }
+                    ]
+                },
+                {
+                    "id": "5",
+                    "type": "action",
+                    "content": "<p>Try to get an access token using the connection in non-interactive mode.</p>"
+                },
+                {
+                    "type": "question",
+                    "id": "8",
+                    "content": "<p>Got exception?</p>",
+                    "yes": [
+                        {
+                            "id": "9",
+                            "type": "action",
+                            "content": "<p>Get a token in interactive mode.</p>"
+                        },
+                        {
+                            "type": "question",
+                            "id": "10",
+                            "content": "<p>Did the user cancel the logon?</p>",
+                            "yes": [
+                                {
+                                    "id": "11",
+                                    "type": "action",
+                                    "content": "<p>Return an empty string</p>"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "12",
+                                    "type": "action",
+                                    "content": "<p>Return the access token</p>"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "12",
+                            "type": "action",
+                            "content": "<p>Return the access token</p>"
+                        }
+                    ]
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

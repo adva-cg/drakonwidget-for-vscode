@@ -1,0 +1,7 @@
+Procedure "05. Жёлтый"
+
+Algorithm:
+If not (3)
+    4
+
+End of procedure

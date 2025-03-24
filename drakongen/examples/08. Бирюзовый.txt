@@ -1,0 +1,6 @@
+Procedure "08. Бирюзовый"
+
+Algorithm:
+If 3 and 4
+    Pass
+End of procedure

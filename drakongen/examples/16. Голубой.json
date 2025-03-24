@@ -1,0 +1,48 @@
+{
+    "name": "16. Голубой",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "7",
+            "body": [
+                {
+                    "type": "question",
+                    "id": "7",
+                    "content": "3",
+                    "yes": [
+                        {
+                            "type": "question",
+                            "id": "24",
+                            "content": "4",
+                            "yes": [],
+                            "no": [
+                                {
+                                    "id": "50",
+                                    "type": "action",
+                                    "content": "5"
+                                },
+                                {
+                                    "id": "60",
+                                    "type": "action",
+                                    "content": "6"
+                                }
+                            ]
+                        }
+                    ],
+                    "no": [
+                        {
+                            "id": "60",
+                            "type": "action",
+                            "content": "6"
+                        }
+                    ]
+                },
+                {
+                    "id": "2",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}

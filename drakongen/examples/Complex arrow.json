@@ -1,0 +1,162 @@
+{
+    "name": "Complex arrow",
+    "params": "",
+    "branches": [
+        {
+            "branchId": 0,
+            "start": "3",
+            "body": [
+                {
+                    "id": "3",
+                    "type": "action",
+                    "content": "<p>AAAAAA</p>"
+                },
+                {
+                    "id": "15",
+                    "type": "loop",
+                    "content": "",
+                    "body": [
+                        {
+                            "id": "4",
+                            "type": "action",
+                            "content": "<p>BBBBB</p>"
+                        },
+                        {
+                            "type": "question",
+                            "id": "5",
+                            "content": "<p>CCCCC</p>",
+                            "yes": [
+                                {
+                                    "type": "question",
+                                    "id": "8",
+                                    "content": "<p>FFFFFF</p>",
+                                    "yes": [],
+                                    "no": [
+                                        {
+                                            "id": "10",
+                                            "type": "loop",
+                                            "content": "<p>For each GGGGG</p>",
+                                            "body": [
+                                                {
+                                                    "id": "11",
+                                                    "type": "action",
+                                                    "content": "<p>HHHHH</p>"
+                                                },
+                                                {
+                                                    "type": "question",
+                                                    "id": "12",
+                                                    "content": "<p>IIIIII</p>",
+                                                    "yes": [
+                                                        {
+                                                            "id": "9",
+                                                            "type": "loopend",
+                                                            "start": "10"
+                                                        }
+                                                    ],
+                                                    "no": [
+                                                        {
+                                                            "type": "break"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "break"
+                                }
+                            ],
+                            "no": [
+                                {
+                                    "id": "6",
+                                    "type": "action",
+                                    "content": "<p>DDDDDD</p>"
+                                },
+                                {
+                                    "type": "question",
+                                    "id": "7",
+                                    "content": "<p>EEEEEE</p>",
+                                    "yes": [
+                                        {
+                                            "id": "10",
+                                            "type": "loop",
+                                            "content": "<p>For each GGGGG</p>",
+                                            "body": [
+                                                {
+                                                    "id": "11",
+                                                    "type": "action",
+                                                    "content": "<p>HHHHH</p>"
+                                                },
+                                                {
+                                                    "type": "question",
+                                                    "id": "12",
+                                                    "content": "<p>IIIIII</p>",
+                                                    "yes": [
+                                                        {
+                                                            "id": "9",
+                                                            "type": "loopend",
+                                                            "start": "10"
+                                                        }
+                                                    ],
+                                                    "no": [
+                                                        {
+                                                            "type": "break"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "break"
+                                        }
+                                    ],
+                                    "no": [
+                                        {
+                                            "id": "14",
+                                            "type": "loop",
+                                            "content": "",
+                                            "body": [
+                                                {
+                                                    "type": "question",
+                                                    "id": "13",
+                                                    "content": "<p>JJJJ</p>",
+                                                    "yes": [
+                                                        {
+                                                            "type": "break"
+                                                        }
+                                                    ],
+                                                    "no": [
+                                                        {
+                                                            "id": "arrow-stub-14",
+                                                            "type": "loopend",
+                                                            "start": "14"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "id": "arrow-stub-15",
+                                            "type": "loopend",
+                                            "start": "15"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "16",
+                    "type": "action",
+                    "content": "<p>KKKK</p>"
+                },
+                {
+                    "id": "1",
+                    "type": "end"
+                }
+            ]
+        }
+    ]
+}
