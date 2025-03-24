@@ -3,7 +3,9 @@
     var widgets
     var drakon
     var currentMode = "write"
+
     function main() {
+        
         widgets = createSimpleWidgets()
         widgets.init(tr)
         initDrakonWidget()
@@ -465,7 +467,7 @@
     }
 
     function addIconButton(container, image, action, tooltip) {
-        var button = widgets.createIconButton("images/" + image, action, tooltip)
+        var button = widgets.createIconButton(extensionBaseUri + "/images/" + image, action, tooltip)
         button.style.marginBottom = "3px"
         add(container, button)
         var br = document.createElement("br")
@@ -1150,4 +1152,3 @@
 
     main()
 })();
-
