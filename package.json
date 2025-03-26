@@ -10,22 +10,38 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "Drakon.Start",
+        "command": "drakon.newDiagram",
         "title": "Новая схема",
         "category": "ДРАКОН"
       },
       {
-        "command": "Drakon.OpenFile",
+        "command": "drakon.openFile",
         "title": "Открыть файл",
         "category": "ДРАКОН"
       }
-    ]
+    ],
+    "customEditors": [{
+      "viewType": "drakonEditor",
+      "displayName": "Drakon Editor",
+      "selector": [{
+        "filenamePattern": "*.drakon"
+      }]
+    }],
+    "mimetypes": {
+      "text/x-drakon": [".drakon"]
+    }
+  
   },
+
+  "activationEvents": [
+    "onCustomEditor:drakonEditor",
+    "onCommand:drakon.newDiagram"
+
+],
 
   "scripts": {
     "vscode:prepublish": "npm run compile",
