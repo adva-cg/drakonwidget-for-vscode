@@ -863,7 +863,7 @@
 
     function addIconPath(item) {
         if (item.icon) {
-            item.icon = "images/" + item.icon
+            item.icon = extensionBaseUri + "/images/" + item.icon
         }
     }
 
@@ -1007,7 +1007,7 @@
         if (core.link) {
             container.style.paddingLeft = core.config.padding * 2 + iconSize + "px"
             var icon = document.createElement("img")
-            icon.src = "images/link.png"
+            icon.src = extensionBaseUri + "/images/link.png"
             icon.style.width = iconSize + "px"
             icon.style.height = iconSize + "px"
             icon.style.display = "inline-block"
