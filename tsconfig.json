@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es6",
+      "outDir": "out",
+      "lib": ["ES6"],
+      "rootDir": "src",
+      "sourceMap": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "moduleResolution": "node"
+    },
+    "exclude": ["drakonwidget", "node_modules"]
+  }

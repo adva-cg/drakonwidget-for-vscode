@@ -10,26 +10,36 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-  ],
-  "main": "./extension.js",
+  "activationEvents": [],
+  "main": "./out/extension.js",
   "contributes": {
-    "commands": [{
-      "command": "drakonwidget.start",
-      "title": "Open DrakonWidget"
-    }]
+    "commands": [
+      {
+        "command": "Drakon.Start",
+        "title": "Новая схема",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "Drakon.OpenFile",
+        "title": "Открыть файл",
+        "category": "ДРАКОН"
+      }
+    ]
   },
+
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "vscode-test"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --yarn"
   },
   "devDependencies": {
-    "@types/vscode": "^1.98.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "eslint": "^9.21.0",
+    "@types/node": "^20.17.27",
+    "@types/vscode": "^1.98.0",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.21.0",
+    "typescript": "^5.8.2"
   }
 }

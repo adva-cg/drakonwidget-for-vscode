@@ -1,8 +1,66 @@
-const vscode = require('vscode');
-const path = require('path');
+import * as vscode from 'vscode';
+//import * as path from 'path';
 
-function activate(context) {
-    const disposable = vscode.commands.registerCommand('drakonwidget.start', () => {
+export function activate(context: vscode.ExtensionContext) {
+
+    registerDrakonCommands(context); // Вынесено в отдельную функцию    
+
+}
+
+
+function registerDrakonCommands(context: vscode.ExtensionContext) {
+
+    // Добавляем команду "Drakon.OpenFile" 
+    const openFileDisposable = vscode.commands.registerCommand('Drakon.OpenFile', async () => {
+        // Логика открытия файла
+        const fileUri = await vscode.window.showOpenDialog({
+            filters: { 'DRAKON Diagrams': ['drakon'] }
+        });
+
+        if (fileUri && fileUri[0]) {
+            const panel = vscode.window.createWebviewPanel(
+                'drakonWidget',
+                'DrakonWidget',
+                vscode.ViewColumn.One,
+                { enableScripts: true,
+                    localResourceRoots: [vscode.Uri.file(context.extensionPath)]
+                 }
+            );
+
+            const extPath = context.extensionPath;
+            const extPathUri = panel.webview.asWebviewUri(vscode.Uri.file(extPath + "/drakonwidget"));
+    
+            panel.webview.html = getWebviewContent(extPathUri);
+    
+
+            // Загрузка данных в WebView
+            const fileContent = await vscode.workspace.fs.readFile(fileUri[0]);
+            const jsonString = new TextDecoder('utf-8').decode(fileContent);
+            var diagram = JSON.parse(jsonString);
+
+            // Добавляем id, если его нет
+            if (!diagram.hasOwnProperty('id')) {
+                diagram.id = fileUri[0].path;
+            };            
+
+
+
+            // const content = await fs.readFile(filepath, 'utf-8');
+            // return JSON.parse(content);
+
+          //  new TextDecoder('utf-8').decode(fileContent)
+    
+            panel.webview.postMessage({
+                command: 'loadDiagram',
+                diagram: diagram
+            });
+        }
+    });
+
+    // Не забываем добавить в subscriptions!
+    context.subscriptions.push(openFileDisposable);
+
+    const disposable = vscode.commands.registerCommand('Drakon.Start', () => {
         const panel = vscode.window.createWebviewPanel(
             'drakonWidget',
             'DrakonWidget',
@@ -14,15 +72,17 @@ function activate(context) {
         );
 
         const extPath = context.extensionPath;
-        const extPathUri = panel.webview.asWebviewUri(vscode.Uri.file(extPath));
+        const extPathUri = panel.webview.asWebviewUri(vscode.Uri.file(extPath + "/drakonwidget"));
+        panel.webview.html = getWebviewContent(extPathUri);
 
-        panel.webview.html = getWebviewContent(extPathUri + "/drakonwidget");
     });
-
     context.subscriptions.push(disposable);
+
 }
 
-function getWebviewContent(extPathUri) {
+
+
+function getWebviewContent(extPathUri: vscode.Uri): string {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -128,8 +188,9 @@ function getWebviewContent(extPathUri) {
 `;
 }
 
-function deactivate() {}
+export function deactivate() { }
 
+// Для CommonJS-совместимости (если требуется)
 module.exports = {
     activate,
     deactivate
