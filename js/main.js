@@ -1,8 +1,37 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 (function () {
     var iconSize = 20
     var widgets
     var drakon
     var currentMode = "write"
+
+    function lis_test(event){
+        if (event.data?.command === 'loadDiagram') {
+            //const { id, name, items, type } = event.data.diagram;
+
+            const diagram = event.data.diagram;
+
+            
+            // Сохраняем в localStorage
+            //const storageKey = `imported-${diagram.id}`;
+            const storageKey = diagram.id; // 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+            //localStorage.setItem(storageKey, JSON.stringify(diagram));
+            localStorage.setItem(storageKey, JSON.stringify(diagram));
+            localStorage.setItem('current-diagram', storageKey);
+            
+            // Открываем диаграмму (если drakon уже инициализирован)
+            if (drakon) {
+                openDiagram(storageKey);
+            } else {
+                console.error("Drakon widget not initialized!");
+            }
+        }
+    }
+
+    // ===== [1] Обработчик для загрузки диаграмм из VSCode =====
+    window.addEventListener('message', lis_test);
+
 
     function main() {
         
@@ -934,12 +963,13 @@
         }
 
         drakon.setDiagram(
-            diagram.id,
+            currentDiagram,
             diagram,
             sender
         )
 
         localStorage.setItem("current-diagram", currentDiagram)
+
     }
 
     function onResize() {
