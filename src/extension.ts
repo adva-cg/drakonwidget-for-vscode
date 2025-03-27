@@ -31,17 +31,16 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         return html;
     }
 
-    private isSaving = false; // Флаг для предотвращения повторного сохранения
-
     private async handleDiagramUpdate(document: vscode.TextDocument, diagram: any, webviewPanel: vscode.WebviewPanel) {
-        if (this.isSaving) return;
-        this.isSaving = true;
-
         try {
             const currentName = path.basename(document.fileName, '.drakon');
 
+            const isNewDiagram = document.isUntitled;
+            const nameChanged = diagram.name !== currentName;
+            const shouldUpdateFile = isNewDiagram ? nameChanged : true;
+
             // Для новых файлов (untitled)
-            if (document.isUntitled) {
+            if (isNewDiagram && nameChanged) {
                 const uri = await this.showSaveDialog(diagram.name);
                 if (!uri) {
                     webviewPanel.webview.postMessage({
@@ -83,13 +82,13 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 JSON.stringify(diagram, null, 2)
             );
             await vscode.workspace.applyEdit(edit);
-            await document.save();
+            //if (shouldUpdateFile) {
+                await document.save();
+            //}
 
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to save diagram';
             vscode.window.showErrorMessage(`Error saving diagram: ${errorMessage}`);
-        } finally {
-            this.isSaving = false;
         }
     }
 
@@ -162,13 +161,13 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                         await this.handleDiagramUpdate(document, message.diagram, webviewPanel);
                     }
                     return;
-                // case 'requestFilename':
-                //     const currentName = path.basename(document.fileName, '.drakon');
-                //     webviewPanel.webview.postMessage({
-                //         command: 'updateFilename',
-                //         filename: currentName
-                //     } as WebviewMessage);
-                //     return;
+                case 'requestFilename':
+                    const currentName = path.basename(document.fileName, '.drakon');
+                    webviewPanel.webview.postMessage({
+                        command: 'updateFilename',
+                        filename: currentName
+                    } as WebviewMessage);
+                    return;
             }
         });
     }
