@@ -41,9 +41,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
+const path_1 = __importDefault(require("path"));
 const vscode = __importStar(require("vscode"));
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 class DrakonEditorProvider {
@@ -61,10 +65,15 @@ class DrakonEditorProvider {
             const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'drakonwidget'));
             // Загружаем и обрабатываем HTML
             webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri);
+            // Получаем имя файла без расширения
+            const fileName = document.fileName;
+            const fileNameWithoutExtension = path_1.default.basename(fileName, path_1.default.extname(fileName));
             // Загрузка данных диаграммы
             try {
                 const content = document.getText();
                 const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
+                // Устанавливаем имя диаграммы равным имени файла
+                diagram.name = fileNameWithoutExtension;
                 webviewPanel.webview.postMessage({
                     command: 'loadDiagram',
                     diagram: diagram

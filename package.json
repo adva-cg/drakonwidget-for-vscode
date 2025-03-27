@@ -38,8 +38,6 @@
   },
 
   "activationEvents": [
-    "onCustomEditor:drakonEditor",
-    "onCommand:drakon.newDiagram"
 
 ],
 

@@ -1,3 +1,4 @@
+import path from 'path';
 import * as vscode from 'vscode';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
@@ -25,10 +26,17 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         // Загружаем и обрабатываем HTML
         webviewPanel.webview.html = await this.getWebviewContent(resourcesUri);
 
+        // Получаем имя файла без расширения
+        const fileName = document.fileName;
+        const fileNameWithoutExtension = path.basename(fileName, path.extname(fileName));
+
         // Загрузка данных диаграммы
         try {
             const content = document.getText();
             const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
+
+            // Устанавливаем имя диаграммы равным имени файла
+            diagram.name = fileNameWithoutExtension;
             
             webviewPanel.webview.postMessage({
                 command: 'loadDiagram',
