@@ -15,6 +15,21 @@
         }
     }
 
+    // Добавляем функции для работы с именем файла
+    function updateFilename(name) {
+        const currentDiagram = localStorage.getItem("current-diagram");
+        const diagramStr = localStorage.getItem(currentDiagram);
+        const diagram = JSON.parse(diagramStr);
+
+        if (diagram.name !== name) {
+            diagram.name = name;
+            localStorage.setItem(currentDiagram, JSON.stringify(diagram));
+            if (drakon) {
+                drakon.setDiagram(currentDiagram, diagram, createEditSender());
+            }
+        }
+    }
+
     // ===== [1] Обработчик для загрузки диаграмм из VSCode =====
     window.addEventListener('message', event => {
         if (event.data?.command === 'loadDiagram') {
@@ -22,17 +37,28 @@
             const storageKey = diagram.id;
             localStorage.setItem(storageKey, JSON.stringify(diagram));
             localStorage.setItem('current-diagram', storageKey);
-            
+
             if (drakon) {
                 openDiagram(storageKey);
             } else {
                 console.error("Drakon widget not initialized!");
             }
+        } else if (event.data?.command === 'updateFilename') {
+            updateFilename(event.data.filename);
+        } else if (event.data?.command === 'revertFilename') {
+            const currentDiagram = localStorage.getItem("current-diagram");
+            const diagramStr = localStorage.getItem(currentDiagram);
+            const diagram = JSON.parse(diagramStr);
+            diagram.name = event.data.filename;
+            localStorage.setItem(currentDiagram, JSON.stringify(diagram));
+            if (drakon) {
+                drakon.setDiagram(currentDiagram, diagram, createEditSender());
+            }
         }
-    });    
+    });
 
     function main() {
-        
+
         widgets = createSimpleWidgets()
         widgets.init(tr)
         initDrakonWidget()
@@ -549,11 +575,11 @@
 
     }
 
-    function loadThemes() {        
+    function loadThemes() {
         var list = getThemes()
         if (!list) {
             saveThemesInStorage()
-        }        
+        }
     }
 
     function saveThemesInStorage() {
