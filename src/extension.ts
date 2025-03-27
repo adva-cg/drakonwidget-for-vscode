@@ -1,5 +1,5 @@
-import path from 'path';
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 
@@ -34,10 +34,10 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         try {
             const content = document.getText();
             const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
-
+            
             // Устанавливаем имя диаграммы равным имени файла
             diagram.name = fileNameWithoutExtension;
-            
+
             webviewPanel.webview.postMessage({
                 command: 'loadDiagram',
                 diagram: diagram
@@ -45,6 +45,33 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         } catch (error) {
             vscode.window.showErrorMessage(`Error loading diagram: ${error}`);
         }
+
+        // Обработчик сообщений от Webview
+        webviewPanel.webview.onDidReceiveMessage(async message => {
+            switch (message.command) {
+                case 'updateDiagram':
+                    // Обновляем имя диаграммы перед сохранением
+                    const updatedDiagram = message.diagram;
+                    updatedDiagram.name = fileNameWithoutExtension;
+
+                    // Сохраняем изменения в документ
+                    const edit = new vscode.WorkspaceEdit();
+                    edit.replace(
+                        document.uri,
+                        new vscode.Range(0, 0, document.lineCount, 0),
+                        JSON.stringify(updatedDiagram, null, 2)
+                    );
+                    
+                    try {
+                        await vscode.workspace.applyEdit(edit);
+                        // Сохраняем документ на диск
+                        await document.save();
+                    } catch (error) {
+                        vscode.window.showErrorMessage(`Error saving diagram: ${error}`);
+                    }
+                    return;
+            }
+        });
     }
 
     private async getWebviewContent(resourcesUri: vscode.Uri): Promise<string> {

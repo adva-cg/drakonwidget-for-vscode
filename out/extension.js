@@ -41,14 +41,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
-const path_1 = __importDefault(require("path"));
 const vscode = __importStar(require("vscode"));
+const path = __importStar(require("path"));
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 class DrakonEditorProvider {
     constructor(context) {
@@ -67,7 +64,7 @@ class DrakonEditorProvider {
             webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri);
             // Получаем имя файла без расширения
             const fileName = document.fileName;
-            const fileNameWithoutExtension = path_1.default.basename(fileName, path_1.default.extname(fileName));
+            const fileNameWithoutExtension = path.basename(fileName, path.extname(fileName));
             // Загрузка данных диаграммы
             try {
                 const content = document.getText();
@@ -82,6 +79,27 @@ class DrakonEditorProvider {
             catch (error) {
                 vscode.window.showErrorMessage(`Error loading diagram: ${error}`);
             }
+            // Обработчик сообщений от Webview
+            webviewPanel.webview.onDidReceiveMessage((message) => __awaiter(this, void 0, void 0, function* () {
+                switch (message.command) {
+                    case 'updateDiagram':
+                        // Обновляем имя диаграммы перед сохранением
+                        const updatedDiagram = message.diagram;
+                        updatedDiagram.name = fileNameWithoutExtension;
+                        // Сохраняем изменения в документ
+                        const edit = new vscode.WorkspaceEdit();
+                        edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), JSON.stringify(updatedDiagram, null, 2));
+                        try {
+                            yield vscode.workspace.applyEdit(edit);
+                            // Сохраняем документ на диск
+                            yield document.save();
+                        }
+                        catch (error) {
+                            vscode.window.showErrorMessage(`Error saving diagram: ${error}`);
+                        }
+                        return;
+                }
+            }));
         });
     }
     getWebviewContent(resourcesUri) {
