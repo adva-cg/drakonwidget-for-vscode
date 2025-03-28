@@ -8,30 +8,6 @@
         const vscode = acquireVsCodeApi();
         window.vscode = vscode;
         const extensionBaseUri = "${extPathUri}";
-
-        // Обработчик сообщений от расширения
-        window.addEventListener('message', event => {
-            const message = event.data;
-
-            if (message.command === 'applyTheme') {
-                // Удаляем все классы тем
-                document.body.classList.remove(
-                    'vscode-light', 'vscode-dark',
-                    'drakon-light', 'drakon-dark'
-                );
-
-                // Добавляем нужный класс темы
-                document.body.classList.add(message.themeClass);
-
-                // Обновляем тему в DrakonWidget (если используется)
-                if (window.DrakonWidget && window.DrakonWidget.setTheme) {
-                    window.DrakonWidget.setTheme(message.themeClass.includes('dark') ? 'dark' : 'light');
-                }
-            }
-        });
-
-        // Инициализация темы по умолчанию
-        document.body.classList.add('vscode-light');        
     </script>
     <title>DrakonWidget for vscode</title>
     <meta name="description" content="DrakonWidget online demo shows how to use DrakonWidget in your application. This demo is an online

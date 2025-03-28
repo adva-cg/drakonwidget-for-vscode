@@ -82,9 +82,6 @@ class DrakonEditorProvider {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const currentName = path.basename(document.fileName, '.drakon');
-                const isNewDiagram = document.isUntitled;
-                const nameChanged = diagram.name !== currentName;
-                const shouldUpdateFile = isNewDiagram ? nameChanged : true;
                 // Для существующих файлов с измененным именем
                 if (currentName !== diagram.name) {
                     const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
@@ -105,6 +102,8 @@ class DrakonEditorProvider {
                 }
                 // Обычное сохранение
                 const edit = new vscode.WorkspaceEdit();
+                delete diagram.name;
+                delete diagram.id;
                 edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), JSON.stringify(diagram, null, 2));
                 yield vscode.workspace.applyEdit(edit);
                 yield document.save();
@@ -174,6 +173,7 @@ class DrakonEditorProvider {
                 const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
                 // Устанавливаем имя диаграммы равным имени файла
                 diagram.name = fileNameWithoutExtension;
+                diagram.id = fileName;
                 webviewPanel.webview.postMessage({
                     command: 'loadDiagram',
                     diagram: diagram
@@ -190,13 +190,6 @@ class DrakonEditorProvider {
                             yield this.handleDiagramUpdate(document, message.diagram, webviewPanel);
                         }
                         return;
-                    case 'requestFilename':
-                        const currentName = path.basename(document.fileName, '.drakon');
-                        webviewPanel.webview.postMessage({
-                            command: 'updateFilename',
-                            filename: currentName
-                        });
-                        return;
                 }
             }));
             webviewPanel.onDidDispose(() => {
@@ -208,13 +201,26 @@ class DrakonEditorProvider {
 DrakonEditorProvider.viewType = 'drakonEditor';
 DrakonEditorProvider.activeWebviews = new Set();
 DrakonEditorProvider.customTheme = null; // Для ручного управления
+function getCurrentDateTimeString() {
+    const now = new Date();
+    const format = (num) => String(num).padStart(2, '0');
+    return [
+        now.getFullYear(),
+        format(now.getMonth() + 1),
+        format(now.getDate()),
+        '_',
+        format(now.getHours()),
+        format(now.getMinutes()),
+        format(now.getSeconds())
+    ].join('');
+}
 function activate(context) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);
     context.subscriptions.push(vscode.window.registerCustomEditorProvider(DRAKON_EDITOR_VIEW_TYPE, provider, { supportsMultipleEditorsPerDocument: false }));
     // Команда создания новой диаграммы
     context.subscriptions.push(vscode.commands.registerCommand('drakon.newDiagram', () => __awaiter(this, void 0, void 0, function* () {
-        const defaultName = `НоваяСхема`;
+        const defaultName = `НоваяСхема_` + getCurrentDateTimeString();
         const uri = yield provider.showSaveDialog(defaultName);
         if (!uri) {
             return;

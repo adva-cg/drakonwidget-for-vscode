@@ -15,7 +15,7 @@
         }
     }
 
-    document.getElementById('themes-combobox').addEventListener('change', function() {
+    document.getElementById('themes-combobox').addEventListener('change', function () {
         vscode.postMessage({
             command: 'changeTheme',
             theme: this.value
@@ -37,34 +37,47 @@
         }
     }
 
-    // ===== [1] Обработчик для загрузки диаграмм из VSCode =====
-    window.addEventListener('message', event => {
-        if (event.data?.command === 'loadDiagram') {
-            const diagram = event.data.diagram;
-            const storageKey = diagram.id;
-            localStorage.setItem(storageKey, JSON.stringify(diagram));
-            localStorage.setItem('current-diagram', storageKey);
+    function registerEventVscode() {
+        window.addEventListener('message', event => {
+            if (event.data?.command === 'loadDiagram') {
+                const diagram = event.data.diagram;
+                const storageKey = diagram.id;
+                localStorage.setItem(storageKey, JSON.stringify(diagram));
+                localStorage.setItem('current-diagram', storageKey);
 
-            if (drakon) {
-                openDiagram(storageKey);
-            } else {
-                console.error("Drakon widget not initialized!");
+                if (drakon) {
+                    openDiagram(storageKey);
+                } else {
+                    console.error("Drakon widget not initialized!");
+                }
+            } else if (event.data?.command === 'updateFilename') {
+                updateFilename(event.data.filename);
+            } else if (event.data?.command === 'revertFilename') {
+                const currentDiagram = localStorage.getItem("current-diagram");
+                const diagramStr = localStorage.getItem(currentDiagram);
+                const diagram = JSON.parse(diagramStr);
+                diagram.name = event.data.filename;
+                localStorage.setItem(currentDiagram, JSON.stringify(diagram));
+                if (drakon) {
+                    drakon.setDiagram(currentDiagram, diagram, createEditSender());
+                }
+            } else if (event.data?.command === 'applyTheme') {
+                // Удаляем все классы тем
+                document.body.classList.remove(
+                    'vscode-light', 'vscode-dark',
+                    'drakon-light', 'drakon-dark'
+                );
+
+                // Добавляем нужный класс темы
+                document.body.classList.add(message.themeClass);
+
+                // Обновляем тему в DrakonWidget (если используется)
+                if (window.DrakonWidget && window.DrakonWidget.setTheme) {
+                    window.DrakonWidget.setTheme(message.themeClass.includes('dark') ? 'dark' : 'light');
+                }
             }
-        } else if (event.data?.command === 'updateFilename') {
-            updateFilename(event.data.filename);
-        } else if (event.data?.command === 'revertFilename') {
-            const currentDiagram = localStorage.getItem("current-diagram");
-            const diagramStr = localStorage.getItem(currentDiagram);
-            const diagram = JSON.parse(diagramStr);
-            diagram.name = event.data.filename;
-            localStorage.setItem(currentDiagram, JSON.stringify(diagram));
-            if (drakon) {
-                drakon.setDiagram(currentDiagram, diagram, createEditSender());
-            }
-        } else if (event.data?.command === 'applyTheme') {
-            document.body.className = event.data.themeClass;
-        }
-    });
+        });
+    }
 
     function main() {
 
@@ -79,7 +92,7 @@
         }
 
         initToolbar()
-        loadDiagrams()
+        //loadDiagrams()
         loadThemes()
         var closeButton = get("close-button")
         closeButton.addEventListener("click", closeMenu)
@@ -92,17 +105,19 @@
         registerClick("set-theme-json-button", setThemeJson)
         registerClick("reset-all-diagrams-button", resetAllDiagrams)
 
-        registerChange("diagrams-combobox", onDiagramsChanged)
+        //registerChange("diagrams-combobox", onDiagramsChanged)
         registerChange("themes-combobox", onThemesChanged)
         registerChange("modes-combobox", onModesChanged)
 
         initShortcuts()
-        var currentDiagram = localStorage.getItem("current-diagram")
-        openDiagram(currentDiagram)
+        // var currentDiagram = localStorage.getItem("current-diagram")
+        // openDiagram(currentDiagram)
         window.onresize = debounce(onResize, 500)
 
-        // Инициализация при загрузке
-        document.body.className = 'vscode-light'; // По умолчанию
+        registerEventVscode();
+
+        // Инициализация темы по умолчанию
+        document.body.classList.add('vscode-light');        
 
     }
 
@@ -955,7 +970,6 @@
         var changedDiagram = JSON.stringify(diagram)
         localStorage.setItem(currentDiagram, changedDiagram)
 
-        // Отправляем обновленную диаграмму в VS Code
         sendUpdateToVSCode(diagram)
 
     }

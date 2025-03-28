@@ -1,6 +1,7 @@
 import * as os from 'os';
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { time } from 'console';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 
@@ -57,10 +58,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         try {
             const currentName = path.basename(document.fileName, '.drakon');
 
-            const isNewDiagram = document.isUntitled;
-            const nameChanged = diagram.name !== currentName;
-            const shouldUpdateFile = isNewDiagram ? nameChanged : true;
-
             // Для существующих файлов с измененным именем
             if (currentName !== diagram.name) {
                 const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
@@ -82,6 +79,8 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
 
             // Обычное сохранение
             const edit = new vscode.WorkspaceEdit();
+            delete diagram.name;
+            delete diagram.id;
             edit.replace(
                 document.uri,
                 new vscode.Range(0, 0, document.lineCount, 0),
@@ -165,6 +164,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
 
             // Устанавливаем имя диаграммы равным имени файла
             diagram.name = fileNameWithoutExtension;
+            diagram.id = fileName;
 
             webviewPanel.webview.postMessage({
                 command: 'loadDiagram',
@@ -182,13 +182,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                         await this.handleDiagramUpdate(document, message.diagram, webviewPanel);
                     }
                     return;
-                case 'requestFilename':
-                    const currentName = path.basename(document.fileName, '.drakon');
-                    webviewPanel.webview.postMessage({
-                        command: 'updateFilename',
-                        filename: currentName
-                    } as WebviewMessage);
-                    return;
             }
         });
 
@@ -199,6 +192,22 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     }
 
 }
+
+function getCurrentDateTimeString() {
+    const now = new Date();
+    const format = (num: number) => String(num).padStart(2, '0');
+    
+    return [
+      now.getFullYear(),
+      format(now.getMonth() + 1),
+      format(now.getDate()),
+      '_',
+      format(now.getHours()),
+      format(now.getMinutes()),
+      format(now.getSeconds())
+    ].join('');
+  }
+  
 
 export function activate(context: vscode.ExtensionContext) {
     // Регистрация провайдера
@@ -214,7 +223,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Команда создания новой диаграммы
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.newDiagram', async () => {
-            const defaultName = `НоваяСхема`;
+            const defaultName = `НоваяСхема_` + getCurrentDateTimeString();
             const uri = await provider.showSaveDialog(defaultName);
 
             if (!uri) {
