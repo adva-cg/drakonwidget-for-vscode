@@ -91,23 +91,6 @@ class DrakonEditorProvider {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const currentName = path.basename(document.fileName, '.drakon');
-                const isNewDiagram = document.isUntitled;
-                const nameChanged = diagram.name !== currentName;
-                const shouldUpdateFile = isNewDiagram ? nameChanged : true;
-                // Для новых файлов (untitled)
-                if (isNewDiagram && nameChanged) {
-                    const uri = yield this.showSaveDialog(diagram.name);
-                    if (!uri) {
-                        webviewPanel.webview.postMessage({
-                            command: 'revertFilename',
-                            filename: currentName
-                        });
-                        return;
-                    }
-                    yield this.saveToNewFile(uri, diagram);
-                    setTimeout(() => webviewPanel.dispose(), 100);
-                    return;
-                }
                 // Для существующих файлов с измененным именем
                 if (currentName !== diagram.name) {
                     const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
@@ -130,9 +113,7 @@ class DrakonEditorProvider {
                 const edit = new vscode.WorkspaceEdit();
                 edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), JSON.stringify(diagram, null, 2));
                 yield vscode.workspace.applyEdit(edit);
-                //if (shouldUpdateFile) {
                 yield document.save();
-                //}
             }
             catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Failed to save diagram';
@@ -187,7 +168,7 @@ class DrakonEditorProvider {
                 webviewPanel.dispose();
                 // Открываем сохраненный файл
                 yield vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
-                return; // ◄◄◄ Важно: прерываем выполнение для нового файла
+                return;
             }
             // Получаем URI для ресурсов
             const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'drakonwidget'));
@@ -255,15 +236,6 @@ function activate(context) {
     // Команда создания новой диаграммы
     context.subscriptions.push(vscode.commands.registerCommand('drakon.newDiagram', () => __awaiter(this, void 0, void 0, function* () {
         const uri = vscode.Uri.parse(`untitled:NewDiagram-${Date.now()}.drakon`);
-        const document = yield vscode.workspace.openTextDocument(uri);
-        const emptyDiagram = {
-            type: "drakon",
-            items: {},
-            name: path.basename(uri.path, '.drakon') // Используем имя файла
-        };
-        const edit = new vscode.WorkspaceEdit();
-        edit.insert(uri, new vscode.Position(0, 0), JSON.stringify(emptyDiagram, null, 2));
-        yield vscode.workspace.applyEdit(edit);
         yield vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
     })));
     // Команда открытия файла
