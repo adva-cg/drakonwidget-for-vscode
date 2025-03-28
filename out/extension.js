@@ -54,15 +54,7 @@ class DrakonEditorProvider {
     }
     // Публичный статический метод для проверки наличия кастомной темы
     static hasCustomTheme() {
-        return this._customTheme !== null;
-    }
-    // Геттер для доступа к теме
-    static get customTheme() {
-        return this._customTheme;
-    }
-    // Сеттер для изменения темы
-    static set customTheme(theme) {
-        this._customTheme = theme;
+        return this.customTheme !== null;
     }
     getWebviewContent(resourcesUri, theme) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -73,18 +65,18 @@ class DrakonEditorProvider {
         });
     }
     static updateThemeForAllPanels() {
-        const theme = this._customTheme ||
+        const theme = this.customTheme ||
             (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark');
         this.activeWebviews.forEach(webviewPanel => {
             webviewPanel.webview.postMessage({
                 command: 'applyTheme',
                 themeClass: theme,
-                isCustom: !!this._customTheme
+                isCustom: !!this.customTheme
             });
         });
     }
     static setCustomTheme(theme) {
-        this._customTheme = theme;
+        this.customTheme = theme;
         this.updateThemeForAllPanels();
     }
     handleDiagramUpdate(document, diagram, webviewPanel) {
@@ -94,20 +86,6 @@ class DrakonEditorProvider {
                 const isNewDiagram = document.isUntitled;
                 const nameChanged = diagram.name !== currentName;
                 const shouldUpdateFile = isNewDiagram ? nameChanged : true;
-                // // Для новых файлов (untitled)
-                // if (isNewDiagram && nameChanged) {
-                //     const uri = await this.showSaveDialog(diagram.name);
-                //     if (!uri) {
-                //         webviewPanel.webview.postMessage({
-                //             command: 'revertFilename',
-                //             filename: currentName
-                //         });
-                //         return;
-                //     }
-                //     await this.saveToNewFile(uri, diagram);
-                //     setTimeout(() => webviewPanel.dispose(), 100);
-                //     return;
-                // }
                 // Для существующих файлов с измененным именем
                 if (currentName !== diagram.name) {
                     const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
@@ -194,7 +172,7 @@ class DrakonEditorProvider {
             // Получаем URI для ресурсов
             const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'drakonwidget'));
             // Определяем текущую тему при открытии
-            const currentTheme = DrakonEditorProvider._customTheme ||
+            const currentTheme = DrakonEditorProvider.customTheme ||
                 (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light
                     ? 'vscode-light'
                     : 'vscode-dark');
@@ -204,7 +182,7 @@ class DrakonEditorProvider {
             webviewPanel.webview.postMessage({
                 command: 'applyTheme',
                 themeClass: currentTheme,
-                isCustom: !!DrakonEditorProvider._customTheme
+                isCustom: !!DrakonEditorProvider.customTheme
             });
             DrakonEditorProvider.activeWebviews.add(webviewPanel);
             // Получаем имя файла без расширения
@@ -249,7 +227,7 @@ class DrakonEditorProvider {
 }
 DrakonEditorProvider.viewType = 'drakonEditor';
 DrakonEditorProvider.activeWebviews = new Set();
-DrakonEditorProvider._customTheme = null; // Для ручного управления
+DrakonEditorProvider.customTheme = null; // Для ручного управления
 function activate(context) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);

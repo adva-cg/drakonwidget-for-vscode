@@ -11,31 +11,17 @@ interface WebviewMessage {
     theme?: string; // Добавляем поле для темы
 }
 
-
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     constructor(private readonly context: vscode.ExtensionContext) { }
 
     private static readonly viewType = 'drakonEditor';
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
 
-    private static _customTheme: string | null = null; // Для ручного управления
-
+    private static customTheme: string | null = null; // Для ручного управления
     // Публичный статический метод для проверки наличия кастомной темы
     public static hasCustomTheme(): boolean {
-        return this._customTheme !== null;
+        return this.customTheme !== null;
     }
-
-
-    // Геттер для доступа к теме
-    private static get customTheme(): string | null {
-        return this._customTheme;
-    }
-
-    // Сеттер для изменения темы
-    private static set customTheme(theme: string | null) {
-        this._customTheme = theme;
-    }
-
     private async getWebviewContent(resourcesUri: vscode.Uri, theme: string): Promise<string> {
         const templatePath = vscode.Uri.joinPath(
             this.context.extensionUri,
@@ -49,20 +35,20 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     }
 
     static updateThemeForAllPanels() {
-        const theme = this._customTheme ||
+        const theme = this.customTheme ||
             (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark');
 
         this.activeWebviews.forEach(webviewPanel => {
             webviewPanel.webview.postMessage({
                 command: 'applyTheme',
                 themeClass: theme,
-                isCustom: !!this._customTheme
+                isCustom: !!this.customTheme
             });
         });
     }
 
     static setCustomTheme(theme: string | null) {
-        this._customTheme = theme;
+        this.customTheme = theme;
         this.updateThemeForAllPanels();
     }
 
@@ -74,22 +60,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             const isNewDiagram = document.isUntitled;
             const nameChanged = diagram.name !== currentName;
             const shouldUpdateFile = isNewDiagram ? nameChanged : true;
-
-            // // Для новых файлов (untitled)
-            // if (isNewDiagram && nameChanged) {
-            //     const uri = await this.showSaveDialog(diagram.name);
-            //     if (!uri) {
-            //         webviewPanel.webview.postMessage({
-            //             command: 'revertFilename',
-            //             filename: currentName
-            //         });
-            //         return;
-            //     }
-
-            //     await this.saveToNewFile(uri, diagram);
-            //     setTimeout(() => webviewPanel.dispose(), 100);
-            //     return;
-            // }
 
             // Для существующих файлов с измененным именем
             if (currentName !== diagram.name) {
@@ -192,7 +162,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         );
 
         // Определяем текущую тему при открытии
-        const currentTheme = DrakonEditorProvider._customTheme ||
+        const currentTheme = DrakonEditorProvider.customTheme ||
             (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light
                 ? 'vscode-light'
                 : 'vscode-dark');
@@ -203,7 +173,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         webviewPanel.webview.postMessage({
             command: 'applyTheme',
             themeClass: currentTheme,
-            isCustom: !!DrakonEditorProvider._customTheme
+            isCustom: !!DrakonEditorProvider.customTheme
         });
 
         DrakonEditorProvider.activeWebviews.add(webviewPanel);
@@ -323,7 +293,6 @@ export function activate(context: vscode.ExtensionContext) {
             }
         })
     );
-
 
     // При старте обновляем все открытые редакторы
     DrakonEditorProvider.updateThemeForAllPanels();
