@@ -18,7 +18,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
 
     private static customTheme: string | null = null; // Для ручного управления
-    // Публичный статический метод для проверки наличия кастомной темы
+
     public static hasCustomTheme(): boolean {
         return this.customTheme !== null;
     }
@@ -88,9 +88,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 JSON.stringify(diagram, null, 2)
             );
             await vscode.workspace.applyEdit(edit);
-            //if (shouldUpdateFile) {
             await document.save();
-            //}
 
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to save diagram';
@@ -98,7 +96,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         }
     }
 
-    private async showSaveDialog(defaultName: string): Promise<vscode.Uri | undefined> {
+    public async showSaveDialog(defaultName: string): Promise<vscode.Uri | undefined> {
         const sanitizedName = defaultName.replace(/[\\/:*?"<>|]/g, '_');
         return await vscode.window.showSaveDialog({
             defaultUri: vscode.Uri.file(path.join(this.getWorkspaceFolder(), `${sanitizedName}.drakon`)),
@@ -107,7 +105,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         });
     }
 
-    private async saveToNewFile(uri: vscode.Uri, diagram: any): Promise<void> {
+    public async saveToNewFile(uri: vscode.Uri, diagram: any): Promise<void> {
         try {
             const data = JSON.stringify(diagram, null, 2);
             await vscode.workspace.fs.writeFile(uri, new TextEncoder().encode(data));
@@ -133,28 +131,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             enableScripts: true,
             localResourceRoots: [this.context.extensionUri]
         };
-
-        if (document.isUntitled) {
-            const defaultName = `NewDiagram-${Date.now()}`;
-            const uri = await this.showSaveDialog(defaultName);
-
-            if (!uri) {
-                webviewPanel.dispose();
-                return;
-            }
-
-            const emptyDiagram = {
-                type: "drakon",
-                items: {}
-            };
-
-            await this.saveToNewFile(uri, emptyDiagram);
-            webviewPanel.dispose();
-
-            // Открываем сохраненный файл
-            await vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
-            return;
-        }
 
         // Получаем URI для ресурсов
         const resourcesUri = webviewPanel.webview.asWebviewUri(
@@ -238,19 +214,19 @@ export function activate(context: vscode.ExtensionContext) {
     // Команда создания новой диаграммы
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.newDiagram', async () => {
-            const uri = vscode.Uri.parse(`untitled:NewDiagram-${Date.now()}.drakon`);
-            const document = await vscode.workspace.openTextDocument(uri);
+            const defaultName = `НоваяСхема`;
+            const uri = await provider.showSaveDialog(defaultName);
+
+            if (!uri) {
+                return;
+            }
 
             const emptyDiagram = {
                 type: "drakon",
-                items: {},
-                name: path.basename(uri.path, '.drakon') // Используем имя файла
+                items: {}
             };
 
-            const edit = new vscode.WorkspaceEdit();
-            edit.insert(uri, new vscode.Position(0, 0), JSON.stringify(emptyDiagram, null, 2));
-            await vscode.workspace.applyEdit(edit);
-
+            await provider.saveToNewFile(uri, emptyDiagram);
             await vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
         })
     );
