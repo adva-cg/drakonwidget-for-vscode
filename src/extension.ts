@@ -5,12 +5,16 @@ import { time } from 'console';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 
+const DOCUMENT_IDS_KEY = 'documentCustomIds';
+
+
 interface WebviewMessage {
     command: string;
     diagram?: any;
     filename?: string;
     theme?: string; // Добавляем поле для темы
 }
+
 
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     constructor(private readonly context: vscode.ExtensionContext) { }
@@ -23,7 +27,8 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     public static hasCustomTheme(): boolean {
         return this.customTheme !== null;
     }
-    private async getWebviewContent(resourcesUri: vscode.Uri, theme: string): Promise<string> {
+
+    private async getWebviewContent(resourcesUri: vscode.Uri, theme: string, namespace: string): Promise<string> {
         const templatePath = vscode.Uri.joinPath(
             this.context.extensionUri,
             'templates',
@@ -32,6 +37,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
 
         let html = (await vscode.workspace.fs.readFile(templatePath)).toString();
         html = html.replace(/\${extPathUri}/g, resourcesUri.toString());
+        html = html.replace(/\${namespace}/g, namespace);
         return html;
     }
 
@@ -142,8 +148,18 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 ? 'vscode-light'
                 : 'vscode-dark');
 
+        // Генерируем/получаем ID
+        async function getDocumentId(doc: vscode.TextDocument, context: vscode.ExtensionContext): Promise<string> {
+            const ids = context.globalState.get<Record<string, string>>(DOCUMENT_IDS_KEY) || {};
+            if (!ids[doc.uri.toString()]) {
+                ids[doc.uri.toString()] = `drakon-${hashString(doc.uri.toString())}`;
+                await context.globalState.update(DOCUMENT_IDS_KEY, ids);
+            }
+            return ids[doc.uri.toString()];
+        }
+
         // Загружаем и обрабатываем HTML
-        webviewPanel.webview.html = await this.getWebviewContent(resourcesUri, currentTheme);
+        webviewPanel.webview.html = await this.getWebviewContent(resourcesUri, currentTheme, await getDocumentId(document, this.context));
         // Отправляем текущую тему сразу после загрузки
         webviewPanel.webview.postMessage({
             command: 'applyTheme',
@@ -196,18 +212,28 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
 function getCurrentDateTimeString() {
     const now = new Date();
     const format = (num: number) => String(num).padStart(2, '0');
-    
+
     return [
-      now.getFullYear(),
-      format(now.getMonth() + 1),
-      format(now.getDate()),
-      '_',
-      format(now.getHours()),
-      format(now.getMinutes()),
-      format(now.getSeconds())
+        now.getFullYear(),
+        format(now.getMonth() + 1),
+        format(now.getDate()),
+        '_',
+        format(now.getHours()),
+        format(now.getMinutes()),
+        format(now.getSeconds())
     ].join('');
-  }
-  
+}
+
+
+function hashString(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash).toString(36).slice(0, 8);
+}
 
 export function activate(context: vscode.ExtensionContext) {
     // Регистрация провайдера
@@ -219,6 +245,7 @@ export function activate(context: vscode.ExtensionContext) {
             { supportsMultipleEditorsPerDocument: false }
         )
     );
+
 
     // Команда создания новой диаграммы
     context.subscriptions.push(

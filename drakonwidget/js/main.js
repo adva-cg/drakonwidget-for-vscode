@@ -1,17 +1,57 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
 (function () {
     var iconSize = 20
     var widgets
     var drakon
     var currentMode = "write"
 
+    // Уникальный ID для изоляции (можно сгенерировать или получить из URL)
+    // const WEBVIEW_NAMESPACE = new URLSearchParams(window.location.search).get('namespace')
+    //     || `webview-${Math.random().toString(36).substr(2, 9)}`;
+
+    console.log('WEBVIEW_NAMESPACE: ' + WEBVIEW_NAMESPACE);
+
+    // Кастомное хранилище с пространствами
+    const isolatedStorage = {
+        setItem: (key, value) => {
+            const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
+            localStorage.setItem(namespacedKey, JSON.stringify(value));
+            console.log('setItem namespacedKey: ',  namespacedKey);
+            console.log('setItem value: ' + JSON.stringify(value));
+        },
+
+        getItem: (key) => {
+            const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
+            const value = localStorage.getItem(namespacedKey);
+            console.log('getItem namespacedKey: ',  namespacedKey);
+            console.log('getItem value: ' + value);
+            return value ? JSON.parse(value) : null;
+        },
+
+        removeItem: (key) => {
+            const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
+            localStorage.removeItem(namespacedKey);
+        },
+
+        clear: () => {
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith(WEBVIEW_NAMESPACE + ':')) {
+                    localStorage.removeItem(key);
+                }
+            });
+        }
+    };
+
+    // Делаем хранилище глобально доступным для этого WebView
+    window.isolatedStorage = isolatedStorage;
+
+
     function sendUpdateToVSCode(diagram) {
-        if (window.vscode) {
-            window.vscode.postMessage({
+        if (vscode) {
+            vscode.postMessage({
                 command: 'updateDiagram',
                 diagram: diagram
             });
+            console.log("ДРАКОН послали апдейт схемы ", JSON.stringify(diagram, null, 2))
         }
     }
 
@@ -24,15 +64,17 @@
 
     // Добавляем функции для работы с именем файла
     function updateFilename(name) {
-        const currentDiagram = localStorage.getItem("current-diagram");
-        const diagramStr = localStorage.getItem(currentDiagram);
+        const currentDiagram = isolatedStorage.getItem("current-diagram");
+        const diagramStr = isolatedStorage.getItem(currentDiagram);
         const diagram = JSON.parse(diagramStr);
 
         if (diagram.name !== name) {
+            diagram.id = diagram.id.replace(diagram.name + ".drakon", name + ".drakon");
             diagram.name = name;
-            localStorage.setItem(currentDiagram, JSON.stringify(diagram));
+            isolatedStorage.setItem(currentDiagram, JSON.stringify(diagram));
             if (drakon) {
                 drakon.setDiagram(currentDiagram, diagram, createEditSender());
+                console.log('updateFileName. Diagram: ', JSON.stringify(diagram, null, 2));
             }
         }
     }
@@ -41,25 +83,26 @@
         window.addEventListener('message', event => {
             if (event.data?.command === 'loadDiagram') {
                 const diagram = event.data.diagram;
-                const storageKey = diagram.id;
-                localStorage.setItem(storageKey, JSON.stringify(diagram));
-                localStorage.setItem('current-diagram', storageKey);
+                isolatedStorage.setItem(diagram.id, JSON.stringify(diagram));
+                isolatedStorage.setItem('current-diagram', diagram.id);
 
                 if (drakon) {
-                    openDiagram(storageKey);
+                    openDiagram(diagram.id);
+                    console.log('loadDiagram. Diagram: ', JSON.stringify(diagram, null, 2));
                 } else {
                     console.error("Drakon widget not initialized!");
                 }
             } else if (event.data?.command === 'updateFilename') {
                 updateFilename(event.data.filename);
             } else if (event.data?.command === 'revertFilename') {
-                const currentDiagram = localStorage.getItem("current-diagram");
-                const diagramStr = localStorage.getItem(currentDiagram);
+                const currentDiagram = isolatedStorage.getItem("current-diagram");
+                const diagramStr = isolatedStorage.getItem(currentDiagram);
                 const diagram = JSON.parse(diagramStr);
                 diagram.name = event.data.filename;
-                localStorage.setItem(currentDiagram, JSON.stringify(diagram));
+                isolatedStorage.setItem(currentDiagram, JSON.stringify(diagram));
                 if (drakon) {
                     drakon.setDiagram(currentDiagram, diagram, createEditSender());
+                    console.log('revertFilename. Diagram: ', JSON.stringify(diagram, null, 2));
                 }
             } else if (event.data?.command === 'applyTheme') {
                 // Удаляем все классы тем
@@ -68,14 +111,18 @@
                     'drakon-light', 'drakon-dark'
                 );
 
-                // Добавляем нужный класс темы
-                document.body.classList.add(message.themeClass);
+                //try {
 
-                // Обновляем тему в DrakonWidget (если используется)
-                if (window.DrakonWidget && window.DrakonWidget.setTheme) {
-                    window.DrakonWidget.setTheme(message.themeClass.includes('dark') ? 'dark' : 'light');
-                }
-            }
+                    // Добавляем нужный класс темы
+                    document.body.classList.add(event.data.themeClass);
+
+                    // Обновляем тему в DrakonWidget (если используется)
+                    if (window.DrakonWidget && window.DrakonWidget.setTheme) {
+                        window.DrakonWidget.setTheme(event.data.themeClass.includes('dark') ? 'dark' : 'light');
+                    }
+                // }catch{
+                // }
+        }
         });
     }
 
@@ -110,14 +157,14 @@
         registerChange("modes-combobox", onModesChanged)
 
         initShortcuts()
-        // var currentDiagram = localStorage.getItem("current-diagram")
+        // var currentDiagram = isolatedStorage.getItem("current-diagram")
         // openDiagram(currentDiagram)
         window.onresize = debounce(onResize, 500)
 
         registerEventVscode();
 
         // Инициализация темы по умолчанию
-        document.body.classList.add('vscode-light');        
+        document.body.classList.add('vscode-light');
 
     }
 
@@ -211,7 +258,7 @@
     }
 
     function reloadCurrent() {
-        var current = localStorage.getItem("current-diagram")
+        var current = isolatedStorage.getItem("current-diagram")
         openDiagram(current)
     }
 
@@ -234,7 +281,7 @@
             return
         }
 
-        localStorage.clear()
+        isolatedStorage.clear()
         location.reload()
     }
 
@@ -265,14 +312,14 @@
             return
         }
 
-        localStorage.setItem(current, newContent)
+        isolatedStorage.setItem(current, newContent)
         reloadCurrent()
         closeMenu()
     }
 
     async function setDiagramJson(evt) {
-        var current = localStorage.getItem("current-diagram")
-        var diagram = JSON.parse(localStorage.getItem(current))
+        var current = isolatedStorage.getItem("current-diagram")
+        var diagram = JSON.parse(isolatedStorage.getItem(current))
         delete diagram.id
         var beautiful = JSON.stringify(diagram, null, 4)
         var newContent = await widgets.largeBox(
@@ -298,7 +345,7 @@
             return
         }
 
-        localStorage.setItem(current, newContent)
+        isolatedStorage.setItem(current, newContent)
         openDiagram(current)
         closeMenu()
     }
@@ -315,11 +362,11 @@
             return
         }
 
-        var current = localStorage.getItem("current-diagram")
+        var current = isolatedStorage.getItem("current-diagram")
         var index = list.indexOf(current)
-        localStorage.removeItem(current)
+        isolatedStorage.removeItem(current)
         list.splice(index, 1)
-        localStorage.setItem("diagram-list", JSON.stringify(list))
+        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
         var nextCurrent
         if (index < list.length) {
             nextCurrent = list[index]
@@ -331,15 +378,15 @@
     }
 
     function duplicateDiagram() {
-        var current = localStorage.getItem("current-diagram")
-        var diagram = JSON.parse(localStorage.getItem(current))
+        var current = isolatedStorage.getItem("current-diagram")
+        var diagram = JSON.parse(isolatedStorage.getItem(current))
         diagram.name += "-2"
         var list = getDiagramList()
         var id = generateId(list)
         var diagramStr = JSON.stringify(diagram)
         list.push(id)
-        localStorage.setItem("diagram-list", JSON.stringify(list))
-        localStorage.setItem(id, diagramStr)
+        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
+        isolatedStorage.setItem(id, diagramStr)
         openDiagram(id)
         closeMenu()
     }
@@ -364,8 +411,8 @@
         var id = generateId(list)
         var diagramStr = JSON.stringify(diagram)
         list.push(id)
-        localStorage.setItem("diagram-list", JSON.stringify(list))
-        localStorage.setItem(id, diagramStr)
+        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
+        isolatedStorage.setItem(id, diagramStr)
         return id
     }
 
@@ -621,7 +668,7 @@
     }
 
     function getDiagramList() {
-        var listStr = localStorage.getItem("diagram-list")
+        var listStr = isolatedStorage.getItem("diagram-list")
         var list = undefined
         if (listStr) {
             try {
@@ -643,7 +690,7 @@
                 saveDiagram(example, id, list)
             }
         }
-        localStorage.setItem("diagram-list", JSON.stringify(list))
+        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
     }
 
     function saveExamplesInStorage() {
@@ -653,15 +700,15 @@
             var id = generateId(list)
             saveDiagram(example, id, list)
         }
-        localStorage.setItem("diagram-list", JSON.stringify(list))
-        localStorage.setItem("current-diagram", examples[3].id)
+        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
+        isolatedStorage.setItem("current-diagram", examples[3].id)
     }
 
     function saveDiagram(example, id, list) {
         example.id = id;
         list.push(id);
         var diagramStr = JSON.stringify(example);
-        localStorage.setItem(id, diagramStr);
+        isolatedStorage.setItem(id, diagramStr);
     }
 
 
@@ -677,14 +724,14 @@
         var list = getDiagramList()
         var output = { diagrams: [] }
         for (var id of list) {
-            var diagramStr = localStorage.getItem(id)
+            var diagramStr = isolatedStorage.getItem(id)
             var diagram = JSON.parse(diagramStr)
             output.diagrams.push({
                 id: id,
                 name: diagram.name
             })
         }
-        output.currentDiagram = localStorage.getItem("current-diagram")
+        output.currentDiagram = isolatedStorage.getItem("current-diagram")
         return output
     }
 
@@ -957,8 +1004,8 @@
 
     function pushEdit(edit) {
         console.log("pushEdit", JSON.stringify(edit, null, 4))
-        var currentDiagram = localStorage.getItem("current-diagram")
-        var diagramStr = localStorage.getItem(currentDiagram)
+        var currentDiagram = isolatedStorage.getItem("current-diagram")
+        var diagramStr = isolatedStorage.getItem(currentDiagram)
         var diagram = JSON.parse(diagramStr)
         for (var change of edit.changes) {
             if (change.id) {
@@ -968,7 +1015,7 @@
             }
         }
         var changedDiagram = JSON.stringify(diagram)
-        localStorage.setItem(currentDiagram, changedDiagram)
+        isolatedStorage.setItem(currentDiagram, changedDiagram)
 
         sendUpdateToVSCode(diagram)
 
@@ -1009,7 +1056,7 @@
     function openDiagram(currentDiagram) {
         renderEditorWidget()
         var sender = createEditSender()
-        var diagramStr = localStorage.getItem(currentDiagram)
+        var diagramStr = isolatedStorage.getItem(currentDiagram)
         var diagram = JSON.parse(diagramStr)
         if (currentMode === "write") {
             diagram.access = "write"
@@ -1023,7 +1070,7 @@
             sender
         )
 
-        localStorage.setItem("current-diagram", currentDiagram)
+        isolatedStorage.setItem("current-diagram", currentDiagram)
 
     }
 

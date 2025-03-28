@@ -48,6 +48,7 @@ const os = __importStar(require("os"));
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
+const DOCUMENT_IDS_KEY = 'documentCustomIds';
 class DrakonEditorProvider {
     constructor(context) {
         this.context = context;
@@ -55,11 +56,12 @@ class DrakonEditorProvider {
     static hasCustomTheme() {
         return this.customTheme !== null;
     }
-    getWebviewContent(resourcesUri, theme) {
+    getWebviewContent(resourcesUri, theme, namespace) {
         return __awaiter(this, void 0, void 0, function* () {
             const templatePath = vscode.Uri.joinPath(this.context.extensionUri, 'templates', 'editor.html');
             let html = (yield vscode.workspace.fs.readFile(templatePath)).toString();
             html = html.replace(/\${extPathUri}/g, resourcesUri.toString());
+            html = html.replace(/\${namespace}/g, namespace);
             return html;
         });
     }
@@ -155,8 +157,19 @@ class DrakonEditorProvider {
                 (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light
                     ? 'vscode-light'
                     : 'vscode-dark');
+            // Генерируем/получаем ID
+            function getDocumentId(doc, context) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const ids = context.globalState.get(DOCUMENT_IDS_KEY) || {};
+                    if (!ids[doc.uri.toString()]) {
+                        ids[doc.uri.toString()] = `drakon-${hashString(doc.uri.toString())}`;
+                        yield context.globalState.update(DOCUMENT_IDS_KEY, ids);
+                    }
+                    return ids[doc.uri.toString()];
+                });
+            }
             // Загружаем и обрабатываем HTML
-            webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri, currentTheme);
+            webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri, currentTheme, yield getDocumentId(document, this.context));
             // Отправляем текущую тему сразу после загрузки
             webviewPanel.webview.postMessage({
                 command: 'applyTheme',
@@ -213,6 +226,15 @@ function getCurrentDateTimeString() {
         format(now.getMinutes()),
         format(now.getSeconds())
     ].join('');
+}
+function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash).toString(36).slice(0, 8);
 }
 function activate(context) {
     // Регистрация провайдера
