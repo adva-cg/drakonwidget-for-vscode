@@ -15,6 +15,13 @@
         }
     }
 
+    document.getElementById('themes-combobox').addEventListener('change', function() {
+        vscode.postMessage({
+            command: 'changeTheme',
+            theme: this.value
+        });
+    });
+
     // Добавляем функции для работы с именем файла
     function updateFilename(name) {
         const currentDiagram = localStorage.getItem("current-diagram");
@@ -54,6 +61,8 @@
             if (drakon) {
                 drakon.setDiagram(currentDiagram, diagram, createEditSender());
             }
+        } else if (event.data?.command === 'applyTheme') {
+            document.body.className = event.data.themeClass;
         }
     });
 
@@ -91,6 +100,10 @@
         var currentDiagram = localStorage.getItem("current-diagram")
         openDiagram(currentDiagram)
         window.onresize = debounce(onResize, 500)
+
+        // Инициализация при загрузке
+        document.body.className = 'vscode-light'; // По умолчанию
+
     }
 
     function initShortcuts() {
