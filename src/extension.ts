@@ -155,11 +155,35 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         document: vscode.TextDocument,
         webviewPanel: vscode.WebviewPanel
     ): Promise<void> {
+
         // Настройка Webview
         webviewPanel.webview.options = {
             enableScripts: true,
             localResourceRoots: [this.context.extensionUri]
         };
+
+        if (document.isUntitled) {
+            const defaultName = `NewDiagram-${Date.now()}`;
+            const uri = await this.showSaveDialog(defaultName);
+
+            if (!uri) {
+                webviewPanel.dispose();
+                return;
+            }
+
+            const emptyDiagram = {
+                type: "drakon",
+                items: {},
+                name: path.basename(uri.fsPath, '.drakon')
+            };
+
+            await this.saveToNewFile(uri, emptyDiagram);
+            webviewPanel.dispose();
+
+            // Открываем сохраненный файл
+            await vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
+            return; // ◄◄◄ Важно: прерываем выполнение для нового файла
+        }
 
         // Получаем URI для ресурсов
         const resourcesUri = webviewPanel.webview.asWebviewUri(
@@ -182,17 +206,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             isCustom: !!DrakonEditorProvider._customTheme
         });
 
-        // // После установки HTML
-        // setTimeout(() => {
-        //     webviewPanel.webview.postMessage({
-        //         command: 'applyTheme',
-        //         themeClass: currentTheme,
-        //         isCustom: !!DrakonEditorProvider._customTheme
-        //     });
-        // }, 300);
-
         DrakonEditorProvider.activeWebviews.add(webviewPanel);
-
 
         // Получаем имя файла без расширения
         const fileName = document.fileName;
