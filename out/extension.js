@@ -52,14 +52,40 @@ class DrakonEditorProvider {
     constructor(context) {
         this.context = context;
     }
-    getWebviewContent(resourcesUri) {
+    // Публичный статический метод для проверки наличия кастомной темы
+    static hasCustomTheme() {
+        return this._customTheme !== null;
+    }
+    // Геттер для доступа к теме
+    static get customTheme() {
+        return this._customTheme;
+    }
+    // Сеттер для изменения темы
+    static set customTheme(theme) {
+        this._customTheme = theme;
+    }
+    getWebviewContent(resourcesUri, theme) {
         return __awaiter(this, void 0, void 0, function* () {
             const templatePath = vscode.Uri.joinPath(this.context.extensionUri, 'templates', 'editor.html');
             let html = (yield vscode.workspace.fs.readFile(templatePath)).toString();
-            // Заменяем плейсхолдеры на реальные URI
             html = html.replace(/\${extPathUri}/g, resourcesUri.toString());
             return html;
         });
+    }
+    static updateThemeForAllPanels() {
+        const theme = this._customTheme ||
+            (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark');
+        this.activeWebviews.forEach(webviewPanel => {
+            webviewPanel.webview.postMessage({
+                command: 'applyTheme',
+                themeClass: theme,
+                isCustom: !!this._customTheme
+            });
+        });
+    }
+    static setCustomTheme(theme) {
+        this._customTheme = theme;
+        this.updateThemeForAllPanels();
     }
     handleDiagramUpdate(document, diagram, webviewPanel) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -147,8 +173,28 @@ class DrakonEditorProvider {
             };
             // Получаем URI для ресурсов
             const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'drakonwidget'));
+            // Определяем текущую тему при открытии
+            const currentTheme = DrakonEditorProvider._customTheme ||
+                (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light
+                    ? 'vscode-light'
+                    : 'vscode-dark');
             // Загружаем и обрабатываем HTML
-            webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri);
+            webviewPanel.webview.html = yield this.getWebviewContent(resourcesUri, currentTheme);
+            // Отправляем текущую тему сразу после загрузки
+            webviewPanel.webview.postMessage({
+                command: 'applyTheme',
+                themeClass: currentTheme,
+                isCustom: !!DrakonEditorProvider._customTheme
+            });
+            // // После установки HTML
+            // setTimeout(() => {
+            //     webviewPanel.webview.postMessage({
+            //         command: 'applyTheme',
+            //         themeClass: currentTheme,
+            //         isCustom: !!DrakonEditorProvider._customTheme
+            //     });
+            // }, 300);
+            DrakonEditorProvider.activeWebviews.add(webviewPanel);
             // Получаем имя файла без расширения
             const fileName = document.fileName;
             const fileNameWithoutExtension = path.basename(fileName, path.extname(fileName));
@@ -183,10 +229,15 @@ class DrakonEditorProvider {
                         return;
                 }
             }));
+            webviewPanel.onDidDispose(() => {
+                DrakonEditorProvider.activeWebviews.delete(webviewPanel);
+            });
         });
     }
 }
 DrakonEditorProvider.viewType = 'drakonEditor';
+DrakonEditorProvider.activeWebviews = new Set();
+DrakonEditorProvider._customTheme = null; // Для ручного управления
 function activate(context) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);
@@ -214,6 +265,25 @@ function activate(context) {
             yield vscode.commands.executeCommand('vscode.openWith', uris[0], DRAKON_EDITOR_VIEW_TYPE);
         }
     })));
+    // Команды для ручного управления темой
+    context.subscriptions.push(vscode.commands.registerCommand('drakon.theme.light', () => {
+        DrakonEditorProvider.setCustomTheme('drakon-light');
+        vscode.window.showInformationMessage('DRAKON: Light theme activated');
+    }), vscode.commands.registerCommand('drakon.theme.dark', () => {
+        DrakonEditorProvider.setCustomTheme('drakon-dark');
+        vscode.window.showInformationMessage('DRAKON: Dark theme activated');
+    }), vscode.commands.registerCommand('drakon.theme.reset', () => {
+        DrakonEditorProvider.setCustomTheme(null);
+        vscode.window.showInformationMessage('DRAKON: Theme reset to VS Code default');
+    }));
+    // Автоматическая синхронизация
+    context.subscriptions.push(vscode.window.onDidChangeActiveColorTheme(() => {
+        if (!DrakonEditorProvider.hasCustomTheme()) {
+            DrakonEditorProvider.updateThemeForAllPanels();
+        }
+    }));
+    // При старте обновляем все открытые редакторы
+    DrakonEditorProvider.updateThemeForAllPanels();
 }
 function deactivate() { }
 //# sourceMappingURL=extension.js.map

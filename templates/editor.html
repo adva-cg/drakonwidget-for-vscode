@@ -8,6 +8,30 @@
         const vscode = acquireVsCodeApi();
         window.vscode = vscode;
         const extensionBaseUri = "${extPathUri}";
+
+        // Обработчик сообщений от расширения
+        window.addEventListener('message', event => {
+            const message = event.data;
+
+            if (message.command === 'applyTheme') {
+                // Удаляем все классы тем
+                document.body.classList.remove(
+                    'vscode-light', 'vscode-dark',
+                    'drakon-light', 'drakon-dark'
+                );
+
+                // Добавляем нужный класс темы
+                document.body.classList.add(message.themeClass);
+
+                // Обновляем тему в DrakonWidget (если используется)
+                if (window.DrakonWidget && window.DrakonWidget.setTheme) {
+                    window.DrakonWidget.setTheme(message.themeClass.includes('dark') ? 'dark' : 'light');
+                }
+            }
+        });
+
+        // Инициализация темы по умолчанию
+        document.body.classList.add('vscode-light');        
     </script>
     <title>DrakonWidget for vscode</title>
     <meta name="description" content="DrakonWidget online demo shows how to use DrakonWidget in your application. This demo is an online
@@ -19,27 +43,48 @@
     <link rel="shortcut icon" href="${extPathUri}/images/favicon.ico" />
     <link rel="icon" type="image/png" href="${extPathUri}/images/favicon.png" />
     <style>
-        *,
-        *:before,
-        *:after {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
+        /* Базовые стили для тем */
+        body {
+            background-color: var(--vscode-editor-background, white);
+            color: var(--vscode-editor-foreground, black);
+            transition: all 0.3s ease;
         }
-        /* Добавьте эти стили для контекстного меню */
-        .context-menu {
-            position: fixed;
-            background: white;
-            border: 1px solid #ccc;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-            z-index: 1000;
+
+        /* Стандартные переменные VS Code */
+        .vscode-light {
+            --drakon-primary: #0066cc;
+            --drakon-secondary: #e0e0e0;
+            --drakon-border: #ddd;
         }
-        .context-menu-item {
-            padding: 8px 15px;
-            cursor: pointer;
+
+        .vscode-dark {
+            --drakon-primary: #3794ff;
+            --drakon-secondary: #333;
+            --drakon-border: #444;
         }
-        .context-menu-item:hover {
-            background: #f0f0f0;
+
+        /* Кастомные темы расширения */
+        .drakon-light {
+            --drakon-primary: #d35400;
+            --drakon-secondary: #f5f5f5;
+            --drakon-border: #ccc;
+        }
+
+        .drakon-dark {
+            --drakon-primary: #ff9d00;
+            --drakon-secondary: #252525;
+            --drakon-border: #666;
+        }
+
+        /* Элементы интерфейса */
+        .node {
+            background-color: var(--drakon-primary);
+            color: white;
+            border-color: var(--drakon-border);
+        }
+
+        .toolbar {
+            background-color: var(--drakon-secondary);
         }
     </style>
     <link rel="stylesheet" href="${extPathUri}/styles/reset.css" />
@@ -85,9 +130,17 @@
                     Diagram JSON...
                 </div>
             </div>
-            <div class="menu-block">
+            <!-- <div class="menu-block">
                 <div class="menu-label">Color theme</div>
                 <select id="themes-combobox" class="main-menu-combobox"></select>
+            </div> -->
+            <div class="menu-block">
+                <div class="menu-label">Color theme</div>
+                <select id="themes-combobox" class="main-menu-combobox">
+                    <option value="system">System (VS Code)</option>
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
             </div>
             <div class="menu-block" style="height: 46px;">
                 <div id="set-theme-json-button" class="generic-button simple-button right-button"

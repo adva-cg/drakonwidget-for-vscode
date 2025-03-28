@@ -20,27 +20,43 @@
       },
       {
         "command": "drakon.openFile",
-        "title": "Открыть файл",
+        "title": "Открыть схему",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.theme.light",
+        "title": "Установить светлую тему",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.theme.dark",
+        "title": "Установить темную схему",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.theme.reset",
+        "title": "Установить тему из VScode",
         "category": "ДРАКОН"
       }
     ],
-    "customEditors": [{
-      "viewType": "drakonEditor",
-      "displayName": "Drakon Editor",
-      "selector": [{
-        "filenamePattern": "*.drakon"
-      }]
-    }],
+    "customEditors": [
+      {
+        "viewType": "drakonEditor",
+        "displayName": "Drakon Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.drakon"
+          }
+        ]
+      }
+    ],
     "mimetypes": {
-      "text/x-drakon": [".drakon"]
+      "text/x-drakon": [
+        ".drakon"
+      ]
     }
-  
   },
-
-  "activationEvents": [
-
-],
-
+  "activationEvents": [],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
