@@ -61,9 +61,35 @@
         return JSON.parse(jsonStr, reviver);
     }
 
-    // Уникальный ID для изоляции (можно сгенерировать или получить из URL)
-    // const WEBVIEW_NAMESPACE = new URLSearchParams(window.location.search).get('namespace')
-    //     || `webview-${Math.random().toString(36).substr(2, 9)}`;
+    function saveStateDrakon() {
+        return; // todo
+        const stateStr = safeStringify({
+            diagramId: isolatedStorage.getItem("current-diagram"),
+            zoom: drakon.getZoom(),
+            //selectedItems: drakon.getSelectedItems(),
+           // theme: localStorage.getItem("current-theme"),
+            edit: drakon.edit
+        });
+        isolatedStorage.setItem("drakon-state", stateStr);
+        console.log('saveStateDrakon:', stateStr);
+    }
+    
+    function restoreStateDrakon() {
+        return; // todo
+        const saved = isolatedStorage.getItem("drakon-state");
+        console.log('restoreStateDrakon:', saved);
+        if (saved) {
+            const state = parseSavedState(saved);
+            drakon.setZoom(state.zoom);
+            drakon.edit = state.edit;
+            //localStorage
+            // ... другие параметры
+        }
+    }
+    
+    function deleteStateDrakon() {
+        isolatedStorage.removeItem("drakon-state");
+    }    
 
     console.log('WEBVIEW_NAMESPACE: ' + WEBVIEW_NAMESPACE);
 
@@ -108,7 +134,8 @@
                 command: 'updateDiagram',
                 diagram: diagram
             });
-            console.log("ДРАКОН послали апдейт схемы ", JSON.stringify(diagram, null, 2))
+            saveStateDrakon();
+            console.log("ДРАКОН послали апдейт схемы ", JSON.stringify(diagram, null, 2));
         }
     }
 
@@ -151,6 +178,12 @@
                 }
             } else if (event.data?.command === 'updateFilename') {
                 updateFilename(event.data.filename);
+            // } else if (event.data?.command === 'saveState') {
+            //     saveStateDrakon();
+            } else if (event.data?.command === 'restoreState') {
+                restoreStateDrakon();
+            } else if (event.data?.command === 'deleteState') {
+                deleteStateDrakon();
             } else if (event.data?.command === 'revertFilename') {
                 const currentDiagram = isolatedStorage.getItem("current-diagram");
                 const diagramStr = isolatedStorage.getItem(currentDiagram);

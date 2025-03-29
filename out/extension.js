@@ -208,15 +208,33 @@ class DrakonEditorProvider {
             // В методе resolveCustomTextEditor():
             webviewPanel.onDidChangeViewState((e) => {
                 if (e.webviewPanel.visible) {
-                    // Панель стала видимой (пользователь переключился на вкладку)
-                    const currentContent = document.getText();
+                    // todo
+                    // // Восстановление при активации
+                    // e.webviewPanel.webview.postMessage({
+                    //     command: 'restoreState'
+                    // });
+                    const content = document.getText();
+                    const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
+                    // Устанавливаем имя диаграммы равным имени файла
+                    diagram.name = fileNameWithoutExtension;
+                    diagram.id = fileName;
                     webviewPanel.webview.postMessage({
-                        command: 'panelActivated',
-                        content: currentContent
+                        command: 'loadDiagram',
+                        diagram: diagram
                     });
+                }
+                else {
+                    // тут не отрабатывает postMessage
+                    // // Сохранение при деактивации 
+                    // e.webviewPanel.webview.postMessage({
+                    //     command: 'saveState'
+                    // });
                 }
             });
             webviewPanel.onDidDispose(() => {
+                webviewPanel.webview.postMessage({
+                    command: 'deleteState'
+                });
                 DrakonEditorProvider.activeWebviews.delete(webviewPanel);
             });
         });
