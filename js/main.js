@@ -13,78 +13,31 @@
     var drakon
     var currentMode = "write"
 
-    function safeStringify(obj) {
-        const seen = new WeakSet(); // Для обнаружения циклических ссылок
-    
-        return JSON.stringify(obj, (key, value) => {
-            // 1. Обрабатываем циклические ссылки
-            if (typeof value === 'object' && value !== null) {
-                if (seen.has(value)) return '[Circular]';
-                seen.add(value);
-            }
-    
-            // 2. Специальные типы данных
-            if (value instanceof Date) {
-                return { __type: 'Date', value: value.toISOString() };
-            }
-            if (value instanceof Map) {
-                return { __type: 'Map', value: Array.from(value.entries()) };
-            }
-            if (value instanceof Set) {
-                return { __type: 'Set', value: Array.from(value) };
-            }
-            if (typeof value === 'function') {
-                return undefined; // Удаляем функции
-            }
-            if (typeof value === 'symbol') {
-                return value.toString(); // Symbol('desc') → 'Symbol(desc)'
-            }
-    
-            return value;
-        });
-    }
-
-    function parseSavedState(jsonStr) {
-        const parsed = JSON.parse(jsonStr);
-    
-        const reviver = (key, value) => {
-            if (value && value.__type) {
-                switch (value.__type) {
-                    case 'Date': return new Date(value.value);
-                    case 'Map': return new Map(value.value);
-                    case 'Set': return new Set(value.value);
-                }
-            }
-            return value;
-        };
-    
-        return JSON.parse(jsonStr, reviver);
-    }
-
     function saveStateDrakon() {
-        return; // todo
-        const stateStr = safeStringify({
-            diagramId: isolatedStorage.getItem("current-diagram"),
-            zoom: drakon.getZoom(),
-            //selectedItems: drakon.getSelectedItems(),
-           // theme: localStorage.getItem("current-theme"),
-            edit: drakon.edit
-        });
-        isolatedStorage.setItem("drakon-state", stateStr);
-        console.log('saveStateDrakon:', stateStr);
+        // const state = {
+        //     undo: drakon.edit.undo,
+        //     currentUndo: drakon.edit.currentUndo
+        //     //diagram: drakon.edit.diagram
+        // }; 
+        // isolatedStorage.setItem("saveStateDrakon", JSON.stringify(state));
+        // console.log('saveStateDrakon:', JSON.stringify(state));
     }
     
     function restoreStateDrakon() {
-        return; // todo
-        const saved = isolatedStorage.getItem("drakon-state");
-        console.log('restoreStateDrakon:', saved);
-        if (saved) {
-            const state = parseSavedState(saved);
-            drakon.setZoom(state.zoom);
-            drakon.edit = state.edit;
-            //localStorage
-            // ... другие параметры
-        }
+        // const saved = isolatedStorage.getItem("drakon-state"); // Исправлено имя ключа
+        // console.log('restoreStateDrakon:', saved);
+        
+        // if (!saved || !drakon?.edit) return;
+    
+        // try {
+        //     const savedState = JSON.parse(saved);
+        //     drakon.edit.undo = savedState.undo;
+        //     drakon.edit.currentUndo = savedState.currentUndo;
+            
+        //     console.log('State restored successfully');
+        // } catch (error) {
+        //     console.error('Failed to restore state:', error);
+        // }
     }
     
     function deleteStateDrakon() {
@@ -1038,6 +991,8 @@
         )
 
         isolatedStorage.setItem("current-diagram", currentDiagram)
+
+        saveStateDrakon();
 
     }
 
