@@ -222,6 +222,9 @@ class DrakonEditorProvider {
                         command: 'loadDiagram',
                         diagram: diagram
                     });
+                    e.webviewPanel.webview.postMessage({
+                        command: 'restoreState'
+                    });
                 }
                 else {
                     // тут не отрабатывает postMessage
