@@ -201,6 +201,18 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             }
         });
 
+        // В методе resolveCustomTextEditor():
+        webviewPanel.onDidChangeViewState((e) => {
+            if (e.webviewPanel.visible) {
+                // Панель стала видимой (пользователь переключился на вкладку)
+                const currentContent = document.getText();
+                webviewPanel.webview.postMessage({
+                    command: 'panelActivated',
+                    content: currentContent
+                });
+            }
+        });        
+
         webviewPanel.onDidDispose(() => {
             DrakonEditorProvider.activeWebviews.delete(webviewPanel);
         });
