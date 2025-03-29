@@ -15,14 +15,14 @@
         setItem: (key, value) => {
             const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
             localStorage.setItem(namespacedKey, JSON.stringify(value));
-            console.log('setItem namespacedKey: ',  namespacedKey);
+            console.log('setItem namespacedKey: ', namespacedKey);
             console.log('setItem value: ' + JSON.stringify(value));
         },
 
         getItem: (key) => {
             const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
             const value = localStorage.getItem(namespacedKey);
-            console.log('getItem namespacedKey: ',  namespacedKey);
+            console.log('getItem namespacedKey: ', namespacedKey);
             console.log('getItem value: ' + value);
             return value ? JSON.parse(value) : null;
         },
@@ -111,18 +111,13 @@
                     'drakon-light', 'drakon-dark'
                 );
 
-                //try {
-
-                    // Добавляем нужный класс темы
-                    document.body.classList.add(event.data.themeClass);
-
-                    // Обновляем тему в DrakonWidget (если используется)
-                    if (window.DrakonWidget && window.DrakonWidget.setTheme) {
-                        window.DrakonWidget.setTheme(event.data.themeClass.includes('dark') ? 'dark' : 'light');
-                    }
-                // }catch{
-                // }
-        }
+                // Добавляем нужный класс темы
+                document.body.classList.add(event.data.themeClass);
+                // Обновляем тему в DrakonWidget (если используется)
+                if (window.DrakonWidget && window.DrakonWidget.setTheme) {
+                    window.DrakonWidget.setTheme(event.data.themeClass.includes('dark') ? 'dark' : 'light');
+                }
+            }
         });
     }
 
@@ -157,8 +152,8 @@
         registerChange("modes-combobox", onModesChanged)
 
         initShortcuts()
-        // var currentDiagram = isolatedStorage.getItem("current-diagram")
-        // openDiagram(currentDiagram)
+        var currentDiagram = isolatedStorage.getItem("current-diagram")
+        openDiagram(currentDiagram)
         window.onresize = debounce(onResize, 500)
 
         registerEventVscode();
