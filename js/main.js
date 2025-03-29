@@ -1,8 +1,65 @@
+/* global WEBVIEW_NAMESPACE */
+/* global localStorage */
+/* global vscode */
+/* global document */
+/* global window */
+/* global Mousetrap */
+/* global extensionBaseUri */
+/* global canvas */
+
 (function () {
     var iconSize = 20
     var widgets
     var drakon
     var currentMode = "write"
+
+    function safeStringify(obj) {
+        const seen = new WeakSet(); // Для обнаружения циклических ссылок
+    
+        return JSON.stringify(obj, (key, value) => {
+            // 1. Обрабатываем циклические ссылки
+            if (typeof value === 'object' && value !== null) {
+                if (seen.has(value)) return '[Circular]';
+                seen.add(value);
+            }
+    
+            // 2. Специальные типы данных
+            if (value instanceof Date) {
+                return { __type: 'Date', value: value.toISOString() };
+            }
+            if (value instanceof Map) {
+                return { __type: 'Map', value: Array.from(value.entries()) };
+            }
+            if (value instanceof Set) {
+                return { __type: 'Set', value: Array.from(value) };
+            }
+            if (typeof value === 'function') {
+                return undefined; // Удаляем функции
+            }
+            if (typeof value === 'symbol') {
+                return value.toString(); // Symbol('desc') → 'Symbol(desc)'
+            }
+    
+            return value;
+        });
+    }
+
+    function parseSavedState(jsonStr) {
+        const parsed = JSON.parse(jsonStr);
+    
+        const reviver = (key, value) => {
+            if (value && value.__type) {
+                switch (value.__type) {
+                    case 'Date': return new Date(value.value);
+                    case 'Map': return new Map(value.value);
+                    case 'Set': return new Set(value.value);
+                }
+            }
+            return value;
+        };
+    
+        return JSON.parse(jsonStr, reviver);
+    }
 
     // Уникальный ID для изоляции (можно сгенерировать или получить из URL)
     // const WEBVIEW_NAMESPACE = new URLSearchParams(window.location.search).get('namespace')
@@ -134,26 +191,20 @@
         }
 
         initToolbar()
-        //loadDiagrams()
         loadThemes()
         var closeButton = get("close-button")
         closeButton.addEventListener("click", closeMenu)
 
-        registerClick("create-diagram-button", createDiagram)
-        registerClick("delete-diagram-button", deleteDiagram)
-        registerClick("duplicate-diagram-button", duplicateDiagram)
-
         registerClick("set-diagram-json-button", setDiagramJson)
         registerClick("set-theme-json-button", setThemeJson)
-        registerClick("reset-all-diagrams-button", resetAllDiagrams)
 
-        //registerChange("diagrams-combobox", onDiagramsChanged)
         registerChange("themes-combobox", onThemesChanged)
         registerChange("modes-combobox", onModesChanged)
 
         initShortcuts()
         var currentDiagram = isolatedStorage.getItem("current-diagram")
         openDiagram(currentDiagram)
+        console.log('main: current-diagram', currentDiagram)
         window.onresize = debounce(onResize, 500)
 
         registerEventVscode();
@@ -264,22 +315,6 @@
         closeMenu()
     }
 
-    function onDiagramsChanged() {
-        var diagrams = get("diagrams-combobox")
-        openDiagram(diagrams.value)
-        closeMenu()
-    }
-
-    async function resetAllDiagrams() {
-        var yes = await widgets.criticalQuestion("Do you want to delete ALL your diagrams?", "Delete", "Cancel")
-        if (!yes) {
-            return
-        }
-
-        isolatedStorage.clear()
-        location.reload()
-    }
-
     async function setThemeJson(evt) {
         var current = localStorage.getItem("current-theme")
         var theme = JSON.parse(localStorage.getItem(current))
@@ -343,61 +378,6 @@
         isolatedStorage.setItem(current, newContent)
         openDiagram(current)
         closeMenu()
-    }
-
-    async function deleteDiagram() {
-        var list = getDiagramList()
-        if (list.length == 1) {
-            widgets.showErrorSnack("Cannot delete the last diagram")
-            return
-        }
-
-        var yes = await widgets.criticalQuestion("Do you want to delete the current diagram", "Delete", "Cancel")
-        if (!yes) {
-            return
-        }
-
-        var current = isolatedStorage.getItem("current-diagram")
-        var index = list.indexOf(current)
-        isolatedStorage.removeItem(current)
-        list.splice(index, 1)
-        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
-        var nextCurrent
-        if (index < list.length) {
-            nextCurrent = list[index]
-        } else {
-            nextCurrent = list[index - 1]
-        }
-        openDiagram(nextCurrent)
-        closeMenu()
-    }
-
-    function duplicateDiagram() {
-        var current = isolatedStorage.getItem("current-diagram")
-        var diagram = JSON.parse(isolatedStorage.getItem(current))
-        diagram.name += "-2"
-        var list = getDiagramList()
-        var id = generateId(list)
-        var diagramStr = JSON.stringify(diagram)
-        list.push(id)
-        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
-        isolatedStorage.setItem(id, diagramStr)
-        openDiagram(id)
-        closeMenu()
-    }
-
-    async function createDiagram(evt) {
-        var name = await widgets.inputBox(
-            evt.clientX,
-            evt.clientY,
-            "Enter diagram name",
-            "",
-            nameNotEmpty)
-        if (name) {
-            var id = createEmptyDiagram(name)
-            openDiagram(id)
-            closeMenu()
-        }
     }
 
     function createEmptyDiagram(name) {
@@ -637,14 +617,6 @@
         drakon.insertFree("group-duration-left")
     }
 
-    function loadDiagrams() {
-        var list = getDiagramList()
-        if (!list) {
-            saveExamplesInStorage()
-        }
-
-    }
-
     function loadThemes() {
         var list = getThemes()
         if (!list) {
@@ -673,39 +645,6 @@
         }
         return list
     }
-
-    function saveMissingExamplesInStorage() {
-        var examples = createExamples()
-        var existing = getDiagramObjects()
-        var list = getDiagramList()
-        var names = existing.diagrams.map(function (diagram) { return diagram.name })
-        for (var example of examples) {
-            if (names.indexOf(example.name) === -1) {
-                var id = generateId(list)
-                saveDiagram(example, id, list)
-            }
-        }
-        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
-    }
-
-    function saveExamplesInStorage() {
-        var examples = createExamples();
-        var list = []
-        for (var example of examples) {
-            var id = generateId(list)
-            saveDiagram(example, id, list)
-        }
-        isolatedStorage.setItem("diagram-list", JSON.stringify(list))
-        isolatedStorage.setItem("current-diagram", examples[3].id)
-    }
-
-    function saveDiagram(example, id, list) {
-        example.id = id;
-        list.push(id);
-        var diagramStr = JSON.stringify(example);
-        isolatedStorage.setItem(id, diagramStr);
-    }
-
 
     function generateId(list) {
         var id = "diagram-" + Math.floor(Math.random() * 1000 + 100)
