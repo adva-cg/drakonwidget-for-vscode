@@ -205,7 +205,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             DrakonEditorProvider.activeWebviews.delete(webviewPanel);
         });
 
-        // В методе resolveCustomTextEditor():
         webviewPanel.onDidChangeViewState((e) => {
             if (e.webviewPanel.visible) {
                 const content = document.getText();
