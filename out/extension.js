@@ -205,19 +205,22 @@ class DrakonEditorProvider {
                         return;
                 }
             }));
+            webviewPanel.onDidDispose(() => {
+                DrakonEditorProvider.activeWebviews.delete(webviewPanel);
+            });
             // В методе resolveCustomTextEditor():
             webviewPanel.onDidChangeViewState((e) => {
                 if (e.webviewPanel.visible) {
-                    // Панель стала видимой (пользователь переключился на вкладку)
-                    const currentContent = document.getText();
+                    const content = document.getText();
+                    const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
+                    // Устанавливаем имя диаграммы равным имени файла
+                    diagram.name = fileNameWithoutExtension;
+                    diagram.id = fileName;
                     webviewPanel.webview.postMessage({
-                        command: 'panelActivated',
-                        content: currentContent
+                        command: 'loadDiagram',
+                        diagram: diagram
                     });
                 }
-            });
-            webviewPanel.onDidDispose(() => {
-                DrakonEditorProvider.activeWebviews.delete(webviewPanel);
             });
         });
     }

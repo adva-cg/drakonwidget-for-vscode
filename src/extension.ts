@@ -201,21 +201,27 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             }
         });
 
-        // В методе resolveCustomTextEditor():
-        webviewPanel.onDidChangeViewState((e) => {
-            if (e.webviewPanel.visible) {
-                // Панель стала видимой (пользователь переключился на вкладку)
-                const currentContent = document.getText();
-                webviewPanel.webview.postMessage({
-                    command: 'panelActivated',
-                    content: currentContent
-                });
-            }
-        });        
-
         webviewPanel.onDidDispose(() => {
             DrakonEditorProvider.activeWebviews.delete(webviewPanel);
         });
+
+        // В методе resolveCustomTextEditor():
+        webviewPanel.onDidChangeViewState((e) => {
+            if (e.webviewPanel.visible) {
+                const content = document.getText();
+                const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
+
+                // Устанавливаем имя диаграммы равным имени файла
+                diagram.name = fileNameWithoutExtension;
+                diagram.id = fileName;
+
+                webviewPanel.webview.postMessage({
+                    command: 'loadDiagram',
+                    diagram: diagram
+                });
+            }
+        });
+
 
     }
 

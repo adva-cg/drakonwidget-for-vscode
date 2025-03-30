@@ -13,58 +13,6 @@
     var drakon
     var currentMode = "write"
 
-    function safeStringify(obj) {
-        const seen = new WeakSet(); // Для обнаружения циклических ссылок
-    
-        return JSON.stringify(obj, (key, value) => {
-            // 1. Обрабатываем циклические ссылки
-            if (typeof value === 'object' && value !== null) {
-                if (seen.has(value)) return '[Circular]';
-                seen.add(value);
-            }
-    
-            // 2. Специальные типы данных
-            if (value instanceof Date) {
-                return { __type: 'Date', value: value.toISOString() };
-            }
-            if (value instanceof Map) {
-                return { __type: 'Map', value: Array.from(value.entries()) };
-            }
-            if (value instanceof Set) {
-                return { __type: 'Set', value: Array.from(value) };
-            }
-            if (typeof value === 'function') {
-                return undefined; // Удаляем функции
-            }
-            if (typeof value === 'symbol') {
-                return value.toString(); // Symbol('desc') → 'Symbol(desc)'
-            }
-    
-            return value;
-        });
-    }
-
-    function parseSavedState(jsonStr) {
-        const parsed = JSON.parse(jsonStr);
-    
-        const reviver = (key, value) => {
-            if (value && value.__type) {
-                switch (value.__type) {
-                    case 'Date': return new Date(value.value);
-                    case 'Map': return new Map(value.value);
-                    case 'Set': return new Set(value.value);
-                }
-            }
-            return value;
-        };
-    
-        return JSON.parse(jsonStr, reviver);
-    }
-
-    // Уникальный ID для изоляции (можно сгенерировать или получить из URL)
-    // const WEBVIEW_NAMESPACE = new URLSearchParams(window.location.search).get('namespace')
-    //     || `webview-${Math.random().toString(36).substr(2, 9)}`;
-
     console.log('WEBVIEW_NAMESPACE: ' + WEBVIEW_NAMESPACE);
 
     // Кастомное хранилище с пространствами
@@ -202,9 +150,6 @@
         registerChange("modes-combobox", onModesChanged)
 
         initShortcuts()
-        var currentDiagram = isolatedStorage.getItem("current-diagram")
-        openDiagram(currentDiagram)
-        console.log('main: current-diagram', currentDiagram)
         window.onresize = debounce(onResize, 500)
 
         registerEventVscode();
