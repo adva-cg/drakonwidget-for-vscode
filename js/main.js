@@ -13,36 +13,57 @@
     var drakon
     var currentMode = "write"
 
-    function saveStateDrakon() {
-        // const state = {
-        //     undo: drakon.edit.undo,
-        //     currentUndo: drakon.edit.currentUndo
-        //     //diagram: drakon.edit.diagram
-        // }; 
-        // isolatedStorage.setItem("saveStateDrakon", JSON.stringify(state));
-        // console.log('saveStateDrakon:', JSON.stringify(state));
+    function safeStringify(obj) {
+        const seen = new WeakSet(); // Для обнаружения циклических ссылок
+    
+        return JSON.stringify(obj, (key, value) => {
+            // 1. Обрабатываем циклические ссылки
+            if (typeof value === 'object' && value !== null) {
+                if (seen.has(value)) return '[Circular]';
+                seen.add(value);
+            }
+    
+            // 2. Специальные типы данных
+            if (value instanceof Date) {
+                return { __type: 'Date', value: value.toISOString() };
+            }
+            if (value instanceof Map) {
+                return { __type: 'Map', value: Array.from(value.entries()) };
+            }
+            if (value instanceof Set) {
+                return { __type: 'Set', value: Array.from(value) };
+            }
+            if (typeof value === 'function') {
+                return undefined; // Удаляем функции
+            }
+            if (typeof value === 'symbol') {
+                return value.toString(); // Symbol('desc') → 'Symbol(desc)'
+            }
+    
+            return value;
+        });
     }
+
+    function parseSavedState(jsonStr) {
+        const parsed = JSON.parse(jsonStr);
     
-    function restoreStateDrakon() {
-        // const saved = isolatedStorage.getItem("drakon-state"); // Исправлено имя ключа
-        // console.log('restoreStateDrakon:', saved);
-        
-        // if (!saved || !drakon?.edit) return;
+        const reviver = (key, value) => {
+            if (value && value.__type) {
+                switch (value.__type) {
+                    case 'Date': return new Date(value.value);
+                    case 'Map': return new Map(value.value);
+                    case 'Set': return new Set(value.value);
+                }
+            }
+            return value;
+        };
     
-        // try {
-        //     const savedState = JSON.parse(saved);
-        //     drakon.edit.undo = savedState.undo;
-        //     drakon.edit.currentUndo = savedState.currentUndo;
-            
-        //     console.log('State restored successfully');
-        // } catch (error) {
-        //     console.error('Failed to restore state:', error);
-        // }
+        return JSON.parse(jsonStr, reviver);
     }
-    
-    function deleteStateDrakon() {
-        isolatedStorage.removeItem("drakon-state");
-    }    
+
+    // Уникальный ID для изоляции (можно сгенерировать или получить из URL)
+    // const WEBVIEW_NAMESPACE = new URLSearchParams(window.location.search).get('namespace')
+    //     || `webview-${Math.random().toString(36).substr(2, 9)}`;
 
     console.log('WEBVIEW_NAMESPACE: ' + WEBVIEW_NAMESPACE);
 
@@ -87,8 +108,7 @@
                 command: 'updateDiagram',
                 diagram: diagram
             });
-            saveStateDrakon();
-            console.log("ДРАКОН послали апдейт схемы ", JSON.stringify(diagram, null, 2));
+            console.log("ДРАКОН послали апдейт схемы ", JSON.stringify(diagram, null, 2))
         }
     }
 
@@ -131,12 +151,6 @@
                 }
             } else if (event.data?.command === 'updateFilename') {
                 updateFilename(event.data.filename);
-            // } else if (event.data?.command === 'saveState') {
-            //     saveStateDrakon();
-            } else if (event.data?.command === 'restoreState') {
-                restoreStateDrakon();
-            } else if (event.data?.command === 'deleteState') {
-                deleteStateDrakon();
             } else if (event.data?.command === 'revertFilename') {
                 const currentDiagram = isolatedStorage.getItem("current-diagram");
                 const diagramStr = isolatedStorage.getItem(currentDiagram);
@@ -991,8 +1005,6 @@
         )
 
         isolatedStorage.setItem("current-diagram", currentDiagram)
-
-        saveStateDrakon();
 
     }
 
