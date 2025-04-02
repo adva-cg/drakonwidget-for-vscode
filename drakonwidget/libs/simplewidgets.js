@@ -954,7 +954,7 @@ function createSimpleWidgets() {
                 case '56':
                     html.addClass('.generic-button', 'display:inline-block', 'vertical-align: top', 'padding-left: 10px', 'padding-right: 10px', 'cursor: pointer', 'border-radius: 3px', 'margin-right: 5px', 'line-height:34px', 'user-select: none');
                     html.addClass('.generic-button:active', 'transform: translateY(2px)');
-                    html.addClass('.simple-button', 'background: white', 'border: solid 1px #a0a0a0');
+                    html.addClass('.simple-button', 'background: var(--drakon-secondary)', 'border: solid 1px var(--drakon-border)');
                     html.addClass('.simple-button:hover', 'background: #9fd694');
                     html.addClass('.default-button', 'border: solid 1px #038009', 'background: #038009', 'color: white');
                     html.addClass('.default-button:hover', 'border: solid 1px #004a04', 'background: #004a04');
