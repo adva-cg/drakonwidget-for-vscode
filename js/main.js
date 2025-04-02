@@ -378,10 +378,8 @@
 
     function showMenu() {
         var menu = get("menu")
-        var diagrams = get("diagrams-combobox")
         var themes = get("themes-combobox")
         var modes = get("modes-combobox")
-        fillDiagrams(diagrams)
         fillModes(modes)
         fillThemes(themes)
         menu.style.display = "inline-block"
@@ -425,16 +423,6 @@
         menu.style.display = "none"
     }
 
-
-    function fillDiagrams(diagrams) {
-        diagrams.innerHTML = ""
-        var diagramObjects = getDiagramObjects()
-        diagramObjects.diagrams.sort(by("name"))
-        for (var diagram of diagramObjects.diagrams) {
-            addOption(diagrams, diagram.id, diagram.name)
-        }
-        diagrams.value = diagramObjects.currentDiagram
-    }
 
     function by(prop) {
         return function (leftObj, rightObj) {
