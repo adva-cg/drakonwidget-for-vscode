@@ -205,9 +205,6 @@ class DrakonEditorProvider {
                         return;
                 }
             }));
-            webviewPanel.onDidDispose(() => {
-                DrakonEditorProvider.activeWebviews.delete(webviewPanel);
-            });
             webviewPanel.onDidChangeViewState((e) => {
                 if (e.webviewPanel.visible) {
                     const content = document.getText();
@@ -219,7 +216,16 @@ class DrakonEditorProvider {
                         command: 'loadDiagram',
                         diagram: diagram
                     });
+                    webviewPanel.webview.postMessage({
+                        command: 'restoreState'
+                    });
                 }
+            });
+            webviewPanel.onDidDispose(() => {
+                webviewPanel.webview.postMessage({
+                    command: 'deleteState'
+                });
+                DrakonEditorProvider.activeWebviews.delete(webviewPanel);
             });
         });
     }
