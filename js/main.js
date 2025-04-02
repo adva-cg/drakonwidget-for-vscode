@@ -143,7 +143,6 @@
         var closeButton = get("close-button")
         closeButton.addEventListener("click", closeMenu)
 
-        registerClick("set-diagram-json-button", setDiagramJson)
         registerClick("set-theme-json-button", setThemeJson)
 
         registerChange("themes-combobox", onThemesChanged)
