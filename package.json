@@ -12,6 +12,16 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Drakonwidget",
+      "properties": {
+        "Drakonwidget.languageForPseudoCode": {
+          "type": "string",
+          "default": "ru",
+          "description": "Language for pseudocode"
+        }
+      }
+    },
     "commands": [
       {
         "command": "drakon.newDiagram",
@@ -36,6 +46,16 @@
       {
         "command": "drakon.theme.reset",
         "title": "Установить тему из VScode",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.genPseudo",
+        "title": "Генерировать псевдо-код",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.setLanguage",
+        "title": "Установить язык по умолчанию для псевдокода",
         "category": "ДРАКОН"
       }
     ],
@@ -70,6 +90,7 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.21.0",
+    "node-html-parser": "^6.1.13",
     "typescript": "^5.8.2"
   }
 }

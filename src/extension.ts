@@ -19,6 +19,8 @@ interface WebviewMessage {
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     constructor(private readonly context: vscode.ExtensionContext) { }
 
+    public static activeFilename = '';
+
     private static isChangeView = false;
     private static readonly viewType = 'drakonEditor';
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
@@ -131,6 +133,8 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         webviewPanel: vscode.WebviewPanel
     ): Promise<void> {
 
+        DrakonEditorProvider.activeFilename = document.fileName;
+
         // Настройка Webview
         webviewPanel.webview.options = {
             enableScripts: true,
@@ -226,8 +230,11 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                     DrakonEditorProvider.isChangeView = false;
                 }
 
-            }else{
+                DrakonEditorProvider.activeFilename = document.fileName;
+
+            } else {
                 DrakonEditorProvider.isChangeView = true;
+                DrakonEditorProvider.activeFilename = '';
             }
         });
         webviewPanel.onDidDispose(() => {
@@ -299,6 +306,123 @@ export function activate(context: vscode.ExtensionContext) {
             await vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE);
         })
     );
+
+    // Установка языка псеводокода
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.setLanguage', async () => {
+            const config = vscode.workspace.getConfiguration('Drakonwidget');
+            const choice = await vscode.window.showQuickPick(
+                ["english", "russian"], // тодо брать из кодогенератора
+                { placeHolder: "Select a language" }
+            );
+            if (choice) {
+                await config.update('languageForPseudoCode', choice, vscode.ConfigurationTarget.Global);
+            }
+        })
+    );
+
+    // Генерация псеводокода
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.genPseudo', async () => {
+
+            let lang: string;
+
+            if (DrakonEditorProvider.activeFilename === '') {
+                vscode.window.showErrorMessage('Нет открытого файла!');
+                return;
+            }
+
+            // Получаем имя файла
+            const fileName = DrakonEditorProvider.activeFilename;
+
+            const config = vscode.workspace.getConfiguration('Drakonwidget');
+            const language = config.get<string>('languageForPseudoCode');
+            if (language === 'russian') {
+                lang = 'ru'
+            } else {
+                lang = 'en'
+            }
+
+            const scriptPath = path.join(context.extensionPath, 'drakongen/src/main.js');
+
+            // Динамический импорт JS-файла
+            const script = await import(scriptPath);
+
+            // 1. Создаем временную директорию
+            const tempDir = path.join(os.tmpdir(), `drakon-${Date.now()}`);
+            const tempDirUri = vscode.Uri.file(tempDir);
+
+            // Вызов функции из JS-файла с аргументами
+            try {
+                // 2. Создаем директорию
+                await vscode.workspace.fs.createDirectory(tempDirUri);
+
+                // // 3. Формируем пути
+                // const inputFile = vscode.Uri.file(path.join(tempDir, 'input.drakon'));
+                // const outputFile = vscode.Uri.file(path.join(tempDir, 'input.txt'));
+
+                // // 4. Копируем исходный файл во временную директорию (если нужно)
+                // await vscode.workspace.fs.copy(fileName, inputFile);
+
+                // 5. Запускаем обработку
+                await script.run(lang, tempDir, false, fileName);
+
+                // 4. Получаем список сгенерированных файлов
+                const generatedFiles = await vscode.workspace.fs.readDirectory(tempDirUri);
+
+                // 5. Фильтруем только .pseudo файлы (или другие нужные)
+                const pseudoFiles = generatedFiles.filter(([name]) => name.endsWith('.txt'));
+
+                // 6. Открываем все файлы в редакторе
+                for (const [file] of pseudoFiles) {
+                    const fileUri = vscode.Uri.file(path.join(tempDir, file));
+                    try {
+                        const fileContent = await vscode.workspace.fs.readFile(fileUri);
+                        const text = new TextDecoder().decode(fileContent);
+
+                        const doc = await vscode.workspace.openTextDocument({
+                            content: text,
+                            language: 'plaintext' // или другой язык для подсветки
+                        });
+
+                        await vscode.window.showTextDocument(doc, {
+                            preview: false, // открываем в постоянной вкладке
+                            viewColumn: vscode.ViewColumn.Beside // рядом с текущим редактором
+                        });
+                    } catch (fileError) {
+                        vscode.window.showErrorMessage(`Ошибка открытия файла ${file}: ${fileError}`);
+                    }
+                }
+
+            } catch (err) {
+                let errorMessage = 'Неизвестная ошибка';
+
+                if (err instanceof Error) {
+                    errorMessage = err.message;
+                    if ('details' in err && typeof err.details === 'object') {
+                        errorMessage += '\n' + (err.details as any).message;
+                    }
+                } else if (typeof err === 'string') {
+                    errorMessage = err;
+                }
+
+                vscode.window.showErrorMessage(`Ошибка: ${errorMessage}`);
+
+                // Для отладки можно вывести полную ошибку в консоль
+                console.error('Полная ошибка:', err);
+            } finally {
+                // 8. Удаляем временную директорию (даже если были ошибки)
+                try {
+                    await vscode.workspace.fs.delete(tempDirUri, { recursive: true });
+                } catch (cleanupError) {
+                    console.warn('Ошибка при удалении временной директории:', cleanupError);
+                }
+            }
+
+        })
+
+    );
+
 
     // Команда открытия файла
     context.subscriptions.push(

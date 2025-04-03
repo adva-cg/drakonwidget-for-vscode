@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const {toTree, toPseudocode} = require("./index")
+const { toTree, toPseudocode } = require("./index")
 
 const fs = require('fs').promises;
 const path = require('path');
@@ -42,7 +42,7 @@ async function main() {
                 break;
             case '--tree':
                 options.tree = true;
-                break;                
+                break;
             case '--output':
                 options.output = args[++i];
                 break;
@@ -74,7 +74,48 @@ async function main() {
     }
 }
 
-async function getDrakonFiles(dirPath) {    
+async function run(language, output, tree, targetPath) {
+
+    let options = {
+        language: language,
+        json: false,
+        output: output,
+        tree: tree
+    };
+
+    try {
+        const stats = await fs.lstat(targetPath);
+
+        if (stats.isDirectory()) {
+            await generate(targetPath, options);
+        } else {
+            await generateOne(targetPath, options);
+        }
+    } catch (err) {
+        // Создаем информативную ошибку
+        const error = new Error(`Ошибка обработки файла ${targetPath}`);
+
+        // Добавляем дополнительные свойства
+        error.filename = targetPath;
+        error.details = {
+            message: err.message,
+            stack: err.stack,
+            nodeId: err.nodeId
+        };
+
+        // Логируем для отладки
+        console.error('Ошибка в run():', {
+            message: err.message,
+            filename: targetPath,
+            nodeId: err.nodeId,
+            stack: err.stack
+        });
+
+        throw error; // Пробрасываем улучшенную ошибку
+    }
+}
+
+async function getDrakonFiles(dirPath) {
     // Read all entries in the directory
     const files = await fs.readdir(dirPath, { withFileTypes: true });
 
@@ -91,12 +132,12 @@ async function generate(folderPath, options) {
     var files = await getDrakonFiles(folderPath)
     var output
     if (options.tree) {
-        var obj = {procedures:[]}
+        var obj = { procedures: [] }
         for (var file of files) {
             var json = await convertToTree(file, options)
             obj.procedures.push(json)
-        }     
-        output = JSON.stringify(obj, null, 4)   
+        }
+        output = JSON.stringify(obj, null, 4)
     } else {
         output = ""
         for (var file of files) {
@@ -111,7 +152,7 @@ async function generateOne(filePath, options) {
     var output
     if (options.tree) {
         var json = await convertToTree(filePath, options)
-        output = JSON.stringify(json, null, 4)   
+        output = JSON.stringify(json, null, 4)
     } else {
         output = await convertToPseudo(filePath, options)
     }
@@ -133,7 +174,7 @@ async function convertToTree(filePath, options) {
     const content = await fs.readFile(filePath, 'utf8');
 
     var pname = path.parse(filePath)
-    const name = pname.name    
+    const name = pname.name
     var result = toTree(content, name, filePath, options.language)
     return JSON.parse(result)
 }
@@ -144,7 +185,7 @@ async function convertToPseudo(filePath, options) {
     const content = await fs.readFile(filePath, 'utf8');
 
     var pname = path.parse(filePath)
-    const name = pname.name    
+    const name = pname.name
     const result = toPseudocode(content, name, filePath, options.language);
     return result
 }
@@ -155,3 +196,6 @@ async function convertToPseudo(filePath, options) {
 main();
 
 
+module.exports = {
+    run
+};
