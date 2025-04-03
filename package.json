@@ -92,5 +92,10 @@
     "eslint": "^9.21.0",
     "node-html-parser": "^6.1.13",
     "typescript": "^5.8.2"
+  },
+  "author": "Vitaly Adadurov",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
   }
 }
