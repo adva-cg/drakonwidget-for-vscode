@@ -1,0 +1,70 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "11"
+    },
+    "3": {
+      "type": "action",
+      "content": "provider.saveToNewFile",
+      "one": "5",
+      "two": ""
+    },
+    "4": {
+      "type": "action",
+      "content": "provider.showSaveDialog\nprovider.saveToNewFile",
+      "one": "3",
+      "two": ""
+    },
+    "5": {
+      "type": "action",
+      "content": "vscode.commands.executeCommand('vscode.openWith', uri, DRAKON_EDITOR_VIEW_TYPE)",
+      "one": "6",
+      "two": ""
+    },
+    "6": {
+      "type": "action",
+      "content": "DrakonEditorProvider: resolveCustomTextEditor",
+      "one": "7",
+      "two": ""
+    },
+    "7": {
+      "type": "output",
+      "content": "webviewPanel.webview.postMessage({\n                command: 'loadDiagram',\n                diagram: diagram\n            });",
+      "one": "9",
+      "secondary": "main.js",
+      "two": ""
+    },
+    "8": {
+      "type": "input",
+      "content": "command: drakon.newDiagram",
+      "one": "4",
+      "secondary": "vscode",
+      "two": ""
+    },
+    "9": {
+      "type": "input",
+      "content": "main()",
+      "one": "10",
+      "secondary": "main.js",
+      "two": ""
+    },
+    "10": {
+      "type": "action",
+      "content": "registerEventVscode: loadDiagram",
+      "one": "1",
+      "two": ""
+    },
+    "11": {
+      "type": "comment",
+      "content": "При переключении вкладки надо проверять наличие буфера, и \"подсвечивать\"\n\nПосле вставки буфера надо \"сохранять\"",
+      "one": "8"
+    }
+  },
+  "style": "{\"maxWidth\":460}"
+}

@@ -219,6 +219,15 @@ class DrakonEditorProvider {
                     webviewPanel.webview.postMessage({
                         command: 'restoreState'
                     });
+                    if (DrakonEditorProvider.isChangeView) {
+                        webviewPanel.webview.postMessage({
+                            command: 'сheckClipboard'
+                        });
+                        DrakonEditorProvider.isChangeView = false;
+                    }
+                }
+                else {
+                    DrakonEditorProvider.isChangeView = true;
                 }
             });
             webviewPanel.onDidDispose(() => {
@@ -230,6 +239,7 @@ class DrakonEditorProvider {
         });
     }
 }
+DrakonEditorProvider.isChangeView = false;
 DrakonEditorProvider.viewType = 'drakonEditor';
 DrakonEditorProvider.activeWebviews = new Set();
 DrakonEditorProvider.customTheme = null; // Для ручного управления

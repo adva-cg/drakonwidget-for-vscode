@@ -19,9 +19,9 @@ interface WebviewMessage {
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     constructor(private readonly context: vscode.ExtensionContext) { }
 
+    private static isChangeView = false;
     private static readonly viewType = 'drakonEditor';
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
-
     private static customTheme: string | null = null; // Для ручного управления
 
     public static hasCustomTheme(): boolean {
@@ -214,9 +214,20 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                     command: 'loadDiagram',
                     diagram: diagram
                 });
+
                 webviewPanel.webview.postMessage({
                     command: 'restoreState'
                 });
+
+                if (DrakonEditorProvider.isChangeView) {
+                    webviewPanel.webview.postMessage({
+                        command: 'сheckClipboard'
+                    });
+                    DrakonEditorProvider.isChangeView = false;
+                }
+
+            }else{
+                DrakonEditorProvider.isChangeView = true;
             }
         });
         webviewPanel.onDidDispose(() => {
