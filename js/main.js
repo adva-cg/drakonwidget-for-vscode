@@ -13,39 +13,6 @@
     var drakon
     var currentMode = "write"
 
-    function saveStateDrakon() {
-        const state = {
-            undo: drakon.edit.undo,
-            redo: drakon.edit.redo,
-            currentUndo: drakon.edit.currentUndo
-            //diagram: drakon.edit.diagram
-        }; 
-        isolatedStorage.setItem("drakon-state", JSON.stringify(state));
-        console.log('saveStateDrakon:', JSON.stringify(state));
-    }
-    
-    function restoreStateDrakon() {
-        const saved = isolatedStorage.getItem("drakon-state"); // Исправлено имя ключа
-        console.log('restoreStateDrakon:', saved);
-        
-        if (!saved || !drakon?.edit) return;
-    
-        try {
-            const savedState = JSON.parse(saved);
-            drakon.edit.undo = savedState.undo;
-            drakon.edit.redo = savedState.redo;
-            drakon.edit.currentUndo = savedState.currentUndo;
-            
-            console.log('State restored successfully');
-        } catch (error) {
-            console.error('Failed to restore state:', error);
-        }
-    }
-    
-    function deleteStateDrakon() {
-        isolatedStorage.removeItem("drakon-state");
-    }    
-
     console.log('WEBVIEW_NAMESPACE: ' + WEBVIEW_NAMESPACE);
 
     // Кастомное хранилище с пространствами
@@ -78,12 +45,22 @@
             });
         }
     };
-
     // Делаем хранилище глобально доступным для этого WebView
     window.isolatedStorage = isolatedStorage;
 
-
     function sendUpdateToVSCode(diagram) {
+
+        function saveStateDrakon() {
+            const state = {
+                undo: drakon.edit.undo,
+                redo: drakon.edit.redo,
+                currentUndo: drakon.edit.currentUndo
+                //diagram: drakon.edit.diagram
+            };
+            isolatedStorage.setItem("drakon-state", JSON.stringify(state));
+            console.log('saveStateDrakon:', JSON.stringify(state));
+        }
+
         if (vscode) {
             vscode.postMessage({
                 command: 'updateDiagram',
@@ -119,6 +96,40 @@
     }
 
     function registerEventVscode() {
+
+        function сheckClipboard() {
+            const state = {
+                undo: drakon.edit.undo,
+                redo: drakon.edit.redo,
+                currentUndo: drakon.edit.currentUndo
+                //diagram: drakon.edit.diagram
+            };
+            isolatedStorage.setItem("drakon-state", JSON.stringify(state));
+            console.log('saveStateDrakon:', JSON.stringify(state));
+        }
+
+        function restoreStateDrakon() {
+            const saved = isolatedStorage.getItem("drakon-state"); // Исправлено имя ключа
+            console.log('restoreStateDrakon:', saved);
+
+            if (!saved || !drakon?.edit) return;
+
+            try {
+                const savedState = JSON.parse(saved);
+                drakon.edit.undo = savedState.undo;
+                drakon.edit.redo = savedState.redo;
+                drakon.edit.currentUndo = savedState.currentUndo;
+
+                console.log('State restored successfully');
+            } catch (error) {
+                console.error('Failed to restore state:', error);
+            }
+        }
+
+        function deleteStateDrakon() {
+            isolatedStorage.removeItem("drakon-state");
+        }
+
         window.addEventListener('message', event => {
             if (event.data?.command === 'loadDiagram') {
                 const diagram = event.data.diagram;
@@ -133,13 +144,13 @@
                 }
             } else if (event.data?.command === 'updateFilename') {
                 updateFilename(event.data.filename);
-            // } else if (event.data?.command === 'saveState') {
-            //     saveStateDrakon();
-        } else if (event.data?.command === 'restoreState') {
-            restoreStateDrakon();
-        } else if (event.data?.command === 'deleteState') {
-            deleteStateDrakon();
-        } else if (event.data?.command === 'revertFilename') {
+            } else if (event.data?.command === 'сheckClipboard') {
+                сheckClipboard();
+            } else if (event.data?.command === 'restoreState') {
+                restoreStateDrakon();
+            } else if (event.data?.command === 'deleteState') {
+                deleteStateDrakon();
+            } else if (event.data?.command === 'revertFilename') {
                 const currentDiagram = isolatedStorage.getItem("current-diagram");
                 const diagramStr = isolatedStorage.getItem(currentDiagram);
                 const diagram = JSON.parse(diagramStr);
@@ -246,6 +257,7 @@
 
     function paste() {
         drakon.showPaste()
+        sendUpdateToVSCode()
     }
 
     function cut() {
