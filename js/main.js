@@ -98,14 +98,16 @@
     function registerEventVscode() {
 
         function сheckClipboard() {
-            const state = {
-                undo: drakon.edit.undo,
-                redo: drakon.edit.redo,
-                currentUndo: drakon.edit.currentUndo
-                //diagram: drakon.edit.diagram
-            };
-            isolatedStorage.setItem("drakon-state", JSON.stringify(state));
-            console.log('saveStateDrakon:', JSON.stringify(state));
+            var content, type, _var2;
+            content = localStorage.getItem('clipboard');
+            if (content) {
+                type = localStorage.getItem('clipboard-type');
+                if (type) {
+                    drakon.showPasteSockets(type);
+                }
+            }
+
+            console.log('сheckClipboard todo');
         }
 
         function restoreStateDrakon() {
