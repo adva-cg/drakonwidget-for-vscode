@@ -972,9 +972,9 @@ function createSimpleWidgets() {
                 case '70':
                     html.addClass('.context-menu-item', 'display:block', 'line-height:30px', 'margin: 0px', 'user-select: none', 'cursor: default', 'white-space: nowrap');
                     html.addClass('.context-menu-item:hover', 'background:#9fd694');
-                    html.addClass('.context-menu', 'display: inline-block', 'position: absolute', 'background: white', 'max-width: 100vw', 'min-width: 200px', 'border: solid 1px #a0a0a0', 'padding: 10px');
-                    html.addClass('.context-menu-separator', 'background: #a0a0a0', 'height: 1px', 'margin-top:5px', 'margin-bottom:5px');
-                    html.addClass('.context-menu-item-text', 'display: inline-block', 'vertical-align: bottom', 'width: calc(100% - 30px)', 'white-space: nowrap', 'overflow: hidden', 'padding-left: 5px');
+                    html.addClass('.context-menu', 'display: inline-block', 'position: absolute', 'background: var(--drakon-button)', 'max-width: 100vw', 'min-width: 200px', 'border: solid 1px #a0a0a0', 'padding: 10px');
+                    html.addClass('.context-menu-separator', 'background: var(--drakon-border)', 'height: 1px', 'margin-top:5px', 'margin-bottom:5px');
+                    html.addClass('.context-menu-item-text', 'display: inline-block', 'vertical-align: bottom', 'width: calc(100% - 30px)', 'white-space: nowrap', 'overflow: hidden', 'padding-left: 5px', 'color: var(--drakon-secondary)');
                     html.addClass('img.context-menu-icon-passive', 'display: inline-block', 'vertical-align: bottom', 'width: 30px', 'height: 30px');
                     __state = '73';
                     break;
