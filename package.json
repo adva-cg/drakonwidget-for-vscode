@@ -76,10 +76,9 @@
       ]
     }
   },
-  "activationEvents": [],
   "scripts": {
-    "drakongen:build": "cd drakongen & npm install",
-    "vscode:prepublish": "drakongen:build & npm run compile",
+    "drakongen:build": "cd drakongen && npm install",
+    "vscode:prepublish": "npm run drakongen:build && npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "package": "vsce package --yarn"
@@ -96,10 +95,6 @@
   "author": "Vitaly Adadurov",
   "license": "UNLICENSED",
   "dependencies": {
-    "drakongen": "file:./drakongen",
     "node-html-parser": "^6.1.13"
-  },
-  "resolutions": {
-    "**/@drakongen/main": "file:./drakongen/src/index.js"
   }
 }

@@ -10,11 +10,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "drakongen": ["drakongen/src/*.js"]
-    },
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/typings", "./src/types"],
+    "allowJs": true, // Разрешить использование JavaScript-файлов
+    "checkJs": true  // Проверять JavaScript-файлы
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

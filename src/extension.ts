@@ -1,10 +1,11 @@
 import * as os from 'os';
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { toPseudocode } from 'drakongen';
+
+const drakongen = require('../drakongen/src/index.js');
+//const { toPseudocode } = drakongen;
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
-
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
 
 
@@ -343,7 +344,7 @@ export function activate(context: vscode.ExtensionContext) {
                 const diagramName = path.basename(DrakonEditorProvider.activeFilename, '.drakon');
 
                 // Генерация псевдокода
-                const pseudoCode = toPseudocode(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
+                const pseudoCode = drakongen.toPseudocode(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
 
                 // Создаем и открываем новый документ
                 const doc = await vscode.workspace.openTextDocument({

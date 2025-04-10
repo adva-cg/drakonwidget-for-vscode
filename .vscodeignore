@@ -8,8 +8,9 @@ vsc-extension-quickstart.md
 **/*.map
 **/eslint.config.mjs
 **/.vscode-test.*
-# drakongen/node_modules/**
-# drakongen/package.json
-# drakongen/package-lock.json
-node_modules/drakongen
-# node_modules/node-html-parser
+
+# Включаем drakongen (локальная папка)
+!drakongen/**
+
+# Исключаем node_modules/drakongen (если нужно)
+node_modules/drakongen/

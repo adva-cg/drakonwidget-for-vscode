@@ -1,4 +1,4 @@
-declare module 'drakongen' {
+declare module '../drakongen/src/index.js' {
     export function toPseudocode(
       drakon: string,
       name: string,
