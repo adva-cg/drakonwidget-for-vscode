@@ -96,5 +96,9 @@
   "license": "UNLICENSED",
   "dependencies": {
     "node-html-parser": "^6.1.13"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adva-cg/drakonwidget-for-vscode.git"
   }
 }
