@@ -3,9 +3,9 @@
   "displayName": "Drakonwidget for vscode",
   "description": "Расширение для работы с диаграммами Drakon в VS Code",
   "version": "0.0.1",
-  "publisher": "Vitaly Adadurov",
+  "publisher": "VitalyAdadurov",
   "engines": {
-    "vscode": "^1.98.0"
+    "vscode": "^1.99.0"
   },
   "categories": [
     "Other"
@@ -78,24 +78,28 @@
   },
   "activationEvents": [],
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "drakongen:build": "cd drakongen & npm install",
+    "vscode:prepublish": "drakongen:build & npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "package": "vsce package --yarn"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^20.17.27",
-    "@types/vscode": "^1.98.0",
+    "@types/node": "^20.17.30",
+    "@types/vscode": "^1.99.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "eslint": "^9.21.0",
-    "node-html-parser": "^6.1.13",
     "typescript": "^5.8.2"
   },
   "author": "Vitaly Adadurov",
   "license": "UNLICENSED",
   "dependencies": {
+    "drakongen": "file:./drakongen",
     "node-html-parser": "^6.1.13"
+  },
+  "resolutions": {
+    "**/@drakongen/main": "file:./drakongen/src/index.js"
   }
 }

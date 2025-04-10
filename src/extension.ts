@@ -1,7 +1,7 @@
 import * as os from 'os';
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { time } from 'console';
+import { toPseudocode } from 'drakongen';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 
@@ -321,108 +321,50 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    // Генерация псеводокода
+    // Генерация псевдокода
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.genPseudo', async () => {
-
-            let lang: string;
-
-            if (DrakonEditorProvider.activeFilename === '') {
-                vscode.window.showErrorMessage('Нет открытого файла!');
-                return;
-            }
-
-            // Получаем имя файла
-            const fileName = DrakonEditorProvider.activeFilename;
-
-            const config = vscode.workspace.getConfiguration('Drakonwidget');
-            const language = config.get<string>('languageForPseudoCode');
-            if (language === 'russian') {
-                lang = 'ru'
-            } else {
-                lang = 'en'
-            }
-
-            const scriptPath = path.join(context.extensionPath, 'drakongen/src/main.js');
-
-            // Динамический импорт JS-файла
-            const script = await import(scriptPath);
-
-            // 1. Создаем временную директорию
-            const tempDir = path.join(os.tmpdir(), `drakon-${Date.now()}`);
-            const tempDirUri = vscode.Uri.file(tempDir);
-
-            // Вызов функции из JS-файла с аргументами
             try {
-                // 2. Создаем директорию
-                await vscode.workspace.fs.createDirectory(tempDirUri);
-
-                // // 3. Формируем пути
-                // const inputFile = vscode.Uri.file(path.join(tempDir, 'input.drakon'));
-                // const outputFile = vscode.Uri.file(path.join(tempDir, 'input.txt'));
-
-                // // 4. Копируем исходный файл во временную директорию (если нужно)
-                // await vscode.workspace.fs.copy(fileName, inputFile);
-
-                // 5. Запускаем обработку
-                await script.run(lang, tempDir, false, fileName);
-
-                // 4. Получаем список сгенерированных файлов
-                const generatedFiles = await vscode.workspace.fs.readDirectory(tempDirUri);
-
-                // 5. Фильтруем только .pseudo файлы (или другие нужные)
-                const pseudoFiles = generatedFiles.filter(([name]) => name.endsWith('.txt'));
-
-                // 6. Открываем все файлы в редакторе
-                for (const [file] of pseudoFiles) {
-                    const fileUri = vscode.Uri.file(path.join(tempDir, file));
-                    try {
-                        const fileContent = await vscode.workspace.fs.readFile(fileUri);
-                        const text = new TextDecoder().decode(fileContent);
-
-                        const doc = await vscode.workspace.openTextDocument({
-                            content: text,
-                            language: 'plaintext' // или другой язык для подсветки
-                        });
-
-                        await vscode.window.showTextDocument(doc, {
-                            preview: false, // открываем в постоянной вкладке
-                            viewColumn: vscode.ViewColumn.Beside // рядом с текущим редактором
-                        });
-                    } catch (fileError) {
-                        vscode.window.showErrorMessage(`Ошибка открытия файла ${file}: ${fileError}`);
-                    }
+                // Проверка активного файла
+                if (!DrakonEditorProvider.activeFilename) {
+                    vscode.window.showErrorMessage('Нет открытого файла!');
+                    return;
                 }
 
-            } catch (err) {
-                let errorMessage = 'Неизвестная ошибка';
+                // Получаем конфигурацию
+                const config = vscode.workspace.getConfiguration('Drakonwidget');
+                const languageSetting = config.get<string>('languageForPseudoCode', 'russian');
+                const lang = languageSetting === 'russian' ? 'ru' : 'en';
 
-                if (err instanceof Error) {
-                    errorMessage = err.message;
-                    if ('details' in err && typeof err.details === 'object') {
-                        errorMessage += '\n' + (err.details as any).message;
-                    }
-                } else if (typeof err === 'string') {
-                    errorMessage = err;
-                }
+                // Получаем содержимое диаграммы
+                const fileUri = vscode.Uri.file(DrakonEditorProvider.activeFilename);
+                const fileContent = await vscode.workspace.fs.readFile(fileUri);
+                const drakonContent = new TextDecoder().decode(fileContent);
+                const diagramName = path.basename(DrakonEditorProvider.activeFilename, '.drakon');
 
-                vscode.window.showErrorMessage(`Ошибка: ${errorMessage}`);
+                // Генерация псевдокода
+                const pseudoCode = toPseudocode(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
 
-                // Для отладки можно вывести полную ошибку в консоль
-                console.error('Полная ошибка:', err);
-            } finally {
-                // 8. Удаляем временную директорию (даже если были ошибки)
-                try {
-                    await vscode.workspace.fs.delete(tempDirUri, { recursive: true });
-                } catch (cleanupError) {
-                    console.warn('Ошибка при удалении временной директории:', cleanupError);
-                }
+                // Создаем и открываем новый документ
+                const doc = await vscode.workspace.openTextDocument({
+                    content: pseudoCode,
+                    language: 'plaintext'
+                });
+
+                await vscode.window.showTextDocument(doc, {
+                    preview: false,
+                    viewColumn: vscode.ViewColumn.Beside
+                });
+
+                vscode.window.showInformationMessage('Псевдокод успешно сгенерирован');
+
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
+                vscode.window.showErrorMessage(`Ошибка генерации: ${errorMessage}`);
+                console.error('Ошибка:', error);
             }
-
         })
-
     );
-
 
     // Команда открытия файла
     context.subscriptions.push(
