@@ -658,7 +658,8 @@
     function onItemClick(prim, pos, evt) {
         if (prim.type === "insertion") {
             if (onInsertionHotspot(prim, pos)) {
-                tryGoToDiagram(prim.content)
+                // tryGoToDiagram(prim.content) // тодо
+                window.open(prim.link, '_blank');
             }
         } else if (prim.type === "action" && prim.link) {
             if (onActionHotspot(prim, pos)) {
