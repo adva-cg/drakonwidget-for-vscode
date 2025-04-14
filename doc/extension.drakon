@@ -1,0 +1,86 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "8"
+    },
+    "3": {
+      "type": "insertion",
+      "content": "activate",
+      "one": "4"
+    },
+    "4": {
+      "type": "insertion",
+      "content": "deactivate",
+      "one": "1"
+    },
+    "5": {
+      "type": "insertion",
+      "content": "getCurrentDateTimeString",
+      "one": "6"
+    },
+    "6": {
+      "type": "insertion",
+      "content": "hashString",
+      "one": "3"
+    },
+    "7": {
+      "type": "shelf",
+      "content": "hasCustomTheme()\ngetWebviewContent()\nupdateThemeForAllPanels()\nsetCustomTheme()\nhandleDiagramUpdate()\nshowSaveDialog()\nsaveToNewFile()\ngetWorkspaceFolder()\nresolveCustomTextEditor()",
+      "one": "16",
+      "secondary": "class DrakonEditorProvider"
+    },
+    "8": {
+      "type": "shelf",
+      "content": "command\ndiagram\nfilename\ntheme",
+      "one": "7",
+      "secondary": "interface WebviewMessage"
+    },
+    "9": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.resolveCustomTextEditor",
+      "one": "5"
+    },
+    "10": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.getWorkspaceFolder",
+      "one": "9"
+    },
+    "11": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.saveToNewFile",
+      "one": "10"
+    },
+    "12": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.handleDiagramUpdate",
+      "one": "11"
+    },
+    "13": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.setCustomTheme",
+      "one": "12"
+    },
+    "14": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.updateThemeForAllPanels",
+      "one": "13"
+    },
+    "15": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.getWebviewContent",
+      "one": "14"
+    },
+    "16": {
+      "type": "insertion",
+      "content": "DrakonEditorProvider.hasCustomTheme",
+      "one": "15"
+    }
+  },
+  "style": "{\"maxWidth\":290}"
+}
