@@ -1,0 +1,34 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "5"
+    },
+    "3": {
+      "type": "insertion",
+      "content": "webviewPanel.webview.onDidReceiveMessage",
+      "one": "4"
+    },
+    "4": {
+      "type": "insertion",
+      "content": "webviewPanel.onDidChangeViewState",
+      "one": "6"
+    },
+    "5": {
+      "type": "action",
+      "content": "Инициализация редактора и загрузка / открытие диаграммы",
+      "one": "3"
+    },
+    "6": {
+      "type": "insertion",
+      "content": "webviewPanel.onDidDispose",
+      "one": "1"
+    }
+  },
+  "style": "{\"maxWidth\":500}"
+}
