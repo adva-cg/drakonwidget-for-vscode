@@ -774,6 +774,31 @@
         }
     }
 
+    function startEditCode(prim, ro) {
+        if (ro) {
+            widgets.largeBoxRo(
+                prim.left,
+                prim.top,
+                "",
+                prim.textCode
+            )
+        } else {
+            widgets.largeBox(
+                prim.left,
+                prim.top,
+                "",
+                prim.textCode
+            ).then(function (newTextCode) {
+                if (newTextCode !== undefined && newTextCode != prim.textCode) {
+                    drakon.setTextCode(
+                        prim.id,
+                        newTextCode
+                    )
+                }
+            })
+        }
+    }
+
     async function startEditSecondary(prim, ro) {
 
         if (ro) {
@@ -888,6 +913,7 @@
         var currentTheme = localStorage.getItem("current-theme")
         var config = JSON.parse(localStorage.getItem(currentTheme))
         config.startEditContent = startEditContent
+        config.startEditCode = startEditCode
         config.startEditSecondary = startEditSecondary
         config.startEditLink = startEditLink
         config.startEditStyle = startEditStyle
