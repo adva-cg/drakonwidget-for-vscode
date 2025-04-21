@@ -5467,7 +5467,8 @@ function createDrakonWidget() {
                         content: node.content || '',
                         secondary: node.secondary || '',
                         link: node.link || '',
-                        style: node.style || ''
+                        style: node.style || '',
+                        textCode: node.textCode || ''
                     };
                     setNotNull(node, prim, 'x');
                     setNotNull(node, prim, 'y');
@@ -12286,6 +12287,21 @@ function createDrakonWidget() {
             updateAndKeepSelection(self, [change]);
             return;
         }
+        function DrakonCanvas_setTextCode(self, itemId, textCode) {
+            var change;
+            tracing.trace('DrakonCanvas.setTextCode', [
+                itemId,
+                textCode
+            ]);
+            checkNotReadonly(self);
+            change = {
+                id: itemId,
+                fields: { textCode: textCode },
+                op: 'update'
+            };
+            updateAndKeepSelection(self, [change]);
+            return;
+        }
         function getPrimById(widget, id) {
             var node, visuals, vitem, free;
             var __state = '2';
@@ -12777,6 +12793,38 @@ function createDrakonWidget() {
                 }
             }
         }
+        function startEditCode(widget, prim) {
+            var callback, delayed, ro, _var2;
+            var __state = '2';
+            while (true) {
+                switch (__state) {
+                case '1':
+                    return;
+                case '2':
+                    _var2 = canEditNodeText(widget, prim);
+                    if (_var2) {
+                        callback = widget.config.startEditCode;
+                        if (callback) {
+                            ro = isReadonly(widget);
+                            delayed = function () {
+                                callback(prim, ro);
+                            };
+                            setTimeout(delayed, 1);
+                            __state = '1';
+                        } else {
+                            console.error('startEditCode is missing in config');
+                            __state = '1';
+                        }
+                    } else {
+                        __state = '1';
+                    }
+                    break;
+                default:
+                    return;
+                }
+            }
+        }
+
         function changeLayout(widget, prim, layout) {
             var item, change, _var2;
             var __state = '2';
@@ -14615,6 +14663,7 @@ function createDrakonWidget() {
         }
         function buildMenuByTypeMind(widget, prim, node) {
             var menu, _var2, _var3, _var4, _var5, _var6, _var7, _var8, _var9, _var10, _var11, _var12, _var13, _var14, _var15, _var16, _var17, _var18, _var19, _var20, _var21, _var22, _var23, _var24, _var25, _var26, _var27, _var28;
+            var _var77;
             var __state = '27';
             while (true) {
                 switch (__state) {
@@ -14796,6 +14845,11 @@ function createDrakonWidget() {
                     _var7 = tr(widget, 'Edit content');
                     pushMenuItem('edit_content', menu, _var7, undefined, function () {
                         startEditContent(widget, prim);
+                    });
+                    menu.push({ type: 'separator' });
+                    _var77 = tr(widget, 'Edit code');
+                    pushMenuItem('edit_code', menu, _var77, undefined, function () {
+                        startEditCode(widget, prim);
                     });
                     if (prim.type === 'graf-image') {
                         _var27 = isReadonly(widget);
@@ -16968,6 +17022,7 @@ function createDrakonWidget() {
         }
         function buildMenuByType(widget, prim, node) {
             var menu, func, _var2, _var3, _var4, _var5, _var6, _var7, _var8, _var9, _var10, _var11, _var12, _var13, _var14, _var15, _var16, _var17, _var18, _var19, _var20, _var21, _var22, _var23, _var24, _var25, _var26, _var27, _var28, _var29, _var30, _var31, _var32, _var33, _var34, _var35, _var36, _var37, _var38;
+            var _var39;
             var __state = '27';
             while (true) {
                 switch (__state) {
@@ -16994,6 +17049,12 @@ function createDrakonWidget() {
                     } else {
                         _var8 = canEditNodeText(widget, prim);
                         if (_var8) {
+                            // Add this code here:
+                            _var39 = tr(widget, 'Edit code'); // Get translated string
+                            pushMenuItem('edit_code', menu, _var39, undefined, function () {
+                                widget.config.startEditCode(widget, prim); // Access through config
+                            });
+
                             _var17 = canEditSecondary(prim);
                             if (_var17) {
                                 _var18 = tr(widget, 'Edit upper text');
@@ -35134,6 +35195,9 @@ function createDrakonWidget() {
             };
             self.setContent = function (itemId, content) {
                 return DrakonCanvas_setContent(self, itemId, content);
+            };
+            self.setTextCode = function (itemId, textCode) {
+                return DrakonCanvas_setTextCode(self, itemId, textCode);
             };
             self.exportToContext = function (box, zoom100, ctx) {
                 return DrakonCanvas_exportToContext(self, box, zoom100, ctx);
