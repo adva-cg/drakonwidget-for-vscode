@@ -8875,6 +8875,7 @@ function createDrakonWidget() {
                         content: node.content,
                         secondary: node.secondary,
                         link: node.link,
+                        textCode: node.textCode,
                         style: node.style,
                         flag1: node.flag1,
                         margin: node.margin || 0,
@@ -12809,6 +12810,7 @@ function createDrakonWidget() {
                             delayed = function () {
                                 callback(prim, ro);
                             };
+                            tracing.trace('DrakonCanvas.startEditCode, will edit', prim);
                             setTimeout(delayed, 1);
                             __state = '1';
                         } else {
@@ -12824,7 +12826,6 @@ function createDrakonWidget() {
                 }
             }
         }
-
         function changeLayout(widget, prim, layout) {
             var item, change, _var2;
             var __state = '2';
@@ -17052,7 +17053,7 @@ function createDrakonWidget() {
                             // Add this code here:
                             _var39 = tr(widget, 'Edit code'); // Get translated string
                             pushMenuItem('edit_code', menu, _var39, undefined, function () {
-                                widget.config.startEditCode(widget, prim); // Access through config
+                                startEditCode(widget, prim); // Access through config
                             });
 
                             _var17 = canEditSecondary(prim);
@@ -21603,6 +21604,7 @@ function createDrakonWidget() {
                     setNotNull(item, node, 'two');
                     setNotNull(item, node, 'side');
                     setNotNull(item, node, 'link');
+                    setNotNull(item, node, 'textCode');
                     setNotNull(item, node, 'margin');
                     setNotNull(item, node, 'secondary');
                     setNotNull(item, node, 'parent');
