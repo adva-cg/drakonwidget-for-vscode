@@ -15,13 +15,27 @@
 const fs = require('fs');
 const path = require('path');
 
+// Log file path
+const logFilePath = path.join(__dirname, 'modify.log');
+
+// Function to write to the log file
+function logToFile(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  fs.appendFileSync(logFilePath, logMessage, 'utf-8');
+}
+
+// Clear the log file at the start
+fs.writeFileSync(logFilePath, '', 'utf-8');
+logToFile('Starting script execution');
+
 // Function to read and parse a JSON file
 function readJsonFile(filepath) {
   try {
     const data = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
     return data;
   } catch (err) {
-    console.error(`Error reading or parsing JSON file '${filepath}':`, err);
+    logToFile(`Error reading or parsing JSON file '${filepath}': ${err}`);
     return null;
   }
 }
@@ -48,7 +62,7 @@ function buildHierarchy(files) {
       if (parent) {
         parent.children.push(hierarchy[file.id]);
       } else {
-        console.warn(`Parent with id '${file.parent_id}' not found for file '${file.name}'.`);
+        logToFile(`Parent with id '${file.parent_id}' not found for file '${file.name}'.`);
       }
     }
   }
@@ -65,7 +79,7 @@ function buildHierarchy(files) {
 function createFoldersAndMoveFiles(node, baseDir, fileMap) {
   const nodeFile = fileMap[node.id];
   if (!nodeFile) {
-    console.error(`File not found for node with id '${node.id}'.`);
+    logToFile(`File not found for node with id '${node.id}'.`);
     return;
   }
   const nodeName = nodeFile.name;
@@ -74,7 +88,7 @@ function createFoldersAndMoveFiles(node, baseDir, fileMap) {
     folderPath = path.join(baseDir, nodeName);
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
-      console.log(`Created folder: '${folderPath}'`);
+      logToFile(`Created folder: '${folderPath}'`);
     }
   } else if (nodeFile.parent_id) {
     const parent = fileMap[nodeFile.parent_id];
@@ -89,7 +103,7 @@ function createFoldersAndMoveFiles(node, baseDir, fileMap) {
 
   if (fs.existsSync(oldFilepath) && oldFilepath !== newFilepath) {
     fs.renameSync(oldFilepath, newFilepath);
-    console.log(`Moved file '${path.basename(oldFilepath)}' to '${folderPath}'`);
+    logToFile(`Moved file '${path.basename(oldFilepath)}' to '${folderPath}'`);
     // Update the filepath in the file object
     nodeFile.filepath = newFilepath;
   }
@@ -101,39 +115,45 @@ function createFoldersAndMoveFiles(node, baseDir, fileMap) {
 }
 
 // Function to format, modify, and rename a JSON file
-function formatAndModifyJson(filepath) {
+function formatAndModifyJson(file) {
+    const filepath = file.filepath;
+    logToFile(`formatAndModifyJson called for: ${filepath}`); // Debugging: Trace the call
   try {
     const data = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
-
-    // 1. Apply pretty formatting
-    const formattedJson = JSON.stringify(data, null, 4);
+    logToFile(`data.items: ${JSON.stringify(data.items)}`); // Debugging: Check data.items
 
     // 2. Replace "text" with "content" in "items"
     if (data.items) {
-      for (const key in data.items) {
-        if (data.items[key].text !== undefined) {
-          data.items[key].content = data.items[key].text;
-          delete data.items[key].text;
+        for (const key in data.items) {
+            if (data.items.hasOwnProperty(key)) {
+                const item = data.items[key];
+                if (item && item.text !== undefined) {
+                    logToFile(`item.text: ${JSON.stringify(item.text)}`); // Debugging: Check item.text
+                    item.content = item.text;
+                    delete item.text;
+                }
+            }
         }
-      }
     }
+    // 1. Apply pretty formatting
+    const formattedJson = JSON.stringify(data, null, 4);
     // Write the modified JSON back to the original file
     fs.writeFileSync(filepath, formattedJson, 'utf-8');
-    console.log(`Formatted and modified '${path.basename(filepath)}'`);
+    logToFile(`Formatted and modified '${path.basename(filepath)}'`);
+    return data;
   } catch (err) {
-    console.error(
-      `An error occurred with '${path.basename(filepath)}':`,
-      err
+    logToFile(
+      `An error occurred with '${path.basename(filepath)}': ${err}`
     );
+    return null;
   }
 }
 
 // Function to rename a JSON file
-function renameJsonFile(file) {
+function renameJsonFile(file, data) {
     const filepath = file.filepath;
     try {
-        const data = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
-        if (data.name) {
+        if (data && data.name) {
             let newFilename = data.name;
             let newExtension = '.json';
 
@@ -146,7 +166,7 @@ function renameJsonFile(file) {
             const newFilepath = path.join(directory, newFilename);
 
             if (fs.existsSync(newFilepath)) {
-                console.log(
+                logToFile(
                     `File with name '${newFilename}' already exists. Skipping rename for '${path.basename(
                         filepath
                     )}'.`
@@ -159,16 +179,15 @@ function renameJsonFile(file) {
                 // Rename the backup file to the new filename
                 fs.renameSync(backupFilepath, newFilepath);
 
-                console.log(
+                logToFile(
                     `Renamed '${path.basename(filepath)}' to '${newFilename}'`
                 );
-                console.log(`Backup created: '${path.basename(backupFilepath)}'`);
+                logToFile(`Backup created: '${path.basename(backupFilepath)}'`);
             }
         }
     } catch (err) {
-        console.error(
-            `An error occurred with '${path.basename(filepath)}':`,
-            err
+        logToFile(
+            `An error occurred with '${path.basename(filepath)}': ${err}`
         );
     }
 }
@@ -211,10 +230,11 @@ for (const rootNode of rootNodes) {
 
 // Format and modify all files
 for (const file of allFiles) {
-    formatAndModifyJson(file.filepath);
+    const data = formatAndModifyJson(file);
+    if (data) {
+        renameJsonFile(file, data);
+    }
 }
 
-// Rename all files
-for (const file of allFiles) {
-    renameJsonFile(file);
-}
+logToFile('Script execution completed');
+//
