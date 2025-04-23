@@ -21577,6 +21577,7 @@ function createDrakonWidget() {
                         content = visuals.config.end;
                         __state = '6';
                     } else {
+                        // content = item.textCode || item.content || ''; для отображения кода
                         content = item.content || '';
                         __state = '6';
                     }
