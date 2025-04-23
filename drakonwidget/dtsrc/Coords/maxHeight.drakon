@@ -1,0 +1,39 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "165595255",
+    "params": "height\nnode",
+    "when_created": 1657696073.5246,
+    "parent_id": "794efc2c",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return Math.max(height, node.h)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "maxHeight",
+    "when_updated": 1657696087.1498
+}

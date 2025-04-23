@@ -1,0 +1,106 @@
+{
+    "version": 20180619,
+    "tag": "166023981",
+    "params": "item\noldToNew",
+    "when_created": 1665136445.5971,
+    "parent_id": "e674bf58",
+    "props": [],
+    "when_updated": 1672682791.7724,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "two": "6",
+            "one": "5",
+            "content": "item.one"
+        },
+        "5": {
+            "flag1": 0,
+            "id": "5",
+            "type": "question",
+            "two": "7",
+            "one": "8",
+            "content": "item.two"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "5",
+            "content": "item.one = oldToNew[item.one]"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "item.two = oldToNew[item.two]"
+        },
+        "8": {
+            "flag1": 0,
+            "id": "8",
+            "type": "question",
+            "one": "10",
+            "two": "9",
+            "content": "item.side"
+        },
+        "9": {
+            "one": "10",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "item.side = oldToNew[item.side]"
+        },
+        "10": {
+            "flag1": 0,
+            "id": "10",
+            "type": "question",
+            "two": "11",
+            "one": "12",
+            "content": "item.begin"
+        },
+        "11": {
+            "one": "12",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "item.begin = oldToNew[item.begin]"
+        },
+        "12": {
+            "flag1": 0,
+            "id": "12",
+            "type": "question",
+            "one": "1",
+            "two": "13",
+            "content": "item.end"
+        },
+        "13": {
+            "one": "1",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "item.end = oldToNew[item.end]"
+        }
+    },
+    "updated_by": "stipan",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "replaceTarget",
+    "language": "LANG_S42"
+}

@@ -1,0 +1,53 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "",
+    "params": "diagram\nchange\nundo\nredo",
+    "when_created": 1661097657.1692,
+    "parent_id": "1b1117a0",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "66",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "66": {
+            "type": "action",
+            "id": "66",
+            "one": "67",
+            "content": "undoChange = createUndoChange(\n    diagram,\n    change\n)"
+        },
+        "67": {
+            "one": "68",
+            "id": "67",
+            "type": "action",
+            "two": "",
+            "content": "redo.changes.push(change)\nundo.changes.push(undoChange)"
+        },
+        "68": {
+            "type": "action",
+            "one": "1",
+            "id": "68",
+            "content": "applyChange(diagram, change)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "addChangeToEdit",
+    "when_updated": 1661097657.1692
+}

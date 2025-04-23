@@ -1,0 +1,237 @@
+{
+    "version": 20180619,
+    "tag": "705947221",
+    "params": "widget\nclipboard\nevt",
+    "when_created": 1667025156.5723,
+    "parent_id": "f7515898",
+    "props": [],
+    "when_updated": 1690566387.0609,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "11",
+            "id": "2",
+            "type": "branch",
+            "content": "Generate new ids"
+        },
+        "6": {
+            "one": "8",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "edits = []"
+        },
+        "8": {
+            "one": "17",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "replaceIds(\n    widget,\n    undefined,\n    payload.items,\n    \"\"\n)"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "45",
+            "content": "payload = clipboard.content"
+        },
+        "16": {
+            "branchId": 4,
+            "one": "18",
+            "id": "16",
+            "type": "branch",
+            "content": "Create items"
+        },
+        "17": {
+            "branchId": 2,
+            "one": "29",
+            "id": "17",
+            "type": "branch",
+            "content": "Calculate insertion coordinates"
+        },
+        "18": {
+            "one": "19",
+            "id": "18",
+            "type": "action",
+            "two": "",
+            "content": "create = function (item) {\n    createPastedItem(edits, item)\n}"
+        },
+        "19": {
+            "one": "43",
+            "id": "19",
+            "type": "action",
+            "two": "",
+            "content": "payload.items.forEach(create)"
+        },
+        "20": {
+            "one": "1",
+            "id": "20",
+            "type": "action",
+            "two": "",
+            "content": "return doEdit(widget, edits)"
+        },
+        "21": {
+            "one": "27",
+            "id": "21",
+            "type": "action",
+            "two": "",
+            "content": "dx = pos.x - epos.x\ndy = pos.y - epos.y"
+        },
+        "23": {
+            "flag1": 1,
+            "id": "23",
+            "type": "question",
+            "two": "25",
+            "one": "24",
+            "content": "evt"
+        },
+        "24": {
+            "type": "action",
+            "one": "21",
+            "id": "24",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "25": {
+            "one": "30",
+            "id": "25",
+            "type": "action",
+            "two": "",
+            "content": "pos = getDiagramCenter(widget)"
+        },
+        "26": {
+            "type": "loopend",
+            "id": "26",
+            "one": "34",
+            "content": ""
+        },
+        "27": {
+            "type": "loopbegin",
+            "one": "41",
+            "id": "27",
+            "content": "item; payload.items"
+        },
+        "28": {
+            "type": "action",
+            "one": "32",
+            "id": "28",
+            "content": "x = snapUp(config, oldPos.x + dx)\ny = snapUp(config, oldPos.y + dy)"
+        },
+        "29": {
+            "type": "action",
+            "one": "23",
+            "id": "29",
+            "content": "first = payload.items[0]\nepos = getFreePosition(first)"
+        },
+        "30": {
+            "one": "27",
+            "id": "30",
+            "type": "action",
+            "two": "",
+            "content": "dx = pos.x - epos.x - 100\ndy = pos.y - epos.y - 100"
+        },
+        "31": {
+            "type": "action",
+            "id": "31",
+            "one": "6",
+            "content": "config = widget.visuals.config"
+        },
+        "32": {
+            "type": "action",
+            "one": "26",
+            "id": "32",
+            "content": "setFreePosition(item, x, y)"
+        },
+        "33": {
+            "type": "action",
+            "one": "28",
+            "id": "33",
+            "content": "oldPos = getFreePosition(item)"
+        },
+        "34": {
+            "branchId": 3,
+            "one": "35",
+            "id": "34",
+            "type": "branch",
+            "content": "z-indexes"
+        },
+        "35": {
+            "type": "action",
+            "one": "46",
+            "id": "35",
+            "content": "utils.sortBy(payload.items, \"zIndex\")"
+        },
+        "37": {
+            "type": "loopend",
+            "one": "16",
+            "id": "37",
+            "content": ""
+        },
+        "38": {
+            "type": "loopbegin",
+            "id": "38",
+            "one": "42",
+            "content": "item; payload.items"
+        },
+        "39": {
+            "type": "action",
+            "one": "40",
+            "id": "39",
+            "content": "item.zIndex = currentZ"
+        },
+        "40": {
+            "type": "action",
+            "id": "40",
+            "one": "37",
+            "content": "currentZ++"
+        },
+        "41": {
+            "flag1": 0,
+            "id": "41",
+            "type": "question",
+            "one": "33",
+            "two": "26",
+            "content": "item.type === \"connection\""
+        },
+        "42": {
+            "flag1": 0,
+            "id": "42",
+            "type": "question",
+            "one": "39",
+            "two": "37",
+            "content": "item.type === \"connection\""
+        },
+        "43": {
+            "type": "action",
+            "one": "20",
+            "id": "43",
+            "content": "await loadCreatedImages(\n    widget,\n    edits,\n    images\n)"
+        },
+        "45": {
+            "type": "action",
+            "id": "45",
+            "one": "31",
+            "content": "images = payload.images"
+        },
+        "46": {
+            "type": "action",
+            "id": "46",
+            "one": "38",
+            "content": "currentZ = getNextZIndex(widget)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": true,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "language": "LANG_S42",
+    "name": "pasteFree",
+    "created_by": "stipan"
+}

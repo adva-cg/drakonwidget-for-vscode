@@ -1,0 +1,205 @@
+{
+    "version": 20180619,
+    "tag": "338756610",
+    "params": "widget\nscrollX\nscrollY",
+    "when_created": 1668154960.3367,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "3",
+            "id": "2",
+            "type": "branch",
+            "content": "Horizontal"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "8",
+            "content": "visuals = widget.visuals\nbox = visuals.box"
+        },
+        "8": {
+            "type": "action",
+            "one": "11",
+            "id": "8",
+            "content": "zoom = widget.zoomFactor"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "26",
+            "content": "wwidth = widget.width / zoom"
+        },
+        "17": {
+            "branchId": 3,
+            "one": "19",
+            "id": "17",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "18": {
+            "branchId": 2,
+            "one": "23",
+            "id": "18",
+            "type": "branch",
+            "content": "Vertical"
+        },
+        "19": {
+            "type": "action",
+            "id": "19",
+            "one": "1",
+            "content": "return {\n    x: Math.round(scrollX),\n    y: Math.round(scrollY)\n}"
+        },
+        "23": {
+            "one": "36",
+            "id": "23",
+            "type": "action",
+            "two": "",
+            "content": "wheight = widget.height / zoom"
+        },
+        "25": {
+            "type": "action",
+            "id": "25",
+            "one": "29",
+            "content": "minScrollX = -wwidth + box.right"
+        },
+        "26": {
+            "flag1": 1,
+            "id": "26",
+            "type": "question",
+            "one": "25",
+            "two": "28",
+            "content": "wwidth >= box.width"
+        },
+        "28": {
+            "type": "action",
+            "one": "30",
+            "id": "28",
+            "content": "minScrollX = box.left"
+        },
+        "29": {
+            "type": "action",
+            "id": "29",
+            "one": "31",
+            "content": "maxScrollX = box.left"
+        },
+        "30": {
+            "type": "action",
+            "id": "30",
+            "one": "31",
+            "content": "maxScrollX = box.right - wwidth"
+        },
+        "31": {
+            "flag1": 0,
+            "id": "31",
+            "type": "question",
+            "one": "33",
+            "two": "32",
+            "content": "scrollX < minScrollX"
+        },
+        "32": {
+            "type": "action",
+            "id": "32",
+            "one": "33",
+            "content": "scrollX = minScrollX"
+        },
+        "33": {
+            "flag1": 0,
+            "id": "33",
+            "type": "question",
+            "one": "18",
+            "two": "34",
+            "content": "scrollX > maxScrollX"
+        },
+        "34": {
+            "type": "action",
+            "one": "18",
+            "id": "34",
+            "content": "scrollX = maxScrollX"
+        },
+        "35": {
+            "one": "38",
+            "id": "35",
+            "type": "action",
+            "two": "",
+            "content": "minScrollY = -wheight + box.bottom"
+        },
+        "36": {
+            "flag1": 1,
+            "id": "36",
+            "type": "question",
+            "one": "35",
+            "two": "37",
+            "content": "wheight >= box.height"
+        },
+        "37": {
+            "one": "39",
+            "id": "37",
+            "type": "action",
+            "two": "",
+            "content": "minScrollY = box.top"
+        },
+        "38": {
+            "one": "40",
+            "id": "38",
+            "type": "action",
+            "two": "",
+            "content": "maxScrollY = box.top"
+        },
+        "39": {
+            "one": "40",
+            "id": "39",
+            "type": "action",
+            "two": "",
+            "content": "maxScrollY = box.bottom - wheight"
+        },
+        "40": {
+            "flag1": 0,
+            "id": "40",
+            "type": "question",
+            "one": "42",
+            "two": "41",
+            "content": "scrollY < minScrollY"
+        },
+        "41": {
+            "one": "42",
+            "id": "41",
+            "type": "action",
+            "two": "",
+            "content": "scrollY = minScrollY"
+        },
+        "42": {
+            "flag1": 0,
+            "id": "42",
+            "type": "question",
+            "one": "17",
+            "two": "43",
+            "content": "scrollY > maxScrollY"
+        },
+        "43": {
+            "one": "17",
+            "id": "43",
+            "type": "action",
+            "two": "",
+            "content": "scrollY = maxScrollY"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "when_updated": 1677512099.8425,
+    "name": "sanitizeScroll",
+    "created_by": "stipan"
+}

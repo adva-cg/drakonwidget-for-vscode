@@ -1,0 +1,116 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "867677387",
+    "params": "widget\nstartX\nstartY\nevt",
+    "when_created": 1658335756.4607,
+    "parent_id": "35f7b123",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "15",
+            "id": "2"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "two": "6",
+            "one": "9",
+            "content": "visuals.selectionFrame"
+        },
+        "5": {
+            "one": "4",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "start = toDiagram(widget, evt0)\ncurrent = toDiagram(widget, evt)"
+        },
+        "6": {
+            "one": "9",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "visuals.selectionFrame = {}"
+        },
+        "7": {
+            "one": "1",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "visuals.selectionFrame.left = left\nvisuals.selectionFrame.top = top\nvisuals.selectionFrame.width = width\nvisuals.selectionFrame.height = height"
+        },
+        "9": {
+            "flag1": 1,
+            "id": "9",
+            "type": "question",
+            "one": "10",
+            "two": "11",
+            "content": "start.x < current.x"
+        },
+        "10": {
+            "type": "action",
+            "one": "12",
+            "id": "10",
+            "content": "left = start.x\nwidth = current.x - start.x"
+        },
+        "11": {
+            "type": "action",
+            "one": "12",
+            "id": "11",
+            "content": "left = current.x\nwidth = start.x - current.x"
+        },
+        "12": {
+            "flag1": 1,
+            "id": "12",
+            "type": "question",
+            "one": "13",
+            "two": "14",
+            "content": "start.y < current.y"
+        },
+        "13": {
+            "one": "7",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "top = start.y\nheight = current.y - start.y"
+        },
+        "14": {
+            "one": "7",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "top = current.y\nheight = start.y - current.y"
+        },
+        "15": {
+            "type": "action",
+            "one": "16",
+            "id": "15",
+            "content": "visuals = widget.visuals"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "5",
+            "content": "evt0 = {\n    clientX: startX,\n    clientY: startY,\n    target: evt.target\n}"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "updateSelectionFrame",
+    "when_updated": 1665577221.419
+}

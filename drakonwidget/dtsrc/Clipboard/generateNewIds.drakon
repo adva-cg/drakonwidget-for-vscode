@@ -1,0 +1,69 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "892533719",
+    "params": "widget\nitems",
+    "when_created": 1665136566.7267,
+    "parent_id": "e674bf58",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "5",
+            "id": "3",
+            "content": "oldToNew = {}"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "8",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "6",
+            "id": "5",
+            "content": "item; items"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "id = getNextId(widget.model)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "4",
+            "content": "oldToNew[item.id] = id\nitem.id = id"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "1",
+            "content": "return oldToNew"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "generateNewIds",
+    "when_updated": 1665136632.1438
+}

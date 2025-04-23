@@ -1,0 +1,90 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "752424241",
+    "params": "userTheme\nconfig",
+    "when_created": 1657287494.2486,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "3",
+            "id": "2",
+            "type": "branch",
+            "content": "Branch1"
+        },
+        "3": {
+            "type": "action",
+            "one": "9",
+            "id": "3",
+            "content": "userTheme = userTheme || {}"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "12",
+            "content": "Object.assign(theme, userTheme)"
+        },
+        "9": {
+            "type": "action",
+            "one": "8",
+            "id": "9",
+            "content": "theme = {\n    \"icons\": {},\n    \"background\": \"#97D3E1\",\n    \"color\": \"black\",\n    \"iconBack\": \"white\",\n    \"lines\": \"black\",\n    \"backText\": \"black\",\n    \"iconBorder\": \"black\",\n    \"candyFill\": \"#00ff00\",\n    \"handleFill\": \"#d0ff00\",\n    \"candyBorder\": \"black\",\n    \"valFill\": \"yellow\",\n    \"internalLine\": \"black\",\n    \"valBorder\": \"black\",\n    \"scrollBar\": \"rgba(0, 0, 0, 0.3)\",\n    \"scrollBarHover\": \"black\",\n    \"shadowColor\": \"\",\n    \"shadowBlur\": 6,\n    \"shadowOffsetX\": 0,\n    \"shadowOffsetY\": 0,\n    \"lineWidth\": 1,\n    \"borderWidth\": 1,\n    \"guides\": \"darkred\",\n    \"highlight\": \"magenta\",\n    \"commentBack\": \"#2293bb\"\n}"
+        },
+        "11": {
+            "branchId": 3,
+            "one": "13",
+            "id": "11",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "12": {
+            "branchId": 2,
+            "one": "14",
+            "id": "12",
+            "type": "branch",
+            "content": "Special icons"
+        },
+        "13": {
+            "type": "action",
+            "one": "1",
+            "id": "13",
+            "content": "return theme"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "15",
+            "content": "setIconDefaultProps(\n    theme.icons,\n    [\n        \"duration\",\n        \"ctrlstart\",\n        \"ctrlend\",\n        \"pause\",\n        \"timer\",\n        \"group-duration\",\n        \"callout\"\n    ],\n    {iconBack: \"#fffdbd\"}\n)"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "16",
+            "content": "setIconDefaultProps(\n    theme.icons,\n    [\"header\"],\n    {font: config.headerFont}\n)"
+        },
+        "16": {
+            "type": "action",
+            "one": "11",
+            "id": "16",
+            "content": "setIconDefaultProps(\n    theme.icons,\n    [\"branch\"],\n    {font: config.branchFont}\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "copyTheme",
+    "when_updated": 1683820675.1215
+}

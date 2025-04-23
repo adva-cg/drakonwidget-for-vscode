@@ -1,0 +1,85 @@
+{
+    "version": 20180619,
+    "tag": "481498796",
+    "when_created": 1666979407.6895,
+    "parent_id": "ddbf5967",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "15",
+            "id": "2"
+        },
+        "5": {
+            "one": "1",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "updateAndKeepSelection(\n    self.widget,\n    changes\n)"
+        },
+        "9": {
+            "type": "loopbegin",
+            "id": "9",
+            "one": "11",
+            "content": "coord; self.coords"
+        },
+        "10": {
+            "type": "loopend",
+            "one": "5",
+            "id": "10",
+            "content": ""
+        },
+        "11": {
+            "one": "18",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "change = {\n    id: coord.element.id,\n    fields: {},\n    op: \"update\"\n}"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "9",
+            "content": "changes = []"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "10",
+            "content": "changes.push(change)"
+        },
+        "17": {
+            "one": "16",
+            "id": "17",
+            "type": "action",
+            "two": "",
+            "content": "change.fields.left = coord.element.left\nchange.fields.top = coord.element.top"
+        },
+        "18": {
+            "flag1": 0,
+            "id": "18",
+            "type": "question",
+            "two": "19",
+            "one": "17",
+            "content": "coord.xy"
+        },
+        "19": {
+            "one": "16",
+            "id": "19",
+            "type": "action",
+            "two": "",
+            "content": "change.fields.x = coord.element.x\nchange.fields.y = coord.element.y"
+        }
+    },
+    "created_by": "stipan",
+    "language": "LANG_S42",
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "complete",
+    "when_updated": 1671351564.2736
+}

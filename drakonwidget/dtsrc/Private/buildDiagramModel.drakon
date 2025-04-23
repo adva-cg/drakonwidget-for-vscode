@@ -1,0 +1,240 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "838650333",
+    "params": "widget\ndiagram",
+    "when_created": 1661365399.5968,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1687248701.8484,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "49",
+            "id": "2",
+            "type": "branch",
+            "content": "Reset data structures"
+        },
+        "4": {
+            "branchId": 5,
+            "one": "1",
+            "id": "4",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "5": {
+            "branchId": 2,
+            "one": "7",
+            "id": "5",
+            "type": "branch",
+            "content": "Items"
+        },
+        "6": {
+            "type": "loopend",
+            "id": "6",
+            "one": "34",
+            "content": ""
+        },
+        "7": {
+            "type": "loopbegin",
+            "id": "7",
+            "one": "50",
+            "content": "itemId, item; diagram.items"
+        },
+        "13": {
+            "type": "action",
+            "id": "13",
+            "one": "14",
+            "content": "idNum = parseInt(item.id)"
+        },
+        "14": {
+            "flag1": 0,
+            "id": "14",
+            "type": "question",
+            "two": "6",
+            "one": "15",
+            "content": "isNaN(idNum)"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "6",
+            "content": "nextId = Math.max(nextId, idNum)"
+        },
+        "16": {
+            "branchId": 3,
+            "one": "21",
+            "id": "16",
+            "type": "branch",
+            "content": "Sort branches"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "19",
+            "content": "model = {\n    items: {},\n    doc: {},\n    branches: [],\n    edits: [],\n    type: type\n}"
+        },
+        "19": {
+            "type": "action",
+            "one": "51",
+            "id": "19",
+            "content": "model.doc.access = diagram.access || \"write\"\nmodel.doc.name = diagram.name || \"\"\nmodel.doc.keywords = utils.clone(\n    diagram.keywords || {}\n)\nmodel.doc.params = diagram.params || \"\"\nmodel.doc.description = diagram.description\n|| \"\""
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "39",
+            "content": "model.branches.sort(\n    function (a, b) {\n        return compareBranches(\n            a,\n            b,\n            model.items\n        )\n    }\n)"
+        },
+        "21": {
+            "flag1": 0,
+            "id": "21",
+            "type": "question",
+            "one": "20",
+            "two": "53",
+            "content": "model.branches.length === 0"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "23",
+            "content": "end = createNewItem(model, \"end\")\nbranch = createNewItem(model, \"branch\")"
+        },
+        "23": {
+            "type": "action",
+            "one": "24",
+            "id": "23",
+            "content": "branch.branchId = 0\nbranch.one = end.id"
+        },
+        "24": {
+            "type": "action",
+            "id": "24",
+            "one": "39",
+            "content": "diagram.initial.push(createInsert(end))\ndiagram.initial.push(\n    createInsert(branch)\n)"
+        },
+        "33": {
+            "type": "action",
+            "one": "5",
+            "id": "33",
+            "content": "nextId = 0"
+        },
+        "34": {
+            "type": "action",
+            "one": "16",
+            "id": "34",
+            "content": "model.nextId = nextId + 1"
+        },
+        "35": {
+            "type": "action",
+            "one": "13",
+            "id": "35",
+            "content": "addItemToModel(model, item)"
+        },
+        "37": {
+            "branchId": 4,
+            "one": "44",
+            "id": "37",
+            "type": "branch",
+            "content": "Mouse events"
+        },
+        "39": {
+            "type": "action",
+            "id": "39",
+            "one": "37",
+            "content": "widget.model = model"
+        },
+        "44": {
+            "type": "action",
+            "one": "45",
+            "id": "44",
+            "content": "stopMachine(widget, \"mouseEvents\")"
+        },
+        "45": {
+            "flag1": 1,
+            "id": "45",
+            "type": "question",
+            "one": "48",
+            "two": "47",
+            "content": "widget.config.canSelect"
+        },
+        "46": {
+            "type": "action",
+            "id": "46",
+            "one": "4",
+            "content": "widget.touchEvents.run()\nwidget.mouseEvents.run()"
+        },
+        "47": {
+            "type": "action",
+            "id": "47",
+            "one": "56",
+            "content": "widget.mouseEvents = NoSelectBehavior_create(\n    widget\n)"
+        },
+        "48": {
+            "type": "action",
+            "one": "56",
+            "id": "48",
+            "content": "widget.mouseEvents = SelectBehavior_create(\n    widget\n)"
+        },
+        "49": {
+            "type": "action",
+            "one": "54",
+            "id": "49",
+            "content": "diagram.initial = []"
+        },
+        "50": {
+            "type": "action",
+            "id": "50",
+            "one": "35",
+            "content": "item.id = itemId"
+        },
+        "51": {
+            "flag1": 1,
+            "id": "51",
+            "type": "question",
+            "two": "33",
+            "one": "52",
+            "content": "diagram.style"
+        },
+        "52": {
+            "type": "action",
+            "id": "52",
+            "one": "33",
+            "content": "model.doc.style = JSON.parse(\n    diagram.style\n)"
+        },
+        "53": {
+            "flag1": 1,
+            "id": "53",
+            "type": "question",
+            "one": "22",
+            "two": "39",
+            "content": "type === \"drakon\""
+        },
+        "54": {
+            "type": "action",
+            "id": "54",
+            "one": "18",
+            "content": "type = diagram.type || \"drakon\""
+        },
+        "56": {
+            "type": "action",
+            "one": "46",
+            "id": "56",
+            "content": "widget.touchEvents = TouchBehavior_create(\n    widget\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "buildDiagramModel",
+    "created_by": "stipan"
+}

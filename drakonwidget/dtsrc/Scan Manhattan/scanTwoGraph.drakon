@@ -1,0 +1,68 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "119547767",
+    "params": "items\nvisited\nid",
+    "when_created": 1657707016.8052,
+    "parent_id": "c978b5ef",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "17",
+            "id": "2"
+        },
+        "17": {
+            "flag1": 0,
+            "id": "17",
+            "type": "question",
+            "one": "1",
+            "two": "18",
+            "content": "id"
+        },
+        "18": {
+            "flag1": 1,
+            "id": "18",
+            "type": "question",
+            "two": "19",
+            "one": "1",
+            "content": "id in visited"
+        },
+        "19": {
+            "one": "28",
+            "id": "19",
+            "type": "action",
+            "two": "",
+            "content": "visited[id] = true"
+        },
+        "28": {
+            "type": "action",
+            "one": "29",
+            "id": "28",
+            "content": "item = items[id]"
+        },
+        "29": {
+            "type": "action",
+            "one": "1",
+            "id": "29",
+            "content": "scanTwoGraph(items, visited, item.one)\nscanTwoGraph(items, visited, item.two)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "scanTwoGraph",
+    "when_updated": 1666627230.9229
+}

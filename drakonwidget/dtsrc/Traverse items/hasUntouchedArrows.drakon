@@ -1,0 +1,65 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "671964812",
+    "params": "visited\nnode",
+    "when_created": 1665048764.6809,
+    "parent_id": "ed3b4890",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return false"
+        },
+        "6": {
+            "type": "loopend",
+            "one": "3",
+            "id": "6",
+            "content": ""
+        },
+        "7": {
+            "type": "loopbegin",
+            "one": "8",
+            "id": "7",
+            "content": "prev; node.aprev"
+        },
+        "8": {
+            "flag1": 1,
+            "id": "8",
+            "type": "question",
+            "one": "6",
+            "two": "9",
+            "content": "prev.itemId in visited"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "return true"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1665048826.8578,
+    "name": "hasUntouchedArrows",
+    "created_by": "stipan"
+}

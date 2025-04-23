@@ -1,0 +1,46 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "",
+    "params": "widget\nelement\nctx",
+    "when_created": 1673073246.9652,
+    "parent_id": "def45ea8",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "62",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "62": {
+            "type": "action",
+            "one": "63",
+            "id": "62",
+            "content": "drawRectCandies(widget, element, ctx)"
+        },
+        "63": {
+            "type": "action",
+            "id": "63",
+            "one": "1",
+            "content": "createRadiusHandleLeft(\n    widget,\n    element,\n    ctx\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1673073246.9652,
+    "name": "drawCandies",
+    "language": "LANG_S42"
+}

@@ -1,0 +1,102 @@
+{
+    "version": 20180619,
+    "tag": "498189642",
+    "params": "widget\nbox\nzoom\nctx",
+    "when_created": 1697108316.8603,
+    "parent_id": "40c06a64",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "24",
+            "id": "2"
+        },
+        "4": {
+            "one": "21",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "width = (box.right - box.left) * zoom\nheight = (box.bottom - box.top) * zoom"
+        },
+        "6": {
+            "one": "4",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals\nconfig = visuals.config"
+        },
+        "9": {
+            "one": "6",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "factor = 1"
+        },
+        "14": {
+            "one": "26",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "paintCore(\n    widget,\n    factor,\n    zoom,\n    -box.left,\n    -box.top,\n    width,\n    height\n)"
+        },
+        "21": {
+            "one": "14",
+            "id": "21",
+            "type": "action",
+            "two": "",
+            "content": "visuals.ctx = ctx"
+        },
+        "22": {
+            "type": "action",
+            "one": "1",
+            "id": "22",
+            "content": "visuals.ctx = widget.canvas.getContext(\n    \"2d\"\n)"
+        },
+        "24": {
+            "type": "action",
+            "one": "9",
+            "id": "24",
+            "content": "tracing.trace(\n    \"DrakonCanvas.exportCore\",\n    zoom\n)"
+        },
+        "26": {
+            "flag1": 1,
+            "id": "26",
+            "type": "question",
+            "two": "22",
+            "one": "28",
+            "content": "config.watermark"
+        },
+        "27": {
+            "one": "22",
+            "id": "27",
+            "type": "action",
+            "two": "",
+            "content": "drawWatermark(\n    widget,\n    ctx,\n    config.watermark,\n    factor,\n    zoom,\n    width,\n    height\n)"
+        },
+        "28": {
+            "flag1": 1,
+            "id": "28",
+            "type": "question",
+            "one": "27",
+            "two": "22",
+            "content": "ctx.resetTransform"
+        }
+    },
+    "when_updated": 1697111157.3853,
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "exportCore",
+    "created_by": "stipan"
+}

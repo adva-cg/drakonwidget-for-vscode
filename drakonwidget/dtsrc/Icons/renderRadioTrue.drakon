@@ -1,0 +1,75 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "509346609",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1673156550.3459,
+    "parent_id": "f298c153",
+    "props": [],
+    "when_updated": 1673156796.2382,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "47",
+            "id": "2"
+        },
+        "32": {
+            "type": "action",
+            "id": "32",
+            "one": "48",
+            "content": "config = visuals.config"
+        },
+        "45": {
+            "type": "action",
+            "one": "51",
+            "id": "45",
+            "content": "circlePath(ctx, x, y, r)"
+        },
+        "46": {
+            "type": "action",
+            "one": "50",
+            "id": "46",
+            "content": "w = element.width / 2\nh = element.height / 2\nx = element.left + w\ny = element.top + h"
+        },
+        "47": {
+            "type": "action",
+            "id": "47",
+            "one": "32",
+            "content": "renderRadioFalse(visuals, element, ctx)"
+        },
+        "48": {
+            "type": "action",
+            "id": "48",
+            "one": "46",
+            "content": "ctx.fillStyle = getThemeValue(\n    config,\n    element,\n    \"iconBorder\"\n)"
+        },
+        "50": {
+            "type": "action",
+            "id": "50",
+            "one": "45",
+            "content": "r = w / 3"
+        },
+        "51": {
+            "type": "action",
+            "id": "51",
+            "one": "1",
+            "content": "ctx.fill()"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "renderRadioTrue",
+    "language": "LANG_S42"
+}

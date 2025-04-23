@@ -1,0 +1,45 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "927630686",
+    "params": "x\ny",
+    "when_created": 1672945234.1464,
+    "parent_id": "cfcfb786",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "8",
+            "id": "2"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "point = self.element.coords[self.ordinal]"
+        },
+        "9": {
+            "type": "action",
+            "one": "1",
+            "id": "9",
+            "content": "point.x = x - self.left\npoint.y = y - self.top"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1672945370.4244,
+    "name": "dragTo",
+    "language": "LANG_S42"
+}

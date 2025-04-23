@@ -1,0 +1,39 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "",
+    "params": "element\npos",
+    "when_created": 1673076889.5345,
+    "parent_id": "32dea8ec",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "10",
+            "id": "2"
+        },
+        "10": {
+            "type": "action",
+            "one": "1",
+            "id": "10",
+            "content": "return true"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1673076889.5345,
+    "name": "hit",
+    "language": "LANG_S42"
+}

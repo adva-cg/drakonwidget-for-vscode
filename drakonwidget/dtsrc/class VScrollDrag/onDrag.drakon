@@ -1,0 +1,61 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "827779681",
+    "params": "evt",
+    "when_created": 1677572280.3505,
+    "parent_id": "a2a6421b",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "8",
+            "id": "2"
+        },
+        "4": {
+            "one": "1",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "setScrollFromMouseEvent(self.widget, x, y)"
+        },
+        "5": {
+            "one": "4",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "x = self.startScrollX - deltaX / zoom\ny = self.startScrollY - deltaY / zoom"
+        },
+        "7": {
+            "one": "5",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "zoom = self.widget.zoomFactor"
+        },
+        "8": {
+            "one": "7",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "deltaX = 0\ndeltaY = (self.startY - evt.clientY) * self\n.barToBox"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1677577030.6299,
+    "name": "onDrag",
+    "created_by": "stipan"
+}

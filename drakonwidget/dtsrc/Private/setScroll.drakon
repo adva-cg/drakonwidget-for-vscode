@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "136195620",
+    "params": "widget\nx\ny",
+    "when_created": 1658089734.5112,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "9",
+            "id": "2"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "10",
+            "content": "widget.origins[widget.diagramId] = {\n    x: scroll.x,\n    y: scroll.y\n}"
+        },
+        "9": {
+            "type": "action",
+            "one": "11",
+            "id": "9",
+            "content": "scroll = sanitizeScroll(widget, x, y)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "1",
+            "content": "return scroll"
+        },
+        "11": {
+            "type": "action",
+            "one": "12",
+            "id": "11",
+            "content": "visuals = widget.visuals"
+        },
+        "12": {
+            "type": "action",
+            "one": "7",
+            "id": "12",
+            "content": "visuals.scrollX = scroll.x\nvisuals.scrollY = scroll.y"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "setScroll",
+    "when_updated": 1668155822.3691
+}

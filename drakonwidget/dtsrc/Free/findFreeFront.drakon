@@ -1,0 +1,109 @@
+{
+    "version": 20180619,
+    "tag": "912829596",
+    "params": "widget\npos",
+    "when_created": 1690626194.7229,
+    "parent_id": "c7c5feee",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "10",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return undefined"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "3",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "id": "5",
+            "one": "12",
+            "content": "i = free.length - 1; i >= 0; i--"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "return found"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "14",
+            "content": "free = visuals.free"
+        },
+        "10": {
+            "type": "action",
+            "one": "8",
+            "id": "10",
+            "content": "visuals = widget.visuals"
+        },
+        "11": {
+            "flag1": 0,
+            "id": "11",
+            "type": "question",
+            "one": "4",
+            "two": "7",
+            "content": "found"
+        },
+        "12": {
+            "type": "action",
+            "one": "18",
+            "id": "12",
+            "content": "element = free[i]"
+        },
+        "14": {
+            "type": "action",
+            "one": "5",
+            "id": "14",
+            "content": "visited = {}"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "11",
+            "content": "found = hitFreeOrConnection(\n    widget,\n    element,\n    pos,\n    visited\n)"
+        },
+        "18": {
+            "flag1": 0,
+            "id": "18",
+            "type": "question",
+            "two": "19",
+            "one": "17",
+            "content": "element.zIndex < 0"
+        },
+        "19": {
+            "type": "action",
+            "one": "1",
+            "id": "19",
+            "content": "return undefined"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "findFreeFront",
+    "when_updated": 1690626640.056
+}

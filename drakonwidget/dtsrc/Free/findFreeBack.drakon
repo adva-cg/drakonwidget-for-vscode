@@ -1,0 +1,168 @@
+{
+    "version": 20180619,
+    "tag": "712590297",
+    "params": "widget\npos",
+    "when_created": 1690626580.1731,
+    "parent_id": "c7c5feee",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 2,
+            "one": "29",
+            "id": "2",
+            "type": "branch",
+            "content": "Find back plane"
+        },
+        "19": {
+            "branchId": 4,
+            "one": "1",
+            "id": "19",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "20": {
+            "branchId": 3,
+            "one": "23",
+            "id": "20",
+            "type": "branch",
+            "content": "Scan back plane"
+        },
+        "21": {
+            "one": "19",
+            "id": "21",
+            "type": "action",
+            "two": "",
+            "content": "return undefined"
+        },
+        "22": {
+            "one": "21",
+            "id": "22",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "23": {
+            "one": "26",
+            "id": "23",
+            "type": "loopbegin",
+            "two": "",
+            "content": "i = start; i >= 0; i--"
+        },
+        "24": {
+            "one": "19",
+            "id": "24",
+            "type": "action",
+            "two": "",
+            "content": "return found"
+        },
+        "25": {
+            "flag1": 0,
+            "id": "25",
+            "type": "question",
+            "two": "24",
+            "one": "22",
+            "content": "found"
+        },
+        "26": {
+            "one": "27",
+            "id": "26",
+            "type": "action",
+            "two": "",
+            "content": "element = free[i]"
+        },
+        "27": {
+            "one": "25",
+            "id": "27",
+            "type": "action",
+            "two": "",
+            "content": "found = hitFreeOrConnection(\n    widget,\n    element,\n    pos,\n    visited\n)"
+        },
+        "29": {
+            "one": "31",
+            "id": "29",
+            "type": "loopbegin",
+            "two": "",
+            "content": "i = free.length - 1; i >= 0; i--"
+        },
+        "30": {
+            "one": "34",
+            "id": "30",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "31": {
+            "one": "32",
+            "id": "31",
+            "type": "action",
+            "two": "",
+            "content": "element = free[i]"
+        },
+        "32": {
+            "flag1": 0,
+            "id": "32",
+            "type": "question",
+            "two": "33",
+            "one": "30",
+            "content": "element.zIndex < 0"
+        },
+        "33": {
+            "type": "action",
+            "id": "33",
+            "one": "20",
+            "content": "start = i"
+        },
+        "34": {
+            "one": "19",
+            "id": "34",
+            "type": "action",
+            "two": "",
+            "content": "return undefined"
+        },
+        "35": {
+            "branchId": 1,
+            "one": "37",
+            "id": "35",
+            "type": "branch",
+            "content": "Init"
+        },
+        "36": {
+            "one": "38",
+            "id": "36",
+            "type": "action",
+            "two": "",
+            "content": "free = visuals.free"
+        },
+        "37": {
+            "one": "36",
+            "id": "37",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals"
+        },
+        "38": {
+            "one": "2",
+            "id": "38",
+            "type": "action",
+            "two": "",
+            "content": "visited = {}"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "findFreeBack",
+    "when_updated": 1690627226.635
+}

@@ -1,0 +1,388 @@
+{
+    "version": 20180619,
+    "tag": "869929548",
+    "params": "target",
+    "when_created": 1667486478.5978,
+    "parent_id": "36bf5937",
+    "props": [],
+    "items": {
+        "6": {
+            "branchId": 6,
+            "one": "66",
+            "id": "6",
+            "type": "branch",
+            "content": "After strong under"
+        },
+        "8": {
+            "branchId": 2,
+            "one": "29",
+            "id": "8",
+            "type": "branch",
+            "content": "Under"
+        },
+        "9": {
+            "branchId": 3,
+            "one": "39",
+            "id": "9",
+            "type": "branch",
+            "content": "Under2"
+        },
+        "10": {
+            "branchId": 4,
+            "one": "48",
+            "id": "10",
+            "type": "branch",
+            "content": "Strong"
+        },
+        "11": {
+            "branchId": 5,
+            "one": "57",
+            "id": "11",
+            "type": "branch",
+            "content": "Em"
+        },
+        "15": {
+            "branchId": 1,
+            "one": "19",
+            "id": "15",
+            "type": "branch",
+            "content": "Normal"
+        },
+        "16": {
+            "type": "case",
+            "one": "21",
+            "id": "16",
+            "content": "line()"
+        },
+        "17": {
+            "one": "20",
+            "id": "17",
+            "type": "case",
+            "two": "27",
+            "content": "next(ch)"
+        },
+        "18": {
+            "one": "8",
+            "id": "18",
+            "type": "case",
+            "two": "17",
+            "content": "under()"
+        },
+        "19": {
+            "type": "select",
+            "id": "19",
+            "one": "18",
+            "content": "receive"
+        },
+        "20": {
+            "type": "action",
+            "one": "15",
+            "id": "20",
+            "content": "target.next(ch)"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "15",
+            "content": "target.line()"
+        },
+        "27": {
+            "one": "28",
+            "id": "27",
+            "type": "case",
+            "two": "16",
+            "content": "white()"
+        },
+        "28": {
+            "type": "action",
+            "one": "15",
+            "id": "28",
+            "content": "target.white()"
+        },
+        "29": {
+            "type": "select",
+            "id": "29",
+            "one": "30",
+            "content": "receive"
+        },
+        "30": {
+            "one": "9",
+            "id": "30",
+            "type": "case",
+            "two": "31",
+            "content": "under()"
+        },
+        "31": {
+            "one": "35",
+            "id": "31",
+            "type": "case",
+            "two": "32",
+            "content": "next(ch)"
+        },
+        "32": {
+            "one": "38",
+            "id": "32",
+            "type": "case",
+            "two": "33",
+            "content": "white()"
+        },
+        "33": {
+            "type": "case",
+            "id": "33",
+            "one": "37",
+            "content": "line()"
+        },
+        "35": {
+            "type": "action",
+            "id": "35",
+            "one": "11",
+            "content": "target.em()\ntarget.next(ch)"
+        },
+        "37": {
+            "type": "action",
+            "id": "37",
+            "one": "15",
+            "content": "target.next(\"_\")\ntarget.line()"
+        },
+        "38": {
+            "type": "action",
+            "id": "38",
+            "one": "15",
+            "content": "target.next(\"_\")\ntarget.white()"
+        },
+        "39": {
+            "type": "select",
+            "id": "39",
+            "one": "40",
+            "content": "receive"
+        },
+        "40": {
+            "one": "44",
+            "id": "40",
+            "type": "case",
+            "two": "41",
+            "content": "under()"
+        },
+        "41": {
+            "one": "45",
+            "id": "41",
+            "type": "case",
+            "two": "42",
+            "content": "next(ch)"
+        },
+        "42": {
+            "one": "46",
+            "id": "42",
+            "type": "case",
+            "two": "43",
+            "content": "white()"
+        },
+        "43": {
+            "type": "case",
+            "one": "47",
+            "id": "43",
+            "content": "line()"
+        },
+        "44": {
+            "type": "action",
+            "one": "15",
+            "id": "44",
+            "content": "target.next(\"_\")"
+        },
+        "45": {
+            "type": "action",
+            "one": "10",
+            "id": "45",
+            "content": "target.strong()\ntarget.next(ch)"
+        },
+        "46": {
+            "type": "action",
+            "id": "46",
+            "one": "15",
+            "content": "target.next(\"__\")\ntarget.white()"
+        },
+        "47": {
+            "type": "action",
+            "id": "47",
+            "one": "15",
+            "content": "target.next(\"__\")\ntarget.line()"
+        },
+        "48": {
+            "type": "select",
+            "id": "48",
+            "one": "49",
+            "content": "receive"
+        },
+        "49": {
+            "one": "6",
+            "id": "49",
+            "type": "case",
+            "two": "50",
+            "content": "under()"
+        },
+        "50": {
+            "one": "54",
+            "id": "50",
+            "type": "case",
+            "two": "51",
+            "content": "next(ch)"
+        },
+        "51": {
+            "one": "55",
+            "id": "51",
+            "type": "case",
+            "two": "52",
+            "content": "white()"
+        },
+        "52": {
+            "type": "case",
+            "one": "56",
+            "id": "52",
+            "content": "line()"
+        },
+        "54": {
+            "type": "action",
+            "one": "10",
+            "id": "54",
+            "content": "target.next(ch)"
+        },
+        "55": {
+            "type": "action",
+            "one": "10",
+            "id": "55",
+            "content": "target.white()"
+        },
+        "56": {
+            "type": "action",
+            "one": "15",
+            "id": "56",
+            "content": "target.line()"
+        },
+        "57": {
+            "type": "select",
+            "id": "57",
+            "one": "58",
+            "content": "receive"
+        },
+        "58": {
+            "one": "62",
+            "id": "58",
+            "type": "case",
+            "two": "59",
+            "content": "under()"
+        },
+        "59": {
+            "one": "63",
+            "id": "59",
+            "type": "case",
+            "two": "60",
+            "content": "next(ch)"
+        },
+        "60": {
+            "one": "64",
+            "id": "60",
+            "type": "case",
+            "two": "61",
+            "content": "white()"
+        },
+        "61": {
+            "type": "case",
+            "one": "65",
+            "id": "61",
+            "content": "line()"
+        },
+        "62": {
+            "type": "action",
+            "one": "15",
+            "id": "62",
+            "content": "target.end()"
+        },
+        "63": {
+            "type": "action",
+            "one": "11",
+            "id": "63",
+            "content": "target.next(ch)"
+        },
+        "64": {
+            "type": "action",
+            "one": "11",
+            "id": "64",
+            "content": "target.white()"
+        },
+        "65": {
+            "type": "action",
+            "id": "65",
+            "one": "15",
+            "content": "target.line()"
+        },
+        "66": {
+            "type": "select",
+            "id": "66",
+            "one": "67",
+            "content": "receive"
+        },
+        "67": {
+            "one": "71",
+            "id": "67",
+            "type": "case",
+            "two": "68",
+            "content": "under()"
+        },
+        "68": {
+            "one": "75",
+            "id": "68",
+            "type": "case",
+            "two": "69",
+            "content": "next(ch)"
+        },
+        "69": {
+            "one": "73",
+            "id": "69",
+            "type": "case",
+            "two": "70",
+            "content": "white()"
+        },
+        "70": {
+            "type": "case",
+            "id": "70",
+            "one": "74",
+            "content": "line()"
+        },
+        "71": {
+            "type": "action",
+            "one": "15",
+            "id": "71",
+            "content": "target.end()"
+        },
+        "73": {
+            "type": "action",
+            "id": "73",
+            "one": "10",
+            "content": "target.next(\"_\")\ntarget.white()"
+        },
+        "74": {
+            "type": "action",
+            "one": "15",
+            "id": "74",
+            "content": "target.next(\"_\")\ntarget.line()"
+        },
+        "75": {
+            "type": "action",
+            "id": "75",
+            "one": "10",
+            "content": "target.next(\"_\")\ntarget.next(ch)"
+        }
+    },
+    "created_by": "stipan",
+    "type": "drakon",
+    "updated_by": "stipan",
+    "keywords": {
+        "scenario": false,
+        "async": true,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "name": "MarkDown",
+    "when_updated": 1667489944.5486
+}

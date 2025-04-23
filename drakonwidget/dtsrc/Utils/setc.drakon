@@ -1,0 +1,53 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "744823562",
+    "params": "property\ndefaultValue\ndst\nsrc",
+    "when_created": 1658245719.1611,
+    "parent_id": "34e4d875",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "dst[property] = src[property]"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "3",
+            "two": "5",
+            "content": "property in src"
+        },
+        "5": {
+            "type": "action",
+            "one": "1",
+            "id": "5",
+            "content": "dst[property] = defaultValue"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "setc",
+    "when_updated": 1660229422.1254
+}

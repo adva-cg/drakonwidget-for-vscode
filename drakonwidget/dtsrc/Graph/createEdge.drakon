@@ -1,0 +1,133 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "142943599",
+    "params": "visuals\nhead\ntail\nvertical",
+    "when_created": 1657623481.0171,
+    "parent_id": "84128d97",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "id = \"e\" + getNextId(visuals)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "5",
+            "content": "edge = {\n    id: id,\n    head: head,\n    tail: tail,\n    vertical: vertical,\n    links: []\n}"
+        },
+        "5": {
+            "flag1": 0,
+            "id": "5",
+            "type": "question",
+            "two": "11",
+            "one": "6",
+            "content": "vertical"
+        },
+        "6": {
+            "flag1": 0,
+            "id": "6",
+            "type": "question",
+            "two": "10",
+            "one": "7",
+            "content": "head.right"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "two": "9",
+            "one": "8",
+            "content": "tail.left"
+        },
+        "8": {
+            "type": "action",
+            "one": "16",
+            "id": "8",
+            "content": "head.right = edge\ntail.left = edge"
+        },
+        "9": {
+            "type": "action",
+            "one": "16",
+            "id": "9",
+            "content": "throw Error(\"tail.left is busy\")"
+        },
+        "10": {
+            "type": "action",
+            "one": "16",
+            "id": "10",
+            "content": "throw Error(\"head.right is busy\")"
+        },
+        "11": {
+            "flag1": 0,
+            "id": "11",
+            "type": "question",
+            "two": "15",
+            "one": "12",
+            "content": "head.down"
+        },
+        "12": {
+            "flag1": 0,
+            "id": "12",
+            "type": "question",
+            "two": "14",
+            "one": "13",
+            "content": "tail.up"
+        },
+        "13": {
+            "type": "action",
+            "one": "16",
+            "id": "13",
+            "content": "head.down = edge\ntail.up = edge"
+        },
+        "14": {
+            "type": "action",
+            "one": "16",
+            "id": "14",
+            "content": "throw Error(\"tail.up is busy\")"
+        },
+        "15": {
+            "type": "action",
+            "one": "16",
+            "id": "15",
+            "content": "throw Error(\"head.down is busy\")"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "17",
+            "content": "visuals.edges[id] = edge"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "1",
+            "content": "return edge"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1657635716.9502,
+    "name": "createEdge",
+    "created_by": "stipan"
+}

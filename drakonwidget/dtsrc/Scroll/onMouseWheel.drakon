@@ -1,0 +1,140 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "924633618",
+    "params": "widget\nevt",
+    "when_created": 1677577614.5728,
+    "parent_id": "ae9f4e53",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "20",
+            "id": "2"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "one": "7",
+            "two": "14",
+            "content": "evt.ctrlKey"
+        },
+        "5": {
+            "flag1": 1,
+            "id": "5",
+            "type": "question",
+            "one": "9",
+            "two": "13",
+            "content": "evt.shiftKey"
+        },
+        "7": {
+            "type": "action",
+            "one": "5",
+            "id": "7",
+            "content": "delta = evt.deltaY / 2"
+        },
+        "8": {
+            "one": "1",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "setScrollFromMouseEvent(\n    widget,\n    x,\n    visuals.scrollY\n)"
+        },
+        "9": {
+            "one": "8",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "x = visuals.scrollX + delta / zoom"
+        },
+        "11": {
+            "one": "4",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "zoom = widget.zoomFactor\nvisuals = widget.visuals"
+        },
+        "12": {
+            "one": "1",
+            "id": "12",
+            "type": "action",
+            "two": "",
+            "content": "setScrollFromMouseEvent(\n    widget,\n    visuals.scrollX,\n    y\n)"
+        },
+        "13": {
+            "one": "12",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "y = visuals.scrollY + delta / zoom"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "15",
+            "content": "levels = [\n    3300,\n    5000,\n    6700,\n    7500,\n    9000,\n    10000,\n    11000,\n    12000,\n    15000,\n    20000,\n    25000,\n    30000\n]"
+        },
+        "15": {
+            "type": "action",
+            "one": "16",
+            "id": "15",
+            "content": "delta = evt.deltaY"
+        },
+        "16": {
+            "flag1": 1,
+            "id": "16",
+            "type": "question",
+            "one": "17",
+            "two": "18",
+            "content": "delta > 0"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "19",
+            "content": "zoom = findValueBelow(\n    levels,\n    widget.zoom\n)"
+        },
+        "18": {
+            "type": "action",
+            "one": "19",
+            "id": "18",
+            "content": "zoom = findValueAbove(\n    levels,\n    widget.zoom\n)"
+        },
+        "19": {
+            "type": "action",
+            "id": "19",
+            "one": "22",
+            "content": "widget.setZoom(zoom)"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "11",
+            "content": "evt.preventDefault()"
+        },
+        "22": {
+            "type": "action",
+            "one": "1",
+            "id": "22",
+            "content": "visuals.config.onZoomChanged(zoom)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "onMouseWheel",
+    "when_updated": 1677586309.9709
+}

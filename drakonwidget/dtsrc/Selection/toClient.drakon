@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "687186970",
+    "params": "widget\ndiaX\ndiaY",
+    "when_created": 1660544363.2642,
+    "parent_id": "35f7b123",
+    "props": [],
+    "when_updated": 1665578433.3428,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "8",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "rect = getWidgetRect(widget)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "6",
+            "content": "clientX = widgetX + rect.left\nclientY = widgetY + rect.top"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return {\n    x: clientX,\n    y: clientY\n}"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "3",
+            "content": "widgetX = diagramToWidgetX(widget, diaX)\nwidgetY = diagramToWidgetY(widget, diaY)"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "7",
+            "content": "visuals = widget.visuals"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "toClient",
+    "created_by": "stipan"
+}

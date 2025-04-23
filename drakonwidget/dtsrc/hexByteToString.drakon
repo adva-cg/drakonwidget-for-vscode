@@ -1,0 +1,39 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": true,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "16751463484006",
+    "params": "value",
+    "when_created": 1663865391.0368,
+    "parent_id": "73128943",
+    "props": [],
+    "when_updated": 1675146348.4007,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return (\"00\" + value.toString(16)).substr(\n    -2\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "hexByteToString",
+    "created_by": "stipan"
+}

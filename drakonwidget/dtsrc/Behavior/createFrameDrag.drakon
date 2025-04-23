@@ -1,0 +1,51 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "869188075",
+    "params": "widget\nevt",
+    "when_created": 1666978669.4504,
+    "parent_id": "a52f66e7",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "obj = FrameDrag()"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "obj.widget = widget\nobj.startX = evt.clientX\nobj.startY = evt.clientY"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "return obj"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "createFrameDrag",
+    "when_updated": 1666979066.7589
+}

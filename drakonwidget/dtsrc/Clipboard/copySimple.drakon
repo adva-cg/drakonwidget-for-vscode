@@ -1,0 +1,57 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "597459506",
+    "params": "widget\nnode",
+    "when_created": 1665133611.8239,
+    "parent_id": "e674bf58",
+    "props": [],
+    "when_updated": 1676012230.5015,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "6",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "copy = copyItem(\n    widget,\n    node.itemId,\n    images\n)"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "copy.one = \"finish\""
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "return copyBlock(\n    widget,\n    node.itemId,\n    [copy],\n    images\n)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "3",
+            "content": "images = {}"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "copySimple",
+    "language": "LANG_S42"
+}

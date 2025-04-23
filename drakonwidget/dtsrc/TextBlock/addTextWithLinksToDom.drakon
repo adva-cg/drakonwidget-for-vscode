@@ -1,0 +1,120 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "12681382",
+    "params": "parentElement\ntext",
+    "when_created": 1675756565.0591,
+    "parent_id": "99e62b4e",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "10",
+            "id": "3",
+            "content": "parts = splitByWhitespacePreserve(text)"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "15",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "7",
+            "id": "5",
+            "content": "part; parts"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "link = tryCreateLink(part)"
+        },
+        "8": {
+            "flag1": 0,
+            "id": "8",
+            "type": "question",
+            "one": "11",
+            "two": "12",
+            "content": "link"
+        },
+        "9": {
+            "one": "4",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "parentElement.appendChild(link)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "5",
+            "content": "buffer = \"\""
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "4",
+            "content": "buffer += part"
+        },
+        "12": {
+            "flag1": 1,
+            "id": "12",
+            "type": "question",
+            "two": "9",
+            "one": "13",
+            "content": "buffer"
+        },
+        "13": {
+            "one": "14",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "appendTextNode(parentElement, buffer)"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "9",
+            "content": "buffer = \"\""
+        },
+        "15": {
+            "flag1": 1,
+            "id": "15",
+            "type": "question",
+            "one": "16",
+            "two": "1",
+            "content": "buffer"
+        },
+        "16": {
+            "one": "1",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "appendTextNode(parentElement, buffer)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "addTextWithLinksToDom",
+    "when_updated": 1675757820.4148
+}

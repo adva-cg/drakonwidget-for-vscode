@@ -1,0 +1,73 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1673094952.3509,
+    "parent_id": "76971d15",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "10",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "10": {
+            "type": "action",
+            "one": "14",
+            "id": "10",
+            "content": "renderFreeIconShapeComplex(\n    ctx,\n    visuals,\n    element,\n    databasePath,\n    element.aux\n)"
+        },
+        "11": {
+            "one": "12",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "top = Math.floor(\n    centerY - element.contentHeight / 2\n)"
+        },
+        "12": {
+            "one": "1",
+            "id": "12",
+            "type": "action",
+            "two": "",
+            "content": "renderContentCore(\n    visuals,\n    element,\n    element.left,\n    top\n)"
+        },
+        "13": {
+            "one": "11",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "centerY = Math.round(\n    element.top + element.height / 2 + element\n    .height * 0.05\n)"
+        },
+        "14": {
+            "type": "action",
+            "one": "15",
+            "id": "14",
+            "content": "databaseLidPath(\n    ctx,\n    element.left,\n    element.top,\n    element.width,\n    element.height\n)"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "13",
+            "content": "ctx.stroke()"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "render",
+    "when_updated": 1673094952.3509
+}

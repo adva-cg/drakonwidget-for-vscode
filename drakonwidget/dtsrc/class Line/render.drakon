@@ -1,0 +1,150 @@
+{
+    "version": 20180619,
+    "tag": "53463129",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1671449958.8885,
+    "parent_id": "c5e5357f",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "34",
+            "id": "2",
+            "type": "branch",
+            "content": "Set style"
+        },
+        "10": {
+            "one": "13",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "lineWidth = getLineWidth(\n    visuals,\n    element\n)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "10",
+            "content": "config = visuals.config"
+        },
+        "13": {
+            "one": "17",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "color = getLineColor(visuals, element)"
+        },
+        "17": {
+            "type": "action",
+            "one": "20",
+            "id": "17",
+            "content": "setLineDashFromStyle(\n    config,\n    element,\n    lineWidth,\n    \"lineStyle\",\n    ctx\n)"
+        },
+        "19": {
+            "branchId": 4,
+            "one": "1",
+            "id": "19",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "20": {
+            "branchId": 2,
+            "one": "21",
+            "id": "20",
+            "type": "branch",
+            "content": "Draw line itself"
+        },
+        "21": {
+            "one": "22",
+            "id": "21",
+            "type": "action",
+            "two": "",
+            "content": "line(\n    ctx,\n    x1,\n    y1,\n    x2,\n    y2,\n    color,\n    lineWidth\n)"
+        },
+        "22": {
+            "one": "23",
+            "id": "22",
+            "type": "action",
+            "two": "",
+            "content": "ctx.setLineDash([])"
+        },
+        "23": {
+            "branchId": 3,
+            "one": "24",
+            "id": "23",
+            "type": "branch",
+            "content": "Draw caps"
+        },
+        "24": {
+            "flag1": 1,
+            "id": "24",
+            "type": "question",
+            "two": "19",
+            "one": "26",
+            "content": "element.style"
+        },
+        "26": {
+            "flag1": 1,
+            "id": "26",
+            "type": "question",
+            "two": "28",
+            "one": "32",
+            "content": "element.style.tailStyle"
+        },
+        "28": {
+            "flag1": 1,
+            "id": "28",
+            "type": "question",
+            "two": "19",
+            "one": "32",
+            "content": "element.style.headStyle"
+        },
+        "29": {
+            "type": "action",
+            "one": "30",
+            "id": "29",
+            "content": "angle = findAngle(x1, y1, x2, y2)"
+        },
+        "30": {
+            "type": "action",
+            "one": "33",
+            "id": "30",
+            "content": "drawCap(\n    ctx,\n    element.style.tailStyle,\n    x1,\n    y1,\n    angle + Math.PI,\n    color,\n    iconBack,\n    lineWidth\n)"
+        },
+        "32": {
+            "one": "29",
+            "id": "32",
+            "type": "action",
+            "two": "",
+            "content": "iconBack = getThemeValue(\n    config,\n    element,\n    \"iconBack\"\n)"
+        },
+        "33": {
+            "type": "action",
+            "id": "33",
+            "one": "19",
+            "content": "drawCap(\n    ctx,\n    element.style.headStyle,\n    x2,\n    y2,\n    angle,\n    color,\n    iconBack,\n    lineWidth\n)"
+        },
+        "34": {
+            "type": "action",
+            "one": "12",
+            "id": "34",
+            "content": "x1 = element.left\nx2 = x1 + element.x2\ny1 = element.top\ny2 = y1 + element.y2"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "when_updated": 1673013883.4482,
+    "name": "render",
+    "created_by": "stipan"
+}

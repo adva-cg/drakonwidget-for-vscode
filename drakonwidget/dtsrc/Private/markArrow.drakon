@@ -1,0 +1,182 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "718032428",
+    "params": "visuals\nloop",
+    "when_created": 1664280843.8675,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "3",
+            "id": "2",
+            "type": "branch",
+            "content": "Arrow itself"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "8",
+            "content": "arrow = loop.right"
+        },
+        "4": {
+            "branchId": 5,
+            "one": "1",
+            "id": "4",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "5": {
+            "branchId": 2,
+            "one": "13",
+            "id": "5",
+            "type": "branch",
+            "content": "Up"
+        },
+        "6": {
+            "branchId": 3,
+            "one": "17",
+            "id": "6",
+            "type": "branch",
+            "content": "Right"
+        },
+        "7": {
+            "branchId": 4,
+            "one": "22",
+            "id": "7",
+            "type": "branch",
+            "content": "Down"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "top = arrow.tail"
+        },
+        "9": {
+            "type": "action",
+            "one": "10",
+            "id": "9",
+            "content": "upEdge = top.down"
+        },
+        "10": {
+            "type": "action",
+            "one": "11",
+            "id": "10",
+            "content": "top.arrow = upEdge"
+        },
+        "11": {
+            "type": "action",
+            "one": "12",
+            "id": "11",
+            "content": "arrow.arrow = upEdge\narrow.finalTarget = upEdge.finalTarget"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "5",
+            "content": "arrow.links = upEdge.links"
+        },
+        "13": {
+            "type": "action",
+            "one": "14",
+            "id": "13",
+            "content": "upEdge.arrow = upEdge"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "16",
+            "content": "bottom = upEdge.tail"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "6",
+            "content": "bottom.arrow = upEdge"
+        },
+        "16": {
+            "flag1": 1,
+            "id": "16",
+            "type": "question",
+            "one": "15",
+            "two": "4",
+            "content": "isLeftUp(bottom)"
+        },
+        "17": {
+            "type": "action",
+            "one": "18",
+            "id": "17",
+            "content": "rightEdge = bottom.left"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "21",
+            "content": "leftBottom = rightEdge.head"
+        },
+        "19": {
+            "flag1": 1,
+            "id": "19",
+            "type": "question",
+            "one": "20",
+            "two": "4",
+            "content": "isRightUp(leftBottom)"
+        },
+        "20": {
+            "type": "action",
+            "one": "7",
+            "id": "20",
+            "content": "leftBottom.arrow = upEdge"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "19",
+            "content": "rightEdge.arrow = upEdge"
+        },
+        "22": {
+            "type": "action",
+            "one": "23",
+            "id": "22",
+            "content": "downEdge = leftBottom.up\nstart = downEdge.head"
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "25",
+            "content": "downEdge.arrow = upEdge"
+        },
+        "24": {
+            "type": "action",
+            "id": "24",
+            "one": "4",
+            "content": "start.arrow = upEdge"
+        },
+        "25": {
+            "flag1": 0,
+            "id": "25",
+            "type": "question",
+            "one": "24",
+            "two": "4",
+            "content": "start.type === \"junction\""
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1664346552.766,
+    "name": "markArrow",
+    "created_by": "stipan"
+}

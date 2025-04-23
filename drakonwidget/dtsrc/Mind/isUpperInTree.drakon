@@ -1,0 +1,71 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "127186356",
+    "params": "visuals\nparent\nids",
+    "when_created": 1673605555.5242,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return false"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "3",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "6",
+            "id": "5",
+            "content": "id; ids"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "node = getNode(visuals, id)"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "two": "8",
+            "one": "4",
+            "content": "isParent(parent, node)"
+        },
+        "8": {
+            "type": "action",
+            "one": "1",
+            "id": "8",
+            "content": "return true"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1673605702.6229,
+    "name": "isUpperInTree",
+    "created_by": "stipan"
+}

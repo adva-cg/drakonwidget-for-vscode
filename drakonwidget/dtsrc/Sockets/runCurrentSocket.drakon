@@ -1,0 +1,57 @@
+{
+    "version": 20180619,
+    "tag": "915694091",
+    "params": "widget",
+    "when_created": 1663074808.3765,
+    "parent_id": "41f1c7b9",
+    "props": [],
+    "when_updated": 1671127454.6666,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "6",
+            "id": "2"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "10",
+            "content": "socket = visuals.sockets[\n    visuals.currentSocket - 1\n]"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "5",
+            "content": "visuals = widget.visuals"
+        },
+        "8": {
+            "type": "action",
+            "one": "1",
+            "id": "8",
+            "content": "runInsertAction(widget, socket)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "8",
+            "content": "tracing.trace(\n    \"runCurrentSocket\",\n    socket.op + \" \" + socket.target\n)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "runCurrentSocket",
+    "language": "LANG_S42"
+}

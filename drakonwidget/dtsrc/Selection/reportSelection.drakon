@@ -1,0 +1,47 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "72398846",
+    "params": "widget",
+    "when_created": 1671124964.1051,
+    "parent_id": "35f7b123",
+    "props": [],
+    "when_updated": 1672824454.2697,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "5": {
+            "one": "1",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "onSelectionChanged(widget, prims)"
+        },
+        "7": {
+            "one": "5",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "prims = getSelectedPrims(widget)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "reportSelection",
+    "created_by": "stipan"
+}

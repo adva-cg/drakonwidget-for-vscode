@@ -1,0 +1,204 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "631383248",
+    "params": "widget",
+    "when_created": 1673507917.1689,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "when_updated": 1673607073.856,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "51",
+            "id": "2",
+            "type": "branch",
+            "content": "Get selected mind nodes"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "selectedNodes = getNodesFromSelection(\n    widget\n)"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "nodes = selectedNodes.filter(\n    function (node) {\n        return isMindIcon(widget, node)\n    }\n)"
+        },
+        "5": {
+            "flag1": 1,
+            "id": "5",
+            "type": "question",
+            "one": "6",
+            "two": "55",
+            "content": "nodes.length === 1"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "39",
+            "content": "node = nodes[0]"
+        },
+        "7": {
+            "branchId": 5,
+            "one": "1",
+            "id": "7",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "8": {
+            "branchId": 3,
+            "one": "38",
+            "id": "8",
+            "type": "branch",
+            "content": "Sibling sockets"
+        },
+        "16": {
+            "branchId": 4,
+            "one": "29",
+            "id": "16",
+            "type": "branch",
+            "content": "Create sockets - before and after"
+        },
+        "20": {
+            "type": "action",
+            "one": "25",
+            "id": "20",
+            "content": "config = widget.visuals.config"
+        },
+        "25": {
+            "type": "action",
+            "one": "54",
+            "id": "25",
+            "content": "radius = config.socketTouchRadius"
+        },
+        "28": {
+            "flag1": 0,
+            "id": "28",
+            "type": "question",
+            "one": "36",
+            "two": "7",
+            "content": "isReadonly(widget)"
+        },
+        "29": {
+            "one": "30",
+            "id": "29",
+            "type": "action",
+            "two": "",
+            "content": "before = createSocket(\n    visuals,\n    sib.before.x,\n    sib.before.y,\n    \"insert\",\n    \"mind-before\",\n    radius\n)"
+        },
+        "30": {
+            "one": "31",
+            "id": "30",
+            "type": "action",
+            "two": "",
+            "content": "before.node = node\nbefore.iconType = \"idea\""
+        },
+        "31": {
+            "one": "32",
+            "id": "31",
+            "type": "action",
+            "two": "",
+            "content": "after = createSocket(\n    visuals,\n    sib.after.x,\n    sib.after.y,\n    \"insert\",\n    \"mind-after\",\n    radius\n)"
+        },
+        "32": {
+            "one": "7",
+            "id": "32",
+            "type": "action",
+            "two": "",
+            "content": "after.node = node\nafter.iconType = \"idea\""
+        },
+        "36": {
+            "type": "action",
+            "id": "36",
+            "one": "20",
+            "content": "visuals = widget.visuals"
+        },
+        "38": {
+            "flag1": 1,
+            "id": "38",
+            "type": "question",
+            "two": "7",
+            "one": "53",
+            "content": "node.parent"
+        },
+        "39": {
+            "branchId": 2,
+            "one": "40",
+            "id": "39",
+            "type": "branch",
+            "content": "Child socket"
+        },
+        "40": {
+            "flag1": 1,
+            "id": "40",
+            "type": "question",
+            "two": "8",
+            "one": "52",
+            "content": "node.children.length === 0"
+        },
+        "41": {
+            "one": "42",
+            "id": "41",
+            "type": "action",
+            "two": "",
+            "content": "child = createSocket(\n    visuals,\n    cpos.x,\n    cpos.y,\n    \"insert\",\n    \"mind-child\",\n    radius\n)"
+        },
+        "42": {
+            "one": "8",
+            "id": "42",
+            "type": "action",
+            "two": "",
+            "content": "child.node = node\nchild.iconType = \"idea\""
+        },
+        "51": {
+            "flag1": 1,
+            "id": "51",
+            "type": "question",
+            "two": "7",
+            "one": "28",
+            "content": "isMind(widget)"
+        },
+        "52": {
+            "type": "action",
+            "id": "52",
+            "one": "41",
+            "content": "cpos = getMindChildSocketPos(r2, node)"
+        },
+        "53": {
+            "type": "action",
+            "one": "16",
+            "id": "53",
+            "content": "sib = getMindSiblingSocketPos(r2, node)"
+        },
+        "54": {
+            "type": "action",
+            "id": "54",
+            "one": "3",
+            "content": "r2 = radius * 1.5"
+        },
+        "55": {
+            "type": "action",
+            "id": "55",
+            "one": "7",
+            "content": "clearSockets(visuals)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "createMindSockets",
+    "language": "LANG_S42"
+}

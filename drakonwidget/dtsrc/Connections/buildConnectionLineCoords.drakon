@@ -1,0 +1,391 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "48164750",
+    "params": "begin\nend\nrole",
+    "when_created": 1672736019.2439,
+    "parent_id": "fdabdff8",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "23",
+            "id": "2",
+            "type": "branch",
+            "content": "Setup"
+        },
+        "11": {
+            "branchId": 4,
+            "one": "1",
+            "id": "11",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "14": {
+            "flag1": 0,
+            "id": "14",
+            "type": "question",
+            "two": "97",
+            "one": "73",
+            "content": "role === \"vertical\""
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "14",
+            "content": "minLine = 40"
+        },
+        "73": {
+            "branchId": 2,
+            "one": "74",
+            "id": "73",
+            "type": "branch",
+            "content": "Horizontal"
+        },
+        "74": {
+            "type": "action",
+            "one": "75",
+            "id": "74",
+            "content": "bleft = begin.left\nbright = begin.left + begin.width\nby = Math.floor(\n    begin.top + begin.height / 2\n)"
+        },
+        "75": {
+            "type": "action",
+            "one": "76",
+            "id": "75",
+            "content": "eleft = end.left\neright = end.left + end.width\ney = Math.floor(end.top + end.height / 2)"
+        },
+        "76": {
+            "flag1": 0,
+            "id": "76",
+            "type": "question",
+            "one": "77",
+            "two": "83",
+            "content": "by === ey"
+        },
+        "77": {
+            "flag1": 1,
+            "id": "77",
+            "type": "question",
+            "one": "80",
+            "two": "78",
+            "content": "bright + minLine <= eleft"
+        },
+        "78": {
+            "flag1": 1,
+            "id": "78",
+            "type": "question",
+            "one": "81",
+            "two": "87",
+            "content": "eright + minLine <= bleft"
+        },
+        "79": {
+            "type": "action",
+            "one": "11",
+            "id": "79",
+            "content": "return [\n    {x: bright, y: by},\n    {x: midX, y: by},\n    {x: midX, y: ey},\n    {x: eleft, y: ey}\n]"
+        },
+        "80": {
+            "type": "action",
+            "id": "80",
+            "one": "79",
+            "content": "midX = Math.floor((bright + eleft) / 2)"
+        },
+        "81": {
+            "type": "action",
+            "one": "82",
+            "id": "81",
+            "content": "midX = Math.floor((eright + bleft) / 2)"
+        },
+        "82": {
+            "type": "action",
+            "id": "82",
+            "one": "11",
+            "content": "return [\n    {x: bleft, y: by},\n    {x: midX, y: by},\n    {x: midX, y: ey},\n    {x: eright, y: ey}\n]"
+        },
+        "83": {
+            "flag1": 1,
+            "id": "83",
+            "type": "question",
+            "one": "84",
+            "two": "85",
+            "content": "bright <= eleft"
+        },
+        "84": {
+            "type": "action",
+            "one": "11",
+            "id": "84",
+            "content": "return [\n    {x: bright, y: by},\n    {x: eleft, y: ey}\n]"
+        },
+        "85": {
+            "flag1": 1,
+            "id": "85",
+            "type": "question",
+            "two": "96",
+            "one": "86",
+            "content": "eright <= bleft"
+        },
+        "86": {
+            "type": "action",
+            "id": "86",
+            "one": "11",
+            "content": "return [\n    {x: bleft, y: ey},\n    {x: eright, y: by}\n]"
+        },
+        "87": {
+            "flag1": 1,
+            "id": "87",
+            "type": "question",
+            "two": "92",
+            "one": "88",
+            "content": "Math.abs(bleft - eleft) <= Math.abs(\n    bright - eright\n)"
+        },
+        "88": {
+            "flag1": 1,
+            "id": "88",
+            "type": "question",
+            "one": "89",
+            "two": "91",
+            "content": "bleft <= eleft"
+        },
+        "89": {
+            "type": "action",
+            "one": "90",
+            "id": "89",
+            "content": "left = bleft - minLine"
+        },
+        "90": {
+            "type": "action",
+            "one": "11",
+            "id": "90",
+            "content": "return [\n    {x: bleft, y: by},\n    {x: left, y: by},\n    {x: left, y: ey},\n    {x: eleft, y: ey}\n]"
+        },
+        "91": {
+            "type": "action",
+            "id": "91",
+            "one": "90",
+            "content": "left = eleft - minLine"
+        },
+        "92": {
+            "flag1": 1,
+            "id": "92",
+            "type": "question",
+            "two": "94",
+            "one": "93",
+            "content": "bright >= eright"
+        },
+        "93": {
+            "type": "action",
+            "one": "95",
+            "id": "93",
+            "content": "right = bright + minLine"
+        },
+        "94": {
+            "type": "action",
+            "one": "95",
+            "id": "94",
+            "content": "right = eright + minLine"
+        },
+        "95": {
+            "type": "action",
+            "id": "95",
+            "one": "11",
+            "content": "return [\n    {x: bright, y: by},\n    {x: right, y: by},\n    {x: right, y: ey},\n    {x: eright, y: ey}\n]"
+        },
+        "96": {
+            "type": "action",
+            "id": "96",
+            "one": "11",
+            "content": "return []"
+        },
+        "97": {
+            "branchId": 3,
+            "one": "98",
+            "id": "97",
+            "type": "branch",
+            "content": "Vertical"
+        },
+        "98": {
+            "one": "99",
+            "id": "98",
+            "type": "action",
+            "two": "",
+            "content": "btop = begin.top\nbbottom = begin.top + begin.height\nbx = Math.floor(\n    begin.left + begin.width / 2\n)"
+        },
+        "99": {
+            "one": "100",
+            "id": "99",
+            "type": "action",
+            "two": "",
+            "content": "etop = end.top\nebottom = end.top + end.height\nex = Math.floor(end.left + end.width / 2)"
+        },
+        "100": {
+            "flag1": 0,
+            "id": "100",
+            "type": "question",
+            "one": "101",
+            "two": "107",
+            "content": "bx === ex"
+        },
+        "101": {
+            "flag1": 1,
+            "id": "101",
+            "type": "question",
+            "two": "102",
+            "one": "104",
+            "content": "bbottom + minLine <= etop"
+        },
+        "102": {
+            "flag1": 1,
+            "id": "102",
+            "type": "question",
+            "two": "111",
+            "one": "105",
+            "content": "ebottom + minLine <= btop"
+        },
+        "103": {
+            "one": "11",
+            "id": "103",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: bbottom},\n    {x: bx, y: midY},\n    {x: ex, y: midY},\n    {x: ex, y: etop}\n]"
+        },
+        "104": {
+            "one": "103",
+            "id": "104",
+            "type": "action",
+            "two": "",
+            "content": "midY = Math.floor((bbottom + etop) / 2)"
+        },
+        "105": {
+            "one": "106",
+            "id": "105",
+            "type": "action",
+            "two": "",
+            "content": "midY = Math.floor((ebottom + btop) / 2)"
+        },
+        "106": {
+            "one": "11",
+            "id": "106",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: btop},\n    {x: bx, y: midY},\n    {x: ex, y: midY},\n    {x: ex, y: ebottom}\n]"
+        },
+        "107": {
+            "flag1": 1,
+            "id": "107",
+            "type": "question",
+            "one": "108",
+            "two": "109",
+            "content": "bbottom <= etop"
+        },
+        "108": {
+            "one": "11",
+            "id": "108",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: bbottom},\n    {x: bx, y: etop}\n]"
+        },
+        "109": {
+            "flag1": 1,
+            "id": "109",
+            "type": "question",
+            "two": "120",
+            "one": "110",
+            "content": "ebottom <= btop"
+        },
+        "110": {
+            "one": "11",
+            "id": "110",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: btop},\n    {x: bx, y: ebottom}\n]"
+        },
+        "111": {
+            "flag1": 1,
+            "id": "111",
+            "type": "question",
+            "one": "112",
+            "two": "116",
+            "content": "Math.abs(btop - etop) <= Math.abs(\n    bbottom - ebottom\n)"
+        },
+        "112": {
+            "flag1": 1,
+            "id": "112",
+            "type": "question",
+            "one": "113",
+            "two": "115",
+            "content": "btop <= etop"
+        },
+        "113": {
+            "one": "114",
+            "id": "113",
+            "type": "action",
+            "two": "",
+            "content": "top = btop - minLine"
+        },
+        "114": {
+            "one": "11",
+            "id": "114",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: btop},\n    {x: bx, y: top},\n    {x: ex, y: top},\n    {x: ex, y: etop}\n]"
+        },
+        "115": {
+            "one": "114",
+            "id": "115",
+            "type": "action",
+            "two": "",
+            "content": "top = etop - minLine"
+        },
+        "116": {
+            "flag1": 1,
+            "id": "116",
+            "type": "question",
+            "one": "117",
+            "two": "118",
+            "content": "bbottom >= ebottom"
+        },
+        "117": {
+            "one": "119",
+            "id": "117",
+            "type": "action",
+            "two": "",
+            "content": "bottom = bbottom + minLine"
+        },
+        "118": {
+            "one": "119",
+            "id": "118",
+            "type": "action",
+            "two": "",
+            "content": "bottom = ebottom + minLine"
+        },
+        "119": {
+            "one": "11",
+            "id": "119",
+            "type": "action",
+            "two": "",
+            "content": "return [\n    {x: bx, y: bbottom},\n    {x: bx, y: bottom},\n    {x: ex, y: bottom},\n    {x: ex, y: ebottom}\n]"
+        },
+        "120": {
+            "type": "action",
+            "id": "120",
+            "one": "11",
+            "content": "return []"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1672831894.186,
+    "name": "buildConnectionLineCoords",
+    "language": "LANG_S42"
+}

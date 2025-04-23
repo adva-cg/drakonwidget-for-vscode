@@ -1,0 +1,302 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "931658250",
+    "params": "widget\nsocket\nimages",
+    "when_created": 1665135663.1616,
+    "parent_id": "e674bf58",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "3",
+            "id": "2",
+            "type": "branch",
+            "content": "Decide"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "5",
+            "content": "edits = []"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "6",
+            "content": "clipboard = getClipboardClone(widget)"
+        },
+        "6": {
+            "flag1": 0,
+            "id": "6",
+            "type": "question",
+            "two": "15",
+            "one": "36",
+            "content": "clipboard"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "73",
+            "content": "payload = clipboard.content\nctype = clipboard.type"
+        },
+        "36": {
+            "branchId": 4,
+            "one": "62",
+            "id": "36",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "37": {
+            "branchId": 2,
+            "one": "41",
+            "id": "37",
+            "type": "branch",
+            "content": "Drakon"
+        },
+        "38": {
+            "type": "case",
+            "id": "38",
+            "one": "36",
+            "two": ""
+        },
+        "39": {
+            "one": "46",
+            "id": "39",
+            "type": "case",
+            "two": "55",
+            "content": "\"case\""
+        },
+        "40": {
+            "one": "44",
+            "id": "40",
+            "type": "case",
+            "two": "39",
+            "content": "\"block\""
+        },
+        "41": {
+            "one": "40",
+            "id": "41",
+            "type": "select",
+            "two": "",
+            "content": "socket.type"
+        },
+        "42": {
+            "one": "48",
+            "id": "42",
+            "type": "case",
+            "two": "43",
+            "content": "\"first-case\""
+        },
+        "43": {
+            "one": "53",
+            "id": "43",
+            "type": "case",
+            "two": "38",
+            "content": "\"branch\""
+        },
+        "44": {
+            "flag1": 1,
+            "id": "44",
+            "type": "question",
+            "two": "50",
+            "one": "45",
+            "content": "socket.type === ctype"
+        },
+        "45": {
+            "one": "36",
+            "id": "45",
+            "type": "action",
+            "two": "",
+            "content": "edits = pasteBlock(\n    widget,\n    socket,\n    payload\n)"
+        },
+        "46": {
+            "flag1": 1,
+            "id": "46",
+            "type": "question",
+            "one": "47",
+            "two": "51",
+            "content": "ctype === \"case\""
+        },
+        "47": {
+            "one": "36",
+            "id": "47",
+            "type": "action",
+            "two": "",
+            "content": "edits = caseInsertCore(\n    widget,\n    socket.node,\n    payload.items[0]\n)"
+        },
+        "48": {
+            "flag1": 1,
+            "id": "48",
+            "type": "question",
+            "two": "52",
+            "one": "49",
+            "content": "ctype === \"case\""
+        },
+        "49": {
+            "one": "36",
+            "id": "49",
+            "type": "action",
+            "two": "",
+            "content": "edits = firstCaseInsertCore(\n    widget,\n    socket.node,\n    payload.items[0]\n)"
+        },
+        "50": {
+            "one": "36",
+            "id": "50",
+            "type": "action",
+            "two": "",
+            "content": ""
+        },
+        "51": {
+            "one": "36",
+            "id": "51",
+            "type": "action",
+            "two": "",
+            "content": ""
+        },
+        "52": {
+            "one": "36",
+            "id": "52",
+            "type": "action",
+            "two": "",
+            "content": ""
+        },
+        "53": {
+            "flag1": 1,
+            "id": "53",
+            "type": "question",
+            "two": "36",
+            "one": "54",
+            "content": "socket.type === ctype"
+        },
+        "54": {
+            "one": "36",
+            "id": "54",
+            "type": "action",
+            "two": "",
+            "content": "edits = pasteBranch(\n    widget,\n    socket,\n    payload\n)"
+        },
+        "55": {
+            "one": "56",
+            "id": "55",
+            "type": "case",
+            "two": "42",
+            "content": "\"duration\""
+        },
+        "56": {
+            "flag1": 1,
+            "id": "56",
+            "type": "question",
+            "two": "58",
+            "one": "57",
+            "content": "ctype === \"duration\""
+        },
+        "57": {
+            "one": "36",
+            "id": "57",
+            "type": "action",
+            "two": "",
+            "content": "edits = pasteDuration(\n    widget,\n    socket.node,\n    payload.items[0]\n)"
+        },
+        "58": {
+            "one": "36",
+            "id": "58",
+            "type": "action",
+            "two": "",
+            "content": ""
+        },
+        "61": {
+            "flag1": 0,
+            "id": "61",
+            "type": "question",
+            "one": "37",
+            "two": "63",
+            "content": "ctype === \"mind\""
+        },
+        "62": {
+            "type": "action",
+            "id": "62",
+            "one": "1",
+            "content": "return edits"
+        },
+        "63": {
+            "branchId": 3,
+            "one": "67",
+            "id": "63",
+            "type": "branch",
+            "content": "Mind"
+        },
+        "64": {
+            "type": "case",
+            "one": "36",
+            "id": "64"
+        },
+        "65": {
+            "one": "71",
+            "id": "65",
+            "type": "case",
+            "two": "68",
+            "content": "\"mind-after\""
+        },
+        "66": {
+            "one": "70",
+            "id": "66",
+            "type": "case",
+            "two": "65",
+            "content": "\"mind-before\""
+        },
+        "67": {
+            "type": "select",
+            "id": "67",
+            "one": "66",
+            "content": "socket.type"
+        },
+        "68": {
+            "one": "72",
+            "id": "68",
+            "type": "case",
+            "two": "64",
+            "content": "\"mind-child\""
+        },
+        "70": {
+            "type": "action",
+            "one": "36",
+            "id": "70",
+            "content": "edits = mindBeforeInsert(\n    widget,\n    socket,\n    payload\n)"
+        },
+        "71": {
+            "type": "action",
+            "id": "71",
+            "one": "36",
+            "content": "edits = mindAfterInsert(\n    widget,\n    socket,\n    payload\n)"
+        },
+        "72": {
+            "type": "action",
+            "one": "36",
+            "id": "72",
+            "content": "edits = mindChildInsert(\n    widget,\n    socket,\n    payload\n)"
+        },
+        "73": {
+            "type": "action",
+            "id": "73",
+            "one": "61",
+            "content": "Object.assign(images, payload.images)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1689925494.1908,
+    "name": "pasteInSocket",
+    "created_by": "stipan"
+}

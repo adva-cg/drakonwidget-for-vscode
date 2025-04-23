@@ -1,0 +1,51 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "17709792",
+    "params": "context",
+    "when_created": 1666159318.8137,
+    "parent_id": "2de72742",
+    "props": [],
+    "when_updated": 1667330580.8715,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "self = DefaultIconCore()"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "Object.assign(self, context)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "return self"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "buildIconCore",
+    "created_by": "stipan"
+}

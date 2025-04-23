@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "971272157",
+    "params": "widget\nprim",
+    "when_created": 1660543357.2282,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1671182136.8059,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "8",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "pos = toClient(\n    widget,\n    prim.left,\n    prim.top\n)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "5",
+            "content": "prim.left = pos.x\nprim.top = pos.y"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "zoom = widget.zoomFactor"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "prim.width *= zoom\nprim.height *= zoom"
+        },
+        "8": {
+            "type": "action",
+            "one": "3",
+            "id": "8",
+            "content": "prim.diagramLeft = prim.left\nprim.diagramTop = prim.top\nprim.diagramWidth = prim.width\nprim.diagramHeight = prim.height"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "primToClient",
+    "created_by": "stipan"
+}

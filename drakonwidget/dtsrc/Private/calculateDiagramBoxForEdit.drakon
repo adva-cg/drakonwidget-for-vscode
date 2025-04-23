@@ -1,0 +1,45 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "372472590",
+    "params": "visuals",
+    "when_created": 1677497741.5173,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "6",
+            "id": "3",
+            "content": "box = calculateDiagramBox(visuals)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return box"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1677512533.018,
+    "name": "calculateDiagramBoxForEdit",
+    "language": "LANG_S42"
+}

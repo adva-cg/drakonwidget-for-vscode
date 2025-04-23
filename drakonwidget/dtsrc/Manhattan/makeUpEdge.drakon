@@ -1,0 +1,75 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "108570776",
+    "params": "visuals\nhead\ntail\nfinalTarget",
+    "when_created": 1657630381.5884,
+    "parent_id": "82d2ccaf",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "9",
+            "content": "finalTarget.upEdge = edge"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "edge = createEdge(\n    visuals,\n    head,\n    tail,\n    true\n)"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "edge.finalTarget = finalTarget\nedge.source = tail\nedge.target = head"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "tail.targets.push(edge)"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "head.sources.push(edge)"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "3",
+            "content": "edge.role = \"up\""
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "return edge"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "makeUpEdge",
+    "when_updated": 1657630439.7379
+}

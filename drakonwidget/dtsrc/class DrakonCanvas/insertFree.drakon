@@ -1,0 +1,128 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": true,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "712596986",
+    "params": "type\nevt\nimageData",
+    "when_created": 1666944615.1792,
+    "parent_id": "e0f4b57d",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "11",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "elementActions = self.freeIcons[type]"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "14",
+            "two": "5",
+            "content": "elementActions"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "console.error(\n    \"Unknown free icon type\",\n    type\n)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "13",
+            "content": "item = elementActions.create(pos, edits)"
+        },
+        "11": {
+            "type": "action",
+            "one": "3",
+            "id": "11",
+            "content": "tracing.trace(\n    \"DrakonCanvas.insertFree\",\n    type\n)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "20",
+            "content": "insertFreeItem(self, edits, item)"
+        },
+        "13": {
+            "type": "action",
+            "one": "12",
+            "id": "13",
+            "content": "edits = []"
+        },
+        "14": {
+            "flag1": 1,
+            "id": "14",
+            "type": "question",
+            "one": "16",
+            "two": "15",
+            "content": "evt"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "6",
+            "content": "pos = getDiagramCenter(self)"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "6",
+            "content": "pos = findFreePos(self, evt)"
+        },
+        "17": {
+            "one": "1",
+            "id": "17",
+            "type": "action",
+            "two": "",
+            "content": "return doEdit(self, edits)"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "19",
+            "content": "insertImageDataItem(\n    imageData,\n    edits,\n    images\n)"
+        },
+        "19": {
+            "type": "action",
+            "one": "21",
+            "id": "19",
+            "content": "await loadCreatedImages(\n    self,\n    edits,\n    images\n)"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "18",
+            "content": "images = {}"
+        },
+        "21": {
+            "type": "action",
+            "one": "17",
+            "id": "21",
+            "content": "resizeElementToImage(self, edits)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1676270992.2061,
+    "name": "insertFree",
+    "language": "LANG_S42"
+}

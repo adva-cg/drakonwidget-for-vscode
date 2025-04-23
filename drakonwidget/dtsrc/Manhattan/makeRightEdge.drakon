@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "55849001",
+    "params": "visuals\nleft\nright\nfinalTarget",
+    "when_created": 1657629390.7787,
+    "parent_id": "82d2ccaf",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "edge = createEdge(\n    visuals,\n    left,\n    right,\n    false\n)"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "edge.role = \"right\"\nedge.finalTarget = finalTarget\nedge.source = left\nedge.target = right"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "left.targets.push(edge)"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "right.sources.push(edge)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "return edge"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "makeRightEdge",
+    "when_updated": 1657629465.0436
+}

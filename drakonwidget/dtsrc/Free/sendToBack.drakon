@@ -1,0 +1,150 @@
+{
+    "version": 20180619,
+    "tag": "793302196",
+    "params": "widget\nid",
+    "when_created": 1671438649.3566,
+    "parent_id": "c7c5feee",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "9": {
+            "branchId": 4,
+            "one": "11",
+            "id": "9",
+            "type": "branch",
+            "content": "Perform edit"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "1",
+            "content": "return updateAndKeepSelection(\n    widget,\n    edits\n)"
+        },
+        "21": {
+            "branchId": 1,
+            "one": "27",
+            "id": "21",
+            "type": "branch",
+            "content": "Find item"
+        },
+        "23": {
+            "one": "51",
+            "id": "23",
+            "type": "action",
+            "two": "",
+            "content": "edits = []"
+        },
+        "27": {
+            "type": "action",
+            "one": "23",
+            "id": "27",
+            "content": "tracing.trace(\"sendToBack\", id)"
+        },
+        "49": {
+            "flag1": 0,
+            "id": "49",
+            "type": "question",
+            "two": "52",
+            "one": "53",
+            "content": "first.id === id"
+        },
+        "50": {
+            "type": "action",
+            "id": "50",
+            "one": "49",
+            "content": "first = free[0]"
+        },
+        "51": {
+            "one": "50",
+            "id": "51",
+            "type": "action",
+            "two": "",
+            "content": "free = widget.visuals.free"
+        },
+        "52": {
+            "flag1": 0,
+            "id": "52",
+            "type": "question",
+            "two": "9",
+            "one": "53",
+            "content": "first.zIndex < 0"
+        },
+        "53": {
+            "branchId": 2,
+            "one": "60",
+            "id": "53",
+            "type": "branch",
+            "content": "Move myself"
+        },
+        "55": {
+            "one": "56",
+            "id": "55",
+            "type": "action",
+            "two": "",
+            "content": "newZ = first.zIndex - 1"
+        },
+        "56": {
+            "one": "57",
+            "id": "56",
+            "type": "action",
+            "two": "",
+            "content": "updateItem(edits, id, {zIndex: newZ})"
+        },
+        "57": {
+            "branchId": 3,
+            "one": "59",
+            "id": "57",
+            "type": "branch",
+            "content": "Rearrange others"
+        },
+        "58": {
+            "type": "action",
+            "one": "9",
+            "id": "58",
+            "content": "rearrangeZOnDelete(\n    widget,\n    toDelete,\n    edits\n)"
+        },
+        "59": {
+            "type": "action",
+            "id": "59",
+            "one": "58",
+            "content": "toDelete = {}\ntoDelete[id] = true"
+        },
+        "60": {
+            "type": "action",
+            "one": "61",
+            "id": "60",
+            "content": "toMove = getFree(widget.visuals, id)"
+        },
+        "61": {
+            "flag1": 0,
+            "id": "61",
+            "type": "question",
+            "two": "62",
+            "one": "55",
+            "content": "toMove.zIndex < 0"
+        },
+        "62": {
+            "one": "56",
+            "id": "62",
+            "type": "action",
+            "two": "",
+            "content": "newZ = first.zIndex"
+        }
+    },
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "sendToBack",
+    "when_updated": 1690564340.8038
+}

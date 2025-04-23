@@ -1,0 +1,51 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "969743314",
+    "params": "visuals",
+    "when_created": 1664280240.4014,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "forType(\n    visuals,\n    \"select\",\n    putLoopsOnCases\n)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "3",
+            "content": "forType(visuals, \"loopend\", trace)"
+        },
+        "5": {
+            "type": "action",
+            "one": "4",
+            "id": "5",
+            "content": "trace = function (vis, node) {\n    traceLoop({}, node, node)\n}"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "traceLoops",
+    "when_updated": 1664280628.4303
+}

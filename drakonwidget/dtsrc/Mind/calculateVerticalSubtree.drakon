@@ -1,0 +1,249 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "666119135",
+    "params": "config\nnode",
+    "when_created": 1673347184.4827,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "when_updated": 1673611802.7364,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "23",
+            "id": "2",
+            "type": "branch",
+            "content": "Start pos"
+        },
+        "10": {
+            "branchId": 5,
+            "one": "1",
+            "id": "10",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "11": {
+            "branchId": 2,
+            "one": "17",
+            "id": "11",
+            "type": "branch",
+            "content": "Go through children"
+        },
+        "13": {
+            "one": "33",
+            "id": "13",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "14": {
+            "one": "15",
+            "id": "14",
+            "type": "loopbegin",
+            "two": "",
+            "content": "child; node.children"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "21",
+            "content": "bottom = Math.max(\n    bottom,\n    top + child.subtreeBox.height\n)"
+        },
+        "17": {
+            "type": "action",
+            "one": "14",
+            "id": "17",
+            "content": "bottom = node.subtreeBox.height"
+        },
+        "21": {
+            "type": "action",
+            "one": "22",
+            "id": "21",
+            "content": "child.subtreeBox.left = left\nchild.subtreeBox.top = top"
+        },
+        "22": {
+            "type": "action",
+            "one": "13",
+            "id": "22",
+            "content": "left += (\n    child.subtreeBox.width + config.metre\n)"
+        },
+        "23": {
+            "type": "action",
+            "one": "26",
+            "id": "23",
+            "content": "left = 0"
+        },
+        "26": {
+            "type": "action",
+            "one": "11",
+            "id": "26",
+            "content": "top = node.h * 2 + config.metre * 2"
+        },
+        "33": {
+            "branchId": 3,
+            "one": "36",
+            "id": "33",
+            "type": "branch",
+            "content": "Position subroot"
+        },
+        "36": {
+            "type": "action",
+            "id": "36",
+            "one": "52",
+            "content": "node.y = node.h"
+        },
+        "37": {
+            "type": "action",
+            "one": "65",
+            "id": "37",
+            "content": "node.x = Math.round(width / 2)"
+        },
+        "38": {
+            "type": "action",
+            "id": "38",
+            "one": "56",
+            "content": "width = left - config.metre"
+        },
+        "39": {
+            "flag1": 0,
+            "id": "39",
+            "type": "question",
+            "one": "57",
+            "two": "40",
+            "content": "node.children.length === 1"
+        },
+        "40": {
+            "type": "action",
+            "id": "40",
+            "one": "41",
+            "content": "node.x = first.x"
+        },
+        "41": {
+            "branchId": 4,
+            "one": "46",
+            "id": "41",
+            "type": "branch",
+            "content": "Adjust box"
+        },
+        "42": {
+            "flag1": 0,
+            "id": "42",
+            "type": "question",
+            "two": "47",
+            "one": "54",
+            "content": "nLeft < 0"
+        },
+        "46": {
+            "type": "action",
+            "id": "46",
+            "one": "42",
+            "content": "nLeft = node.x - node.w\nnRight = node.x + node.w"
+        },
+        "47": {
+            "type": "action",
+            "one": "48",
+            "id": "47",
+            "content": "shift = -nLeft"
+        },
+        "48": {
+            "one": "50",
+            "id": "48",
+            "type": "loopbegin",
+            "two": "",
+            "content": "child; node.children"
+        },
+        "49": {
+            "one": "51",
+            "id": "49",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "50": {
+            "one": "49",
+            "id": "50",
+            "type": "action",
+            "two": "",
+            "content": "child.subtreeBox.left += shift"
+        },
+        "51": {
+            "type": "action",
+            "id": "51",
+            "one": "54",
+            "content": "width += shift\nnode.x += shift\nnRight += shift"
+        },
+        "52": {
+            "type": "action",
+            "id": "52",
+            "one": "38",
+            "content": "node.subtreeBox.height = bottom"
+        },
+        "54": {
+            "type": "action",
+            "one": "10",
+            "id": "54",
+            "content": "node.subtreeBox.width = Math.max(\n    nRight,\n    width\n)"
+        },
+        "56": {
+            "type": "action",
+            "one": "39",
+            "id": "56",
+            "content": "first = node.children[0]"
+        },
+        "57": {
+            "type": "action",
+            "id": "57",
+            "one": "37",
+            "content": "last = node.children[\n    node.children.length - 1\n]"
+        },
+        "59": {
+            "flag1": 0,
+            "id": "59",
+            "type": "question",
+            "one": "63",
+            "two": "62",
+            "content": "node.x < first.x"
+        },
+        "62": {
+            "type": "action",
+            "id": "62",
+            "one": "41",
+            "content": "node.x = first.x"
+        },
+        "63": {
+            "flag1": 0,
+            "id": "63",
+            "type": "question",
+            "one": "41",
+            "two": "64",
+            "content": "node.x > lastX"
+        },
+        "64": {
+            "type": "action",
+            "id": "64",
+            "one": "41",
+            "content": "node.x = lastX"
+        },
+        "65": {
+            "type": "action",
+            "id": "65",
+            "one": "59",
+            "content": "lastX = last.x + last.subtreeBox.left"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "calculateVerticalSubtree",
+    "language": "LANG_S42"
+}

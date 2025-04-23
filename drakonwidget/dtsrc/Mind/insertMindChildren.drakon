@@ -1,0 +1,120 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "257976059",
+    "params": "edits\nparent\nids\nordinal",
+    "when_created": 1673552331.7903,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "5",
+            "id": "2",
+            "type": "branch",
+            "content": "Set ordinals for inserted items"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "11",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "8",
+            "id": "5",
+            "content": "i = 0; i < ids.length; i++"
+        },
+        "6": {
+            "type": "action",
+            "one": "9",
+            "id": "6",
+            "content": "insert = edits[index]"
+        },
+        "7": {
+            "type": "action",
+            "one": "6",
+            "id": "7",
+            "content": "index = utils.findIndex(edits, \"id\", id)"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "7",
+            "content": "id = ids[i]"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "4",
+            "content": "insert.fields.ordinal = ordinal + i"
+        },
+        "10": {
+            "branchId": 3,
+            "one": "1",
+            "id": "10",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "11": {
+            "branchId": 2,
+            "one": "16",
+            "id": "11",
+            "type": "branch",
+            "content": "Shift up existing"
+        },
+        "12": {
+            "type": "loopend",
+            "one": "10",
+            "id": "12",
+            "content": ""
+        },
+        "13": {
+            "type": "loopbegin",
+            "id": "13",
+            "one": "15",
+            "content": "i = ordinal; i < parent.children.length; i++"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "17",
+            "content": "updateItem(\n    edits,\n    sibling.id,\n    {ordinal: exOrdinal}\n)"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "14",
+            "content": "sibling = parent.children[i]"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "13",
+            "content": "exOrdinal = ordinal + ids.length"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "12",
+            "content": "exOrdinal++"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1675146108.7629,
+    "name": "insertMindChildren",
+    "language": "LANG_S42"
+}

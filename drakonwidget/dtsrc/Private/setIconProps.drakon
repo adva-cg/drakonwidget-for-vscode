@@ -1,0 +1,83 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "343008903",
+    "params": "icons\nnames\nprops",
+    "when_created": 1668844575.0056,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "1",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "id": "5",
+            "one": "6",
+            "content": "name; names"
+        },
+        "6": {
+            "flag1": 1,
+            "id": "6",
+            "type": "question",
+            "two": "8",
+            "one": "7",
+            "content": "name in icons"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "11",
+            "content": "icon = icons[name]"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "11",
+            "content": "icon = {}\nicons[name] = icon"
+        },
+        "10": {
+            "type": "loopend",
+            "id": "10",
+            "one": "4",
+            "content": ""
+        },
+        "11": {
+            "type": "loopbegin",
+            "one": "14",
+            "id": "11",
+            "content": "key, value; props"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "10",
+            "content": "icon[key] = value"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "setIconProps",
+    "when_updated": 1668844608.8483
+}

@@ -1,0 +1,75 @@
+{
+    "version": 20180619,
+    "tag": "129534728",
+    "params": "widget\nnode\ny\nctx",
+    "when_created": 1671016208.0767,
+    "parent_id": "f46b657d",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "10",
+            "content": "config = widget.visuals.config"
+        },
+        "4": {
+            "type": "action",
+            "one": "6",
+            "id": "4",
+            "content": "handle.widget = widget\nhandle.element = node\nhandle.side = \"left\"\nhandle.x = node.x - node.w\nhandle.y = y\nhandle.id = node.id"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "12",
+            "content": "handle.minX = node.x - big\nhandle.maxX = node.x - config.minWidth /\n2"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "3",
+            "content": "big = 500"
+        },
+        "9": {
+            "type": "action",
+            "one": "1",
+            "id": "9",
+            "content": "createHandle(widget.visuals, handle, ctx)"
+        },
+        "10": {
+            "type": "action",
+            "one": "4",
+            "id": "10",
+            "content": "handle = LeftDrakonResizeHandle()"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "9",
+            "content": "handle.primId = \"left-drakon-\" + node.id\n+ \"-\" + y"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "when_updated": 1673006783.9226,
+    "name": "createLeftDrakonResizeHandle",
+    "language": "LANG_S42"
+}

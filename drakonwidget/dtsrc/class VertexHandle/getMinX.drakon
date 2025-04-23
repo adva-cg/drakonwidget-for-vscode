@@ -1,0 +1,31 @@
+{
+    "version": 20180619,
+    "tag": "",
+    "when_created": 1672945234.2206,
+    "parent_id": "cfcfb786",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return self.minX"
+        }
+    },
+    "created_by": "stipan",
+    "language": "LANG_S42",
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "getMinX",
+    "when_updated": 1672945234.2206
+}

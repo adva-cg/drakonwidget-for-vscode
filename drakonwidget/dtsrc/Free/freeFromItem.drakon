@@ -1,0 +1,81 @@
+{
+    "version": 20180619,
+    "tag": "950846441",
+    "params": "visuals\nid\nitem",
+    "when_created": 1666945816.7635,
+    "parent_id": "c7c5feee",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "element = {}"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "Object.assign(element, item)"
+        },
+        "5": {
+            "type": "action",
+            "one": "8",
+            "id": "5",
+            "content": "element.id = id"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return element"
+        },
+        "7": {
+            "type": "action",
+            "one": "10",
+            "id": "7",
+            "content": "visuals.free.push(element)"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "parseStyle(item, element)"
+        },
+        "9": {
+            "type": "action",
+            "one": "7",
+            "id": "9",
+            "content": "parseCoords(item, element)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "6",
+            "content": "incrementImageRefCount(\n    visuals,\n    element.image\n)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "freeFromItem",
+    "when_updated": 1676219147.6019
+}

@@ -1,0 +1,76 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "550083118",
+    "params": "handle",
+    "when_created": 1673450466.0164,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "when_updated": 1673458491.1515,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "9",
+            "id": "3",
+            "content": "ids = getHorSiblings(handle.element)"
+        },
+        "4": {
+            "type": "action",
+            "one": "6",
+            "id": "4",
+            "content": "edits = []"
+        },
+        "5": {
+            "type": "loopend",
+            "id": "5",
+            "one": "8",
+            "content": ""
+        },
+        "6": {
+            "type": "loopbegin",
+            "one": "7",
+            "id": "6",
+            "content": "id; ids"
+        },
+        "7": {
+            "type": "action",
+            "one": "5",
+            "id": "7",
+            "content": "updateItem(edits, id, {w: w})"
+        },
+        "8": {
+            "one": "1",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "updateAndKeepSelection(\n    handle.widget,\n    edits\n)"
+        },
+        "9": {
+            "type": "action",
+            "one": "4",
+            "id": "9",
+            "content": "w = snapUp(\n    handle.widget.visuals.config,\n    handle.element.w\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "completeMindResize",
+    "language": "LANG_S42"
+}

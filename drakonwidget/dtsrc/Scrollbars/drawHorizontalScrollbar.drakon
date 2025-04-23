@@ -1,0 +1,110 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "753137902",
+    "params": "widget\ncontext",
+    "when_created": 1677565569.9673,
+    "parent_id": "6e1195bb",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "17",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "12",
+            "id": "3",
+            "content": "roundedRect(\n    ctx,\n    cleft,\n    ctop,\n    context.scrollHeight,\n    cheight,\n    cradius\n)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "9",
+            "content": "visuals = widget.visuals\nctx = visuals.ctx\nconfig = visuals.config"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "8",
+            "content": "clearShadow(ctx)"
+        },
+        "8": {
+            "type": "action",
+            "one": "10",
+            "id": "8",
+            "content": "ctop = (\n    widget.height - (\n        context.barWidth + context.margin\n    )\n) / zoom + visuals.scrollY\ncleft = context.scrollTop + visuals.scrollX"
+        },
+        "9": {
+            "one": "6",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "zoom = widget.zoomFactor"
+        },
+        "10": {
+            "type": "action",
+            "one": "15",
+            "id": "10",
+            "content": "cheight = context.barWidth / zoom\ncradius = cheight / 2"
+        },
+        "12": {
+            "type": "action",
+            "one": "13",
+            "id": "12",
+            "content": "ctx.fill()"
+        },
+        "13": {
+            "type": "action",
+            "one": "1",
+            "id": "13",
+            "content": "visuals.horizontalScrollBar = {\n    elType: id,\n    primId: id,\n    barToBox: context.barToBox,\n    box: createBox(\n        cleft,\n        ctop - context.margin,\n        context.scrollHeight,\n        cheight + context.margin * 2\n    )\n}"
+        },
+        "14": {
+            "one": "3",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "ctx.fillStyle = config.theme.scrollBar"
+        },
+        "15": {
+            "flag1": 0,
+            "id": "15",
+            "type": "question",
+            "two": "16",
+            "one": "14",
+            "content": "visuals.highlight === id"
+        },
+        "16": {
+            "one": "3",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "ctx.fillStyle = config.theme.scrollBarHover"
+        },
+        "17": {
+            "type": "action",
+            "one": "4",
+            "id": "17",
+            "content": "id = \"hscroll\""
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "drawHorizontalScrollbar",
+    "when_updated": 1677577128.5291
+}

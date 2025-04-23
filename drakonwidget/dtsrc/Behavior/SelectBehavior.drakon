@@ -1,0 +1,668 @@
+{
+    "version": 20180619,
+    "tag": "142881175",
+    "params": "widget",
+    "when_created": 1658245635.8836,
+    "parent_id": "a52f66e7",
+    "props": [],
+    "when_updated": 1702925333.3355,
+    "items": {
+        "2": {
+            "branchId": 1,
+            "one": "59",
+            "id": "2",
+            "type": "branch",
+            "content": "Idle"
+        },
+        "3": {
+            "type": "action",
+            "one": "69",
+            "id": "3",
+            "content": "startX = evt.clientX\nstartY = evt.clientY"
+        },
+        "6": {
+            "branchId": 4,
+            "one": "11",
+            "id": "6",
+            "type": "branch",
+            "content": "Scroll"
+        },
+        "11": {
+            "type": "select",
+            "one": "12",
+            "id": "11",
+            "content": "receive"
+        },
+        "12": {
+            "one": "107",
+            "id": "12",
+            "type": "case",
+            "two": "14",
+            "content": "mouseMove(evt)"
+        },
+        "14": {
+            "one": "2",
+            "id": "14",
+            "type": "case",
+            "two": "15",
+            "content": "mouseUp(evt)"
+        },
+        "15": {
+            "one": "2",
+            "id": "15",
+            "type": "case",
+            "two": null,
+            "content": "mouseLeave(evt)"
+        },
+        "22": {
+            "one": "105",
+            "id": "22",
+            "type": "case",
+            "two": "136",
+            "content": "2"
+        },
+        "23": {
+            "one": "106",
+            "id": "23",
+            "type": "case",
+            "two": "22",
+            "content": "1"
+        },
+        "24": {
+            "one": "144",
+            "id": "24",
+            "type": "case",
+            "two": "23",
+            "content": "0"
+        },
+        "25": {
+            "type": "select",
+            "id": "25",
+            "one": "24",
+            "content": "evt.button"
+        },
+        "29": {
+            "branchId": 5,
+            "one": "31",
+            "id": "29",
+            "type": "branch",
+            "content": "Choose"
+        },
+        "30": {
+            "type": "action",
+            "one": "2",
+            "id": "30",
+            "content": "handleRightClick(widget, pos, evt)"
+        },
+        "31": {
+            "one": "32",
+            "id": "31",
+            "type": "select",
+            "two": "",
+            "content": "receive"
+        },
+        "32": {
+            "one": "47",
+            "id": "32",
+            "type": "case",
+            "two": "33",
+            "content": "mouseMove(evt)"
+        },
+        "33": {
+            "one": "46",
+            "id": "33",
+            "type": "case",
+            "two": "34",
+            "content": "mouseUp(evt)"
+        },
+        "34": {
+            "one": "2",
+            "id": "34",
+            "type": "case",
+            "two": "",
+            "content": "mouseLeave(evt)"
+        },
+        "39": {
+            "branchId": 6,
+            "one": "40",
+            "id": "39",
+            "type": "branch",
+            "content": "Drag"
+        },
+        "40": {
+            "one": "41",
+            "id": "40",
+            "type": "select",
+            "two": "",
+            "content": "receive"
+        },
+        "41": {
+            "one": "111",
+            "id": "41",
+            "type": "case",
+            "two": "42",
+            "content": "mouseMove(evt)"
+        },
+        "42": {
+            "one": "115",
+            "id": "42",
+            "type": "case",
+            "two": "43",
+            "content": "mouseUp(evt)"
+        },
+        "43": {
+            "one": "115",
+            "id": "43",
+            "type": "case",
+            "two": "",
+            "content": "mouseLeave(evt)"
+        },
+        "45": {
+            "type": "action",
+            "one": "2",
+            "id": "45",
+            "content": "mouseClick(widget, pos, evt)"
+        },
+        "46": {
+            "type": "action",
+            "id": "46",
+            "one": "137",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "47": {
+            "type": "action",
+            "id": "47",
+            "one": "48",
+            "content": "deltaX = evt.clientX - startX\ndeltaY = evt.clientY - startY"
+        },
+        "48": {
+            "flag1": 0,
+            "id": "48",
+            "type": "question",
+            "one": "49",
+            "two": "116",
+            "content": "Math.abs(deltaX) > 2"
+        },
+        "49": {
+            "flag1": 0,
+            "id": "49",
+            "type": "question",
+            "one": "29",
+            "two": "116",
+            "content": "Math.abs(deltaY) > 2"
+        },
+        "59": {
+            "type": "select",
+            "id": "59",
+            "one": "63",
+            "content": "receive"
+        },
+        "60": {
+            "one": "133",
+            "id": "60",
+            "type": "case",
+            "two": "131",
+            "content": "mouseMove(evt)"
+        },
+        "63": {
+            "one": "132",
+            "id": "63",
+            "type": "case",
+            "two": "60",
+            "content": "mouseDown(evt)"
+        },
+        "64": {
+            "type": "action",
+            "one": "100",
+            "id": "64",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "67": {
+            "type": "action",
+            "id": "67",
+            "one": "2",
+            "content": "setCursor(evt.target, \"pointer\")"
+        },
+        "69": {
+            "type": "action",
+            "id": "69",
+            "one": "71",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "70": {
+            "flag1": 0,
+            "id": "70",
+            "type": "question",
+            "one": "29",
+            "two": "114",
+            "content": "widget.visuals.currentSocket"
+        },
+        "71": {
+            "type": "action",
+            "one": "70",
+            "id": "71",
+            "content": "widget.visuals.currentSocket = findSocket(\n    widget.visuals,\n    pos.x,\n    pos.y\n)"
+        },
+        "72": {
+            "branchId": 2,
+            "one": "73",
+            "id": "72",
+            "type": "branch",
+            "content": "OnSocket"
+        },
+        "73": {
+            "type": "select",
+            "one": "74",
+            "id": "73",
+            "content": "receive"
+        },
+        "74": {
+            "one": "78",
+            "id": "74",
+            "type": "case",
+            "two": "75",
+            "content": "mouseMove(evt)"
+        },
+        "75": {
+            "one": "80",
+            "id": "75",
+            "type": "case",
+            "two": "76",
+            "content": "mouseUp(evt)"
+        },
+        "76": {
+            "one": "80",
+            "id": "76",
+            "type": "case",
+            "two": null,
+            "content": "mouseLeave(evt)"
+        },
+        "77": {
+            "type": "action",
+            "one": "72",
+            "id": "77",
+            "content": "paint(widget)"
+        },
+        "78": {
+            "one": "79",
+            "id": "78",
+            "type": "action",
+            "two": "",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "79": {
+            "one": "89",
+            "id": "79",
+            "type": "action",
+            "two": "",
+            "content": "currentSocket = findSocket(\n    widget.visuals,\n    pos.x,\n    pos.y\n)"
+        },
+        "80": {
+            "type": "action",
+            "one": "2",
+            "id": "80",
+            "content": "runCurrentSocket(widget)"
+        },
+        "81": {
+            "branchId": 3,
+            "one": "82",
+            "id": "81",
+            "type": "branch",
+            "content": "OffSocket"
+        },
+        "82": {
+            "type": "select",
+            "one": "83",
+            "id": "82",
+            "content": "receive"
+        },
+        "83": {
+            "one": "86",
+            "id": "83",
+            "type": "case",
+            "two": "84",
+            "content": "mouseMove(evt)"
+        },
+        "84": {
+            "one": "2",
+            "id": "84",
+            "type": "case",
+            "two": "85",
+            "content": "mouseUp(evt)"
+        },
+        "85": {
+            "one": "2",
+            "id": "85",
+            "type": "case",
+            "two": null,
+            "content": "mouseLeave(evt)"
+        },
+        "86": {
+            "one": "87",
+            "id": "86",
+            "type": "action",
+            "two": "",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "87": {
+            "one": "90",
+            "id": "87",
+            "type": "action",
+            "two": "",
+            "content": "currentSocket = findSocket(\n    widget.visuals,\n    pos.x,\n    pos.y\n)"
+        },
+        "89": {
+            "flag1": 1,
+            "id": "89",
+            "type": "question",
+            "two": "91",
+            "one": "72",
+            "content": "currentSocket === widget.visuals.currentSocket"
+        },
+        "90": {
+            "flag1": 1,
+            "id": "90",
+            "type": "question",
+            "one": "93",
+            "two": "81",
+            "content": "currentSocket === widget.visuals.currentSocket"
+        },
+        "91": {
+            "type": "action",
+            "one": "95",
+            "id": "91",
+            "content": "widget.visuals.onSocket = false"
+        },
+        "93": {
+            "type": "action",
+            "id": "93",
+            "one": "96",
+            "content": "widget.visuals.onSocket = true"
+        },
+        "94": {
+            "type": "action",
+            "id": "94",
+            "one": "97",
+            "content": "widget.visuals.onSocket = true"
+        },
+        "95": {
+            "type": "action",
+            "id": "95",
+            "one": "81",
+            "content": "paintLater(widget)"
+        },
+        "96": {
+            "type": "action",
+            "id": "96",
+            "one": "72",
+            "content": "paintLater(widget)"
+        },
+        "97": {
+            "type": "action",
+            "id": "97",
+            "one": "77",
+            "content": "setCursor(evt.target, \"pointer\")"
+        },
+        "100": {
+            "type": "action",
+            "one": "101",
+            "id": "100",
+            "content": "currentSocket = findSocket(\n    widget.visuals,\n    pos.x,\n    pos.y\n)"
+        },
+        "101": {
+            "flag1": 1,
+            "id": "101",
+            "type": "question",
+            "one": "125",
+            "two": "127",
+            "content": "currentSocket"
+        },
+        "104": {
+            "type": "action",
+            "id": "104",
+            "one": "110",
+            "content": "clearSockets(widget.visuals)"
+        },
+        "105": {
+            "type": "action",
+            "id": "105",
+            "one": "30",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "106": {
+            "type": "action",
+            "one": "6",
+            "id": "106",
+            "content": "scroller = createMouseScroll(widget, evt)"
+        },
+        "107": {
+            "type": "action",
+            "id": "107",
+            "one": "6",
+            "content": "onMouseScroll(scroller, widget, evt)"
+        },
+        "110": {
+            "type": "action",
+            "one": "39",
+            "id": "110",
+            "content": "dragTarget = chooseDragTarget(\n    widget,\n    evt\n)"
+        },
+        "111": {
+            "type": "action",
+            "one": "39",
+            "id": "111",
+            "content": "dragTarget.onDrag(evt)"
+        },
+        "112": {
+            "type": "action",
+            "one": "2",
+            "id": "112",
+            "content": "dragTarget.complete()"
+        },
+        "114": {
+            "type": "action",
+            "one": "94",
+            "id": "114",
+            "content": "tracing.trace(\n    \"found socket\",\n    widget.visuals.currentSocket\n)"
+        },
+        "115": {
+            "type": "action",
+            "id": "115",
+            "one": "112",
+            "content": "tracing.trace(\"drag complete\")"
+        },
+        "116": {
+            "type": "action",
+            "id": "116",
+            "one": "104",
+            "content": "tracing.trace(\"drag start\")"
+        },
+        "117": {
+            "flag1": 1,
+            "id": "117",
+            "type": "question",
+            "one": "128",
+            "two": "119",
+            "content": "ear"
+        },
+        "118": {
+            "one": "2",
+            "id": "118",
+            "type": "action",
+            "two": "",
+            "content": "setCursor(evt.target, \"default\")"
+        },
+        "119": {
+            "one": "124",
+            "id": "119",
+            "type": "action",
+            "two": "",
+            "content": "prim = findVisualItem(widget, pos)"
+        },
+        "120": {
+            "flag1": 1,
+            "id": "120",
+            "type": "question",
+            "two": "118",
+            "one": "122",
+            "content": "prim"
+        },
+        "121": {
+            "one": "2",
+            "id": "121",
+            "type": "action",
+            "two": "",
+            "content": "setCursor(evt.target, cursor)"
+        },
+        "122": {
+            "one": "121",
+            "id": "122",
+            "type": "action",
+            "two": "",
+            "content": "cursor = getCursorForItem(\n    widget,\n    prim,\n    pos,\n    evt\n)"
+        },
+        "123": {
+            "one": "2",
+            "id": "123",
+            "type": "action",
+            "two": "",
+            "content": "setCursor(evt.target, \"grab\")"
+        },
+        "124": {
+            "type": "action",
+            "one": "120",
+            "id": "124",
+            "content": "updateHighlight(widget, prim)"
+        },
+        "125": {
+            "type": "action",
+            "one": "126",
+            "id": "125",
+            "content": "prim = {\n    primId: \"socket-\" + currentSocket\n}"
+        },
+        "126": {
+            "type": "action",
+            "one": "67",
+            "id": "126",
+            "content": "updateHighlight(widget, prim)"
+        },
+        "127": {
+            "type": "action",
+            "id": "127",
+            "one": "117",
+            "content": "ear = hitEars(widget.visuals, pos)"
+        },
+        "128": {
+            "type": "action",
+            "one": "129",
+            "id": "128",
+            "content": "prim = {primId: ear}"
+        },
+        "129": {
+            "type": "action",
+            "one": "123",
+            "id": "129",
+            "content": "updateHighlight(widget, prim)"
+        },
+        "131": {
+            "one": "134",
+            "id": "131",
+            "type": "case",
+            "two": null,
+            "content": "mouseLeave(evt)"
+        },
+        "132": {
+            "type": "action",
+            "id": "132",
+            "one": "25",
+            "content": "clearMouseHover(widget)"
+        },
+        "133": {
+            "type": "action",
+            "id": "133",
+            "one": "64",
+            "content": "trackMouseHover(widget, evt)"
+        },
+        "134": {
+            "type": "action",
+            "one": "135",
+            "id": "134",
+            "content": "clearMouseHover(widget)"
+        },
+        "135": {
+            "type": "action",
+            "id": "135",
+            "one": "118",
+            "content": "updateHighlight(widget, undefined)"
+        },
+        "136": {
+            "type": "case",
+            "id": "136",
+            "one": "2",
+            "two": null
+        },
+        "137": {
+            "flag1": 0,
+            "id": "137",
+            "type": "question",
+            "two": "140",
+            "one": "45",
+            "content": "evt.source === \"touch\""
+        },
+        "140": {
+            "flag1": 1,
+            "id": "140",
+            "type": "question",
+            "two": "141",
+            "one": "142",
+            "content": "widget.config.hasPopup()"
+        },
+        "141": {
+            "one": "2",
+            "id": "141",
+            "type": "action",
+            "two": "",
+            "content": "handleRightClick(widget, pos, evt)"
+        },
+        "142": {
+            "type": "action",
+            "one": "45",
+            "id": "142",
+            "content": "widget.config.removePopups()"
+        },
+        "144": {
+            "flag1": 0,
+            "id": "144",
+            "type": "question",
+            "two": "146",
+            "one": "3",
+            "content": "evt.ctrlKey"
+        },
+        "145": {
+            "one": "2",
+            "id": "145",
+            "type": "action",
+            "two": "",
+            "content": "handleRightClick(widget, pos, evt)"
+        },
+        "146": {
+            "one": "145",
+            "id": "146",
+            "type": "action",
+            "two": "",
+            "content": "pos = toDiagram(widget, evt)"
+        }
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": true,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "name": "SelectBehavior",
+    "language": "LANG_S42"
+}

@@ -1,0 +1,40 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "295609430",
+    "params": "element\nconfig",
+    "when_created": 1671263765.3157,
+    "parent_id": "768df1c8",
+    "props": [],
+    "when_updated": 1671559954.3979,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "35",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "35": {
+            "type": "action",
+            "one": "1",
+            "id": "35",
+            "content": "calculateRectBox(element)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "calculateBox",
+    "language": "LANG_S42"
+}

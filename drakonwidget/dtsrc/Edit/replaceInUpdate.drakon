@@ -1,0 +1,95 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "523216622",
+    "params": "edits\nid\nprev\ntargetId",
+    "when_created": 1667124527.3822,
+    "parent_id": "f7515898",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "8",
+            "id": "3",
+            "content": "updated = true"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "two": "8",
+            "one": "6",
+            "content": "prev.one === id"
+        },
+        "5": {
+            "type": "action",
+            "one": "4",
+            "id": "5",
+            "content": "updated = false\nfields = {}"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "3",
+            "content": "fields.one = targetId"
+        },
+        "7": {
+            "one": "10",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "updated = true"
+        },
+        "8": {
+            "flag1": 1,
+            "id": "8",
+            "type": "question",
+            "two": "10",
+            "one": "9",
+            "content": "prev.two === id"
+        },
+        "9": {
+            "one": "7",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "fields.two = targetId"
+        },
+        "10": {
+            "flag1": 1,
+            "id": "10",
+            "type": "question",
+            "two": "1",
+            "one": "11",
+            "content": "updated"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "1",
+            "content": "updateItem(edits, prev.id, fields)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "replaceInUpdate",
+    "when_updated": 1667125543.7938
+}

@@ -1,0 +1,58 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "263779410",
+    "params": "node",
+    "when_created": 1657701462.6681,
+    "parent_id": "794efc2c",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "node = getLeft(node)"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "6",
+            "two": "5",
+            "content": "node.down"
+        },
+        "5": {
+            "type": "arrow-loop",
+            "one": "3",
+            "id": "5"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return node"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1657701499.0585,
+    "name": "getNextDown",
+    "created_by": "stipan"
+}

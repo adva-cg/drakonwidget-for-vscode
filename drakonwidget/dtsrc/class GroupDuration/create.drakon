@@ -1,0 +1,61 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "853490927",
+    "params": "pos",
+    "when_created": 1671081369.0937,
+    "parent_id": "4dc44fb7",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return item"
+        },
+        "4": {
+            "one": "5",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "item = {\n    type: \"group-duration\",\n    flag1: self.flag1,\n    x: pos.x,\n    y: pos.y + 50,\n    loX: 200,\n    loY: 200,\n    hiX: 200,\n    hiY: -200\n}"
+        },
+        "5": {
+            "flag1": 0,
+            "id": "5",
+            "type": "question",
+            "one": "3",
+            "two": "6",
+            "content": "self.flag1 === 1"
+        },
+        "6": {
+            "one": "3",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "item.loX = -item.loX\nitem.hiX = -item.hiX\nitem.x += 200"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1671429297.8168,
+    "name": "create",
+    "language": "LANG_S42"
+}

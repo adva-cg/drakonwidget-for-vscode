@@ -1,0 +1,82 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "27258889",
+    "params": "widget\nnodes",
+    "when_created": 1665157348.6002,
+    "parent_id": "f474e5bd",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "10",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "5",
+            "id": "3",
+            "content": "bottomId = findSelectionBottom(widget)\nhead = getNode(visuals, selection.head)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "3",
+            "content": "selection = widget.selection"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "edits = []"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "redirectUpperItems(\n    edits,\n    head.up.links,\n    bottomId\n)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "8",
+            "content": "addDeletion = function (node) {\n    deleteItemCore(edits, node.id)\n    decrementImageRefCount(\n        widget,\n        node.image\n    )\n}"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "15",
+            "content": "nodes.forEach(addDeletion)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "4",
+            "content": "visuals = widget.visuals"
+        },
+        "15": {
+            "one": "1",
+            "id": "15",
+            "type": "action",
+            "two": "",
+            "content": "return doEdit(widget, edits)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "deleteBlock",
+    "when_updated": 1675884314.6828
+}

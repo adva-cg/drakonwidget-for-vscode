@@ -1,0 +1,97 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "637115420",
+    "params": "widget",
+    "when_created": 1677498897.8819,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return top"
+        },
+        "4": {
+            "one": "5",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals"
+        },
+        "5": {
+            "one": "6",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "zoom = widget.zoomFactor"
+        },
+        "6": {
+            "flag1": 0,
+            "id": "6",
+            "type": "question",
+            "one": "11",
+            "two": "8",
+            "content": "widget.model.type === \"free\""
+        },
+        "7": {
+            "one": "3",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "top = visuals.box.top"
+        },
+        "8": {
+            "one": "9",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "wheight = widget.height / zoom"
+        },
+        "9": {
+            "flag1": 0,
+            "id": "9",
+            "type": "question",
+            "one": "7",
+            "two": "10",
+            "content": "wheight > visuals.box.height"
+        },
+        "10": {
+            "one": "3",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "top = visuals.box.top - Math.floor(\n    (wheight - visuals.box.height) / 3\n)"
+        },
+        "11": {
+            "one": "3",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "top = visuals.box.top"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "getDefaultScrollTop",
+    "when_updated": 1677499232.0974
+}

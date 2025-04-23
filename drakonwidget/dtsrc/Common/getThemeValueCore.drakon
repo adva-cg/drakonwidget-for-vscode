@@ -1,0 +1,139 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "337458995",
+    "params": "config\ntype\nstyle\nname\ndefaultValue",
+    "when_created": 1666160333.5077,
+    "parent_id": "148e1f9c",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "10",
+            "id": "2"
+        },
+        "10": {
+            "flag1": 1,
+            "id": "10",
+            "type": "question",
+            "two": "16",
+            "one": "22",
+            "content": "style"
+        },
+        "12": {
+            "flag1": 1,
+            "id": "12",
+            "type": "question",
+            "two": "16",
+            "one": "24",
+            "content": "utils.hasValue(value)"
+        },
+        "14": {
+            "flag1": 1,
+            "id": "14",
+            "type": "question",
+            "two": "21",
+            "one": "17",
+            "content": "icons"
+        },
+        "16": {
+            "one": "14",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "theme = config.theme\nicons = theme.icons"
+        },
+        "17": {
+            "one": "25",
+            "id": "17",
+            "type": "action",
+            "two": "",
+            "content": "forIcon = icons[type]"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "33",
+            "content": "value = theme[name]"
+        },
+        "22": {
+            "type": "action",
+            "one": "12",
+            "id": "22",
+            "content": "value = style[name]"
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "32",
+            "content": "value = forIcon[name]"
+        },
+        "24": {
+            "type": "action",
+            "one": "1",
+            "id": "24",
+            "content": "return value"
+        },
+        "25": {
+            "flag1": 1,
+            "id": "25",
+            "type": "question",
+            "one": "23",
+            "two": "21",
+            "content": "forIcon"
+        },
+        "31": {
+            "type": "action",
+            "id": "31",
+            "one": "34",
+            "content": "value = config[name]"
+        },
+        "32": {
+            "flag1": 1,
+            "id": "32",
+            "type": "question",
+            "one": "24",
+            "two": "21",
+            "content": "utils.hasValue(value)"
+        },
+        "33": {
+            "flag1": 1,
+            "id": "33",
+            "type": "question",
+            "one": "24",
+            "two": "31",
+            "content": "utils.hasValue(value)"
+        },
+        "34": {
+            "flag1": 1,
+            "id": "34",
+            "type": "question",
+            "two": "35",
+            "one": "24",
+            "content": "utils.hasValue(value)"
+        },
+        "35": {
+            "type": "action",
+            "id": "35",
+            "one": "1",
+            "content": "return defaultValue"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "getThemeValueCore",
+    "when_updated": 1675146244.4245
+}

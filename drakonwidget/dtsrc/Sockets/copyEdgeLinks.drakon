@@ -1,0 +1,51 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "673603956",
+    "params": "socket",
+    "when_created": 1662483316.3825,
+    "parent_id": "41f1c7b9",
+    "props": [],
+    "when_updated": 1675145396.3914,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "edge = socket.edge"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "socket.target = edge.finalTarget.itemId"
+        },
+        "5": {
+            "type": "action",
+            "one": "1",
+            "id": "5",
+            "content": "utils.addRange(edge.links, socket.links)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "copyEdgeLinks",
+    "created_by": "stipan"
+}

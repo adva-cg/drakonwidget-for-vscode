@@ -1,0 +1,67 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "20941678",
+    "params": "sub\nedge",
+    "when_created": 1664012838.4417,
+    "parent_id": "8e739cfd",
+    "props": [],
+    "when_updated": 1664013708.1625,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "targetId = edge.finalTarget.itemId"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "existing = sub.outer[targetId]"
+        },
+        "5": {
+            "flag1": 0,
+            "id": "5",
+            "type": "question",
+            "one": "8",
+            "two": "7",
+            "content": "existing"
+        },
+        "7": {
+            "flag1": 1,
+            "id": "7",
+            "type": "question",
+            "two": "1",
+            "one": "8",
+            "content": "existing.type == \"edge\""
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "1",
+            "content": "addEdgeSubRecord(sub.outer, edge)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "addEdgeToSub",
+    "created_by": "stipan"
+}

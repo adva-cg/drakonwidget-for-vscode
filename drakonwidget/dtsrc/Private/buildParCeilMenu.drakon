@@ -1,0 +1,86 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "395522948",
+    "params": "widget\nedge",
+    "when_created": 1673428490.1388,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "7",
+            "content": "menu = []"
+        },
+        "4": {
+            "type": "action",
+            "one": "1",
+            "id": "4",
+            "content": "return menu"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "two": "4",
+            "one": "12",
+            "content": "isReadonly(widget)"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "4",
+            "content": "pushMenuItem(\n    \"delete_path\",\n    menu,\n    tr(widget, \"Delete path\"),\n    widget.visuals.config.imagePath + \"delete.png\",\n    function () {\n        deleteParPath(widget, edge.tail)\n    }\n)"
+        },
+        "9": {
+            "type": "action",
+            "one": "10",
+            "id": "9",
+            "content": "pushMenuItem(\n    \"add_path\",\n    menu,\n    tr(widget, \"Add path\"),\n    widget.visuals.config.imagePath + \"par.png\",\n    function () {\n        insertPath(\n            widget,\n            edge.head,\n            false\n        )\n    }\n)"
+        },
+        "10": {
+            "one": "8",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "9",
+            "content": "pushMenuItem(\n    \"add_path_left\",\n    menu,\n    tr(widget, \"Add path to the left\"),\n    widget.visuals.config.imagePath + \"par.png\",\n    function () {\n        insertPath(\n            widget,\n            edge.head,\n            true\n        )\n    }\n)"
+        },
+        "12": {
+            "flag1": 0,
+            "id": "12",
+            "type": "question",
+            "one": "11",
+            "two": "9",
+            "content": "edge.head.left"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "buildParCeilMenu",
+    "when_updated": 1673435286.9194
+}

@@ -1,0 +1,65 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "114533472",
+    "params": "crawler\nquestion",
+    "when_created": 1664017340.0661,
+    "parent_id": "8e739cfd",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "6",
+            "id": "3",
+            "content": "sub = createSubspace(crawler.visuals)"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "one": "3",
+            "two": "1",
+            "content": "question.zoned"
+        },
+        "5": {
+            "type": "action",
+            "one": "7",
+            "id": "5",
+            "content": "inner = createInnerRight(\n    crawler.visuals,\n    sub\n)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "5",
+            "content": "outer = createOuter(crawler.visuals, sub)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "crawl(outer, question.down)\ncrawl(inner, question.right)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1664017483.8163,
+    "name": "createQSubspace",
+    "created_by": "stipan"
+}

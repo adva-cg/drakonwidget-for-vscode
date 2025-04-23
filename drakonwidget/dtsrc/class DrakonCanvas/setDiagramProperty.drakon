@@ -1,0 +1,101 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "462727584",
+    "params": "name\nvalue",
+    "when_created": 1675691930.1655,
+    "parent_id": "e0f4b57d",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "4": {
+            "type": "action",
+            "one": "6",
+            "id": "4",
+            "content": "checkNotReadonly(self)"
+        },
+        "5": {
+            "type": "action",
+            "one": "4",
+            "id": "5",
+            "content": "tracing.trace(\n    \"DrakonCanvas.setDiagramProperty\",\n    [name, value]\n)"
+        },
+        "6": {
+            "one": "9",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "change = {fields: {}, op: \"update\"}"
+        },
+        "9": {
+            "type": "action",
+            "one": "13",
+            "id": "9",
+            "content": "change.fields[name] = value"
+        },
+        "10": {
+            "type": "case",
+            "one": "14",
+            "id": "10"
+        },
+        "11": {
+            "one": "15",
+            "id": "11",
+            "type": "case",
+            "two": "10",
+            "content": "\"params\""
+        },
+        "12": {
+            "one": "17",
+            "id": "12",
+            "type": "case",
+            "two": "11",
+            "content": "\"name\""
+        },
+        "13": {
+            "type": "select",
+            "id": "13",
+            "one": "12",
+            "content": "name"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "1",
+            "content": "updateAndKeepSelection(self, [change])"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "1",
+            "content": "return doEdit(self, [change])"
+        },
+        "17": {
+            "type": "action",
+            "one": "1",
+            "id": "17",
+            "content": "doEditNoRender(self, [change])"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "setDiagramProperty",
+    "when_updated": 1681378951.5929
+}

@@ -1,0 +1,127 @@
+{
+    "version": 20180619,
+    "tag": "571737572",
+    "params": "visuals\nnode\nctx",
+    "when_created": 1657733074.5546,
+    "parent_id": "4ee6bb37",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "21",
+            "id": "2",
+            "type": "branch",
+            "content": "The icon"
+        },
+        "11": {
+            "branchId": 3,
+            "one": "1",
+            "id": "11",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "12": {
+            "branchId": 2,
+            "one": "13",
+            "id": "12",
+            "type": "branch",
+            "content": "Mark"
+        },
+        "13": {
+            "flag1": 0,
+            "id": "13",
+            "type": "question",
+            "one": "11",
+            "two": "14",
+            "content": "node.mark"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "15",
+            "content": "x = node.x\ny = node.y\nw = node.w\nh = node.h\nbottom = y + h\ntx0 = x - w / 2;\ntx1 = x + w / 2;\nty = (bottom + middle) / 2;"
+        },
+        "15": {
+            "type": "action",
+            "one": "17",
+            "id": "15",
+            "content": "ctx.fillStyle = visuals.config.theme.internalLine"
+        },
+        "16": {
+            "one": "11",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "ctx.fill()"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "16",
+            "content": "ctx.beginPath()\nctx.moveTo(tx0, ty)\nctx.lineTo(x, bottom)\nctx.lineTo(tx1, ty)\nctx.closePath()"
+        },
+        "21": {
+            "type": "action",
+            "one": "27",
+            "id": "21",
+            "content": "tri = visuals.config.triangleHeight"
+        },
+        "22": {
+            "one": "12",
+            "id": "22",
+            "type": "action",
+            "two": "",
+            "content": "centerContentTop(visuals, node)"
+        },
+        "25": {
+            "type": "action",
+            "id": "25",
+            "one": "26",
+            "content": "middle = node.y + node.h - tri"
+        },
+        "26": {
+            "type": "action",
+            "id": "26",
+            "one": "22",
+            "content": "renderDrakonIconShape(\n    ctx,\n    visuals,\n    node,\n    buildBranchCoords,\n    tri\n)"
+        },
+        "27": {
+            "one": "28",
+            "id": "27",
+            "type": "action",
+            "two": "",
+            "content": "radius = visuals.config.iconRadius || 0"
+        },
+        "28": {
+            "flag1": 0,
+            "id": "28",
+            "type": "question",
+            "one": "25",
+            "two": "29",
+            "content": "radius"
+        },
+        "29": {
+            "type": "action",
+            "one": "25",
+            "id": "29",
+            "content": "tri -= radius"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "when_updated": 1672560720.2189,
+    "name": "renderBranch",
+    "created_by": "stipan"
+}

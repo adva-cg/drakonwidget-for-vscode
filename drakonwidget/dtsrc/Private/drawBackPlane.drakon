@@ -1,0 +1,90 @@
+{
+    "version": 20180619,
+    "tag": "197758502",
+    "params": "widget\nctx",
+    "when_created": 1690026038.564,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "one": "9",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals"
+        },
+        "5": {
+            "one": "8",
+            "id": "5",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "6": {
+            "one": "11",
+            "id": "6",
+            "type": "loopbegin",
+            "two": "",
+            "content": "element; visuals.free"
+        },
+        "7": {
+            "one": "5",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "drawFreeIcon(\n    widget,\n    element,\n    ctx,\n    visited\n)"
+        },
+        "8": {
+            "one": "10",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "ctx.setLineDash([])"
+        },
+        "9": {
+            "one": "6",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "visited = {}"
+        },
+        "10": {
+            "one": "1",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "clearShadow(ctx)"
+        },
+        "11": {
+            "flag1": 0,
+            "id": "11",
+            "type": "question",
+            "two": "8",
+            "one": "7",
+            "content": "element.zIndex >= 0"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "language": "LANG_S42",
+    "name": "drawBackPlane",
+    "when_updated": 1690027647.2098
+}

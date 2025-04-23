@@ -1,0 +1,66 @@
+{
+    "version": 20180619,
+    "tag": "726672758",
+    "params": "elementBox\nbox",
+    "when_created": 1667018710.2737,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1673244530.6685,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "one": "15",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "left = elementBox.left\ntop = elementBox.top"
+        },
+        "13": {
+            "type": "action",
+            "one": "17",
+            "id": "13",
+            "content": "right = left + elementBox.width\nbottom = top + elementBox.height"
+        },
+        "15": {
+            "flag1": 1,
+            "id": "15",
+            "type": "question",
+            "one": "13",
+            "two": "16",
+            "content": "\"width\" in elementBox"
+        },
+        "16": {
+            "type": "action",
+            "one": "17",
+            "id": "16",
+            "content": "right = left\nbottom = top"
+        },
+        "17": {
+            "type": "action",
+            "one": "1",
+            "id": "17",
+            "content": "nextBox(box, left, top, right, bottom)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "language": "LANG_S42",
+    "name": "calculateBoxFromFree",
+    "created_by": "stipan"
+}

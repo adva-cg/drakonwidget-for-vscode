@@ -1,0 +1,164 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "415290516",
+    "params": "inputLine\nleft\ntop\nright\nflowBlock",
+    "when_created": 1667551216.0128,
+    "parent_id": "99e62b4e",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "4",
+            "id": "2",
+            "type": "branch",
+            "content": "Init"
+        },
+        "4": {
+            "type": "action",
+            "one": "12",
+            "id": "4",
+            "content": "margin = (\n    flowBlock.lineHeight - flowBlock.fontSize\n) / 2"
+        },
+        "10": {
+            "branchId": 3,
+            "one": "55",
+            "id": "10",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "12": {
+            "type": "action",
+            "one": "60",
+            "id": "12",
+            "content": "baseLineShift = flowBlock.lineHeight - margin"
+        },
+        "45": {
+            "branchId": 2,
+            "one": "63",
+            "id": "45",
+            "type": "branch",
+            "content": "Process tokens"
+        },
+        "46": {
+            "type": "loopend",
+            "id": "46",
+            "one": "10",
+            "content": ""
+        },
+        "47": {
+            "type": "loopbegin",
+            "one": "54",
+            "id": "47",
+            "content": "token; inputLine.tokens"
+        },
+        "48": {
+            "flag1": 1,
+            "id": "48",
+            "type": "question",
+            "one": "50",
+            "two": "49",
+            "content": "line.right + token.width <= right"
+        },
+        "49": {
+            "flag1": 1,
+            "id": "49",
+            "type": "question",
+            "two": "52",
+            "one": "50",
+            "content": "line.tokens.length === 0"
+        },
+        "50": {
+            "one": "46",
+            "id": "50",
+            "type": "action",
+            "two": "",
+            "content": "addTokenToLine(line, token)"
+        },
+        "52": {
+            "one": "54",
+            "id": "52",
+            "type": "action",
+            "two": "",
+            "content": "line = createLine(\n    flowBlock,\n    left,\n    line.bottom,\n    baseLineShift\n)"
+        },
+        "54": {
+            "type": "arrow-loop",
+            "one": "48",
+            "id": "54"
+        },
+        "55": {
+            "type": "action",
+            "id": "55",
+            "one": "1",
+            "content": "return line.bottom"
+        },
+        "56": {
+            "type": "case",
+            "one": "45",
+            "id": "56"
+        },
+        "57": {
+            "one": "62",
+            "id": "57",
+            "type": "case",
+            "two": "56",
+            "content": "\"ol\""
+        },
+        "58": {
+            "one": "62",
+            "id": "58",
+            "type": "case",
+            "two": "57",
+            "content": "\"ul\""
+        },
+        "59": {
+            "type": "select",
+            "one": "58",
+            "id": "59",
+            "content": "inputLine.type"
+        },
+        "60": {
+            "type": "action",
+            "id": "60",
+            "one": "59",
+            "content": "line = createLine(\n    flowBlock,\n    left,\n    top,\n    baseLineShift\n)"
+        },
+        "61": {
+            "type": "action",
+            "id": "61",
+            "one": "45",
+            "content": "left += inputLine.tokens[0].width"
+        },
+        "62": {
+            "flag1": 0,
+            "id": "62",
+            "type": "question",
+            "one": "61",
+            "two": "45",
+            "content": "inputLine.tokens.length === 0"
+        },
+        "63": {
+            "type": "action",
+            "one": "47",
+            "id": "63",
+            "content": ""
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1677137526.4572,
+    "name": "flowLine",
+    "language": "LANG_S42"
+}

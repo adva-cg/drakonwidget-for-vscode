@@ -1,0 +1,98 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "494814267",
+    "params": "widget\nelement\nctx",
+    "when_created": 1672852837.6958,
+    "parent_id": "791b14d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "11",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3"
+        },
+        "4": {
+            "one": "5",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "handle = RoundedRadiusLeft()"
+        },
+        "5": {
+            "one": "10",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "setCommonHandleFields(\n    widget,\n    element,\n    handle\n)"
+        },
+        "6": {
+            "one": "3",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "createHandle(visuals, handle, ctx)"
+        },
+        "7": {
+            "one": "8",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "handle.x = element.left + element.aux + touch\n* 2\nhandle.y = element.top\nhandle.minX = element.left + touch * 2\nhandle.maxX = right - touch * 2"
+        },
+        "8": {
+            "one": "13",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "handle.left = element.left\nhandle.touch = touch\nhandle.color = \"yellow\""
+        },
+        "10": {
+            "one": "12",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "touch = visuals.config.socketTouchRadius"
+        },
+        "11": {
+            "type": "action",
+            "one": "4",
+            "id": "11",
+            "content": "visuals = widget.visuals"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "7",
+            "content": "right = element.left + element.width"
+        },
+        "13": {
+            "type": "action",
+            "one": "6",
+            "id": "13",
+            "content": "handle.primId = \"radius-left-\" + element.id"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1673007360.949,
+    "name": "createRadiusHandleLeft",
+    "created_by": "stipan"
+}

@@ -1,0 +1,479 @@
+{
+    "version": 20180619,
+    "tag": "49260707",
+    "params": "widget\nprim\nnode",
+    "when_created": 1663766244.7299,
+    "parent_id": "befd80d4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 3,
+            "one": "20",
+            "id": "2",
+            "type": "branch",
+            "content": "Edit content"
+        },
+        "8": {
+            "branchId": 6,
+            "one": "15",
+            "id": "8",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "9": {
+            "branchId": 4,
+            "one": "13",
+            "id": "9",
+            "type": "branch",
+            "content": "Node-specific"
+        },
+        "10": {
+            "type": "case",
+            "one": "16",
+            "id": "10"
+        },
+        "12": {
+            "one": "14",
+            "id": "12",
+            "type": "case",
+            "two": "41",
+            "content": "\"question\""
+        },
+        "13": {
+            "type": "select",
+            "one": "12",
+            "id": "13",
+            "content": "prim.type"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "16",
+            "content": "pushMenuItem(\n    \"swap_yes_no\",\n    menu,\n    tr(widget, \"Swap \\\"Yes\\\" and \\\"No\\\"\"),\n    undefined,\n    function () {\n        widget.swapYesNo(prim.id)\n    }\n)"
+        },
+        "15": {
+            "type": "action",
+            "one": "1",
+            "id": "15",
+            "content": "return menu"
+        },
+        "16": {
+            "branchId": 5,
+            "one": "17",
+            "id": "16",
+            "type": "branch",
+            "content": "Delete"
+        },
+        "17": {
+            "flag1": 1,
+            "id": "17",
+            "type": "question",
+            "one": "19",
+            "two": "56",
+            "content": "canDelete(widget.visuals, node)"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "56",
+            "content": "pushMenuItem(\n    \"delete_one\",\n    menu,\n    tr(widget, \"Delete\"),\n    widget.visuals.config.imagePath + \"delete.png\",\n    function () {\n        deleteOne(widget, node)\n    }\n)"
+        },
+        "19": {
+            "one": "18",
+            "id": "19",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "20": {
+            "flag1": 1,
+            "id": "20",
+            "type": "question",
+            "two": "24",
+            "one": "21",
+            "content": "prim.type === \"header\""
+        },
+        "21": {
+            "type": "action",
+            "one": "23",
+            "id": "21",
+            "content": "pushMenuItem(\n    \"rename\",\n    menu,\n    tr(widget, \"Rename\"),\n    undefined,\n    function () {\n        startEditContent(widget, prim)\n    }\n)"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "45",
+            "content": "pushMenuItem(\n    \"add_params\",\n    menu,\n    tr(widget, \"Add parameters\"),\n    undefined,\n    function () {\n        addParameters(widget, prim)\n    }\n)"
+        },
+        "23": {
+            "flag1": 0,
+            "id": "23",
+            "type": "question",
+            "two": "45",
+            "one": "44",
+            "content": "widget.visuals.params"
+        },
+        "24": {
+            "flag1": 1,
+            "id": "24",
+            "type": "question",
+            "one": "46",
+            "two": "45",
+            "content": "canEditNodeText(widget, prim)"
+        },
+        "27": {
+            "branchId": 1,
+            "one": "28",
+            "id": "27",
+            "type": "branch",
+            "content": "Copy/Cut"
+        },
+        "28": {
+            "type": "action",
+            "id": "28",
+            "one": "59",
+            "content": "menu = []"
+        },
+        "29": {
+            "type": "action",
+            "one": "30",
+            "id": "29",
+            "content": "func = getCopyFunction(node)"
+        },
+        "30": {
+            "flag1": 1,
+            "id": "30",
+            "type": "question",
+            "one": "32",
+            "two": "2",
+            "content": "func"
+        },
+        "31": {
+            "one": "2",
+            "id": "31",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "32": {
+            "type": "action",
+            "one": "43",
+            "id": "32",
+            "content": "pushMenuItem(\n    \"copy_one\",\n    menu,\n    tr(widget, \"Copy\"),\n    undefined,\n    function () {\n        copy(widget)\n    }\n)"
+        },
+        "33": {
+            "flag1": 1,
+            "id": "33",
+            "type": "question",
+            "one": "34",
+            "two": "31",
+            "content": "canDelete(widget.visuals, node)"
+        },
+        "34": {
+            "type": "action",
+            "one": "31",
+            "id": "34",
+            "content": "pushMenuItem(\n    \"cut_one\",\n    menu,\n    tr(widget, \"Cut\"),\n    undefined,\n    function () {\n        cut(widget)\n    }\n)"
+        },
+        "35": {
+            "one": "53",
+            "id": "35",
+            "type": "case",
+            "two": "72",
+            "content": "\"branch\""
+        },
+        "36": {
+            "type": "action",
+            "one": "71",
+            "id": "36",
+            "content": "pushMenuItem(\n    \"insert_end_branch\",\n    menu,\n    tr(widget, \"Insert Branch with End\"),\n    widget.visuals.config.imagePath + \"end.png\",\n    function () {\n        branchInsertEnd(widget)\n    }\n)"
+        },
+        "37": {
+            "flag1": 0,
+            "id": "37",
+            "type": "question",
+            "two": "69",
+            "one": "40",
+            "content": "widget.visuals.end"
+        },
+        "40": {
+            "flag1": 1,
+            "id": "40",
+            "type": "question",
+            "two": "71",
+            "one": "36",
+            "content": "isLastBranch(widget, node)"
+        },
+        "41": {
+            "one": "50",
+            "id": "41",
+            "type": "case",
+            "two": "35",
+            "content": "\"address\""
+        },
+        "42": {
+            "type": "action",
+            "id": "42",
+            "one": "16",
+            "content": "addressDestinations(widget, node, menu)"
+        },
+        "43": {
+            "flag1": 0,
+            "id": "43",
+            "type": "question",
+            "one": "33",
+            "two": "31",
+            "content": "isReadonly(widget)"
+        },
+        "44": {
+            "flag1": 0,
+            "id": "44",
+            "type": "question",
+            "two": "45",
+            "one": "22",
+            "content": "isReadonly(widget)"
+        },
+        "45": {
+            "flag1": 0,
+            "id": "45",
+            "type": "question",
+            "two": "8",
+            "one": "9",
+            "content": "isReadonly(widget)"
+        },
+        "46": {
+            "flag1": 1,
+            "id": "46",
+            "type": "question",
+            "two": "77",
+            "one": "47",
+            "content": "canEditSecondary(prim)"
+        },
+        "47": {
+            "one": "77",
+            "id": "47",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"edit_secondary\",\n    menu,\n    tr(widget, \"Edit upper text\"),\n    undefined,\n    function () {\n        startEditSecondary(widget, prim)\n    }\n)"
+        },
+        "48": {
+            "one": "45",
+            "id": "48",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"edit_link\",\n    menu,\n    tr(widget, \"Edit link\"),\n    undefined,\n    function () {\n        startEditLink(widget, prim)\n    }\n)"
+        },
+        "49": {
+            "one": "48",
+            "id": "49",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "50": {
+            "type": "action",
+            "one": "52",
+            "id": "50",
+            "content": "pushMenuItem(\n    \"go_to_target_branch\",\n    menu,\n    tr(widget, \"Go to branch\"),\n    undefined,\n    function () {\n        widget.showItem(node.branch.id)\n    }\n)"
+        },
+        "52": {
+            "one": "42",
+            "id": "52",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "53": {
+            "flag1": 1,
+            "id": "53",
+            "type": "question",
+            "one": "55",
+            "two": "54",
+            "content": "getBranchMargin(node) === 0"
+        },
+        "54": {
+            "type": "action",
+            "one": "55",
+            "id": "54",
+            "content": "pushMenuItem(\n    \"reset_margin\",\n    menu,\n    tr(widget, \"Reset margin\"),\n    undefined,\n    function () {\n        resetMargin(widget, node.id)\n    }\n)"
+        },
+        "55": {
+            "type": "action",
+            "id": "55",
+            "one": "67",
+            "content": "pushMenuItem(\n    \"increase_margin\",\n    menu,\n    tr(widget, \"Increase margin\"),\n    undefined,\n    function () {\n        increaseMargin(widget, node.id)\n    }\n)"
+        },
+        "56": {
+            "flag1": 1,
+            "id": "56",
+            "type": "question",
+            "two": "8",
+            "one": "57",
+            "content": "canEditStyle(node)"
+        },
+        "57": {
+            "one": "58",
+            "id": "57",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "58": {
+            "one": "8",
+            "id": "58",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"format\",\n    menu,\n    tr(widget, \"Format\"),\n    undefined,\n    function () {\n        startEditStyle(widget)\n    }\n)"
+        },
+        "59": {
+            "flag1": 0,
+            "id": "59",
+            "type": "question",
+            "one": "29",
+            "two": "60",
+            "content": "prim.type === \"params\""
+        },
+        "60": {
+            "branchId": 2,
+            "one": "64",
+            "id": "60",
+            "type": "branch",
+            "content": "Params"
+        },
+        "61": {
+            "one": "65",
+            "id": "61",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"delete_one\",\n    menu,\n    tr(widget, \"Delete\"),\n    widget.visuals.config.imagePath + \"delete.png\",\n    function () {\n        deleteOne(widget, node)\n    }\n)"
+        },
+        "62": {
+            "one": "61",
+            "id": "62",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "63": {
+            "flag1": 0,
+            "id": "63",
+            "type": "question",
+            "two": "8",
+            "one": "62",
+            "content": "isReadonly(widget)"
+        },
+        "64": {
+            "one": "63",
+            "id": "64",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"edit_content\",\n    menu,\n    tr(widget, \"Edit content\"),\n    undefined,\n    function () {\n        startEditContent(widget, prim)\n    }\n)"
+        },
+        "65": {
+            "one": "66",
+            "id": "65",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "66": {
+            "one": "8",
+            "id": "66",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"format\",\n    menu,\n    tr(widget, \"Format\"),\n    undefined,\n    function () {\n        startEditStyle(widget)\n    }\n)"
+        },
+        "67": {
+            "type": "action",
+            "one": "37",
+            "id": "67",
+            "content": "pushMenuItem(\n    \"insert_branch_left\",\n    menu,\n    tr(\n        widget,\n        \"Insert Branch to the left\"\n    ),\n    widget.visuals.config.imagePath + \"branch.png\",\n    function () {\n        insertBranch(widget, node, true)\n    }\n)"
+        },
+        "69": {
+            "flag1": 1,
+            "id": "69",
+            "type": "question",
+            "one": "16",
+            "two": "70",
+            "content": "isLastBranch(widget, node)"
+        },
+        "70": {
+            "type": "action",
+            "one": "16",
+            "id": "70",
+            "content": "pushMenuItem(\n    \"insert_branch_right\",\n    menu,\n    tr(\n        widget,\n        \"Insert Branch to the right\"\n    ),\n    widget.visuals.config.imagePath + \"branch.png\",\n    function () {\n        insertBranch(widget, node, false)\n    }\n)"
+        },
+        "71": {
+            "type": "action",
+            "id": "71",
+            "one": "16",
+            "content": "pushMenuItem(\n    \"insert_branch_right\",\n    menu,\n    tr(\n        widget,\n        \"Insert Branch to the right\"\n    ),\n    widget.visuals.config.imagePath + \"branch.png\",\n    function () {\n        insertBranch(widget, node, false)\n    }\n)"
+        },
+        "72": {
+            "one": "73",
+            "id": "72",
+            "type": "case",
+            "two": "10",
+            "content": "\"case\""
+        },
+        "73": {
+            "type": "action",
+            "one": "74",
+            "id": "73",
+            "content": "pushMenuItem(\n    \"insert_case_left\",\n    menu,\n    tr(widget, \"Insert Case to the left\"),\n    widget.visuals.config.imagePath + \"case.png\",\n    function () {\n        insertCase(widget, node, true)\n    }\n)"
+        },
+        "74": {
+            "type": "action",
+            "one": "16",
+            "id": "74",
+            "content": "pushMenuItem(\n    \"insert_case_right\",\n    menu,\n    tr(\n        widget,\n        \"Insert Case to the right\"\n    ),\n    widget.visuals.config.imagePath + \"case.png\",\n    function () {\n        insertCase(widget, node, false)\n    }\n)"
+        },
+        "75": {
+            "flag1": 1,
+            "id": "75",
+            "type": "question",
+            "one": "76",
+            "two": "49",
+            "content": "prim.type === \"drakon-image\""
+        },
+        "76": {
+            "flag1": 0,
+            "id": "76",
+            "type": "question",
+            "one": "78",
+            "two": "49",
+            "content": "isReadonly(widget)"
+        },
+        "77": {
+            "one": "75",
+            "id": "77",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"edit_content\",\n    menu,\n    tr(widget, \"Edit content\"),\n    undefined,\n    function () {\n        startEditContent(widget, prim)\n    }\n)"
+        },
+        "78": {
+            "one": "49",
+            "id": "78",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"change_image\",\n    menu,\n    tr(widget, \"Change image\"),\n    undefined,\n    function () {\n        startChangeImage(widget, prim)\n    }\n)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "when_updated": 1676127301.982,
+    "name": "buildMenuByType",
+    "created_by": "stipan"
+}

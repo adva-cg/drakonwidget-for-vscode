@@ -1,0 +1,104 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "192467975",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1673081442.6849,
+    "parent_id": "f298c153",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "32",
+            "id": "2"
+        },
+        "19": {
+            "flag1": 0,
+            "id": "19",
+            "type": "question",
+            "two": "20",
+            "one": "30",
+            "content": "mustShift(visuals.config, line)"
+        },
+        "20": {
+            "one": "30",
+            "id": "20",
+            "type": "action",
+            "two": "",
+            "content": "left += 0.5\ntop += 0.5"
+        },
+        "21": {
+            "one": "24",
+            "id": "21",
+            "type": "action",
+            "two": "",
+            "content": "line = ctx.lineWidth || 1"
+        },
+        "24": {
+            "one": "31",
+            "id": "24",
+            "type": "action",
+            "two": "",
+            "content": "clearShadow(ctx)"
+        },
+        "28": {
+            "type": "action",
+            "id": "28",
+            "one": "21",
+            "content": "renderFreeIconShape(\n    ctx,\n    visuals,\n    element,\n    buildRectCoords,\n    undefined\n)"
+        },
+        "29": {
+            "type": "action",
+            "one": "19",
+            "id": "29",
+            "content": "left = element.left + radius\ntop = element.top + radius"
+        },
+        "30": {
+            "type": "action",
+            "one": "33",
+            "id": "30",
+            "content": "right = left + element.width - radius * 2\nbottom = top + element.height - radius *\n2"
+        },
+        "31": {
+            "type": "action",
+            "id": "31",
+            "one": "29",
+            "content": "radius = config.iconRadius || 0"
+        },
+        "32": {
+            "type": "action",
+            "id": "32",
+            "one": "28",
+            "content": "config = visuals.config"
+        },
+        "33": {
+            "type": "action",
+            "id": "33",
+            "one": "34",
+            "content": "line1(ctx, left, top, right, bottom)"
+        },
+        "34": {
+            "type": "action",
+            "id": "34",
+            "one": "1",
+            "content": "line1(ctx, right, top, left, bottom)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1673096640.2115,
+    "name": "renderPlaceholder",
+    "language": "LANG_S42"
+}

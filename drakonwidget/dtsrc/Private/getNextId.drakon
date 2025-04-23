@@ -1,0 +1,51 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "780857508",
+    "params": "obj",
+    "when_created": 1657285473.6366,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1657628812.5042,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "id = obj.nextId.toString()"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "obj.nextId++"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "return id"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "getNextId",
+    "created_by": "stipan"
+}

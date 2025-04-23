@@ -1,0 +1,44 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": true,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "16751461900083",
+    "params": "",
+    "when_created": 1660029596.0138,
+    "parent_id": "73128943",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "date = new Date()"
+        },
+        "4": {
+            "type": "action",
+            "one": "1",
+            "id": "4",
+            "content": "return date.getTime()"
+        }
+    },
+    "created_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "name": "getNowMs",
+    "when_updated": 1675146190.0084
+}

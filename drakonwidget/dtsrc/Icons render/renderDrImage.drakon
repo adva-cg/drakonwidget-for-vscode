@@ -1,0 +1,146 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "873498085",
+    "params": "visuals\nnode\nctx",
+    "when_created": 1657733014.2041,
+    "parent_id": "4ee6bb37",
+    "props": [],
+    "when_updated": 1675871180.8519,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 2,
+            "one": "31",
+            "id": "2",
+            "type": "branch",
+            "content": "Branch1"
+        },
+        "30": {
+            "type": "action",
+            "id": "30",
+            "one": "33",
+            "content": "ctx.drawImage(\n    image.imageObj,\n    left,\n    top,\n    width,\n    imageHeight\n)"
+        },
+        "31": {
+            "type": "action",
+            "one": "45",
+            "id": "31",
+            "content": "image = visuals.images[node.image]"
+        },
+        "32": {
+            "branchId": 5,
+            "one": "1",
+            "id": "32",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "33": {
+            "branchId": 3,
+            "one": "38",
+            "id": "33",
+            "type": "branch",
+            "content": "Text content"
+        },
+        "34": {
+            "branchId": 1,
+            "one": "37",
+            "id": "34",
+            "type": "branch",
+            "content": "Fill"
+        },
+        "35": {
+            "one": "36",
+            "id": "35",
+            "type": "action",
+            "two": "",
+            "content": "line = setFillStroke(visuals, node, ctx)"
+        },
+        "36": {
+            "type": "action",
+            "one": "2",
+            "id": "36",
+            "content": "renderIconShapeFill(\n    ctx,\n    visuals,\n    buildRectCoords,\n    left,\n    top,\n    width,\n    height,\n    undefined\n)"
+        },
+        "37": {
+            "type": "action",
+            "one": "35",
+            "id": "37",
+            "content": "left = node.x - node.w\ntop = node.y - node.h\nwidth = node.w * 2\nheight = node.h * 2\nbottom = top + height"
+        },
+        "38": {
+            "one": "42",
+            "id": "38",
+            "type": "action",
+            "two": "",
+            "content": "textLeft = Math.floor(node.x - node.w) +\n1"
+        },
+        "40": {
+            "one": "48",
+            "id": "40",
+            "type": "action",
+            "two": "",
+            "content": "renderContentCore(\n    visuals,\n    node,\n    textLeft,\n    textTop\n)"
+        },
+        "41": {
+            "type": "action",
+            "id": "41",
+            "one": "40",
+            "content": "textTop = Math.ceil(\n    middle - node.flowBlock.height / 2\n)"
+        },
+        "42": {
+            "type": "action",
+            "id": "42",
+            "one": "41",
+            "content": "middle = (imageHeight + top + bottom) / 2"
+        },
+        "45": {
+            "one": "46",
+            "id": "45",
+            "type": "action",
+            "two": "",
+            "content": "imageHeight = node.extraHeight"
+        },
+        "46": {
+            "flag1": 1,
+            "id": "46",
+            "type": "question",
+            "two": "47",
+            "one": "30",
+            "content": "node.flowBlock"
+        },
+        "47": {
+            "type": "action",
+            "one": "48",
+            "id": "47",
+            "content": "ctx.drawImage(\n    image.imageObj,\n    left,\n    Math.round(node.y - imageHeight / 2),\n    width,\n    imageHeight\n)"
+        },
+        "48": {
+            "branchId": 4,
+            "one": "49",
+            "id": "48",
+            "type": "branch",
+            "content": "Border"
+        },
+        "49": {
+            "type": "action",
+            "id": "49",
+            "one": "32",
+            "content": "renderIconShapeBorder(\n    ctx,\n    visuals,\n    buildRectCoords,\n    line,\n    left,\n    top,\n    width,\n    height,\n    undefined\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "renderDrImage",
+    "created_by": "stipan"
+}

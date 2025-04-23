@@ -1,0 +1,92 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "557622169",
+    "params": "nodes\nlines",
+    "when_created": 1667822114.02,
+    "parent_id": "f2ec426b",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "9",
+            "id": "2"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "1",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "12",
+            "id": "5",
+            "content": "node; nodes"
+        },
+        "7": {
+            "one": "8",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "lines.push(line)"
+        },
+        "8": {
+            "one": "10",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "addNodeToLine(\n    node,\n    line.tokens,\n    false,\n    false\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "5",
+            "content": "i = 1"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "4",
+            "content": "i++"
+        },
+        "11": {
+            "flag1": 1,
+            "id": "11",
+            "type": "question",
+            "two": "4",
+            "one": "13",
+            "content": "name === \"li\""
+        },
+        "12": {
+            "type": "action",
+            "one": "11",
+            "id": "12",
+            "content": "name = getNodeName(node)"
+        },
+        "13": {
+            "one": "7",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "line = {\n    type: \"ul\",\n    tokens: [{text: i + \". \"}]\n}"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "processOrdered",
+    "when_updated": 1668153589.272
+}

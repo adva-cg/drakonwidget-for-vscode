@@ -1,0 +1,65 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "746747628",
+    "params": "visuals\nhead\ntail\nfinalTarget",
+    "when_created": 1657629524.5765,
+    "parent_id": "82d2ccaf",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "edge = makeDownEdgeCore(\n    visuals,\n    head,\n    tail,\n    finalTarget\n)"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "two": "11",
+            "one": "6",
+            "content": "isLeftDown(head)"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "edge.role = \"down\""
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "return edge"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "6",
+            "content": "finalTarget.mountUp = head"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "makeDownEdge",
+    "when_updated": 1658396479.6895
+}

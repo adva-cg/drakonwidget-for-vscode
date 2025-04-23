@@ -1,0 +1,31 @@
+{
+    "version": 20180619,
+    "tag": "",
+    "when_created": 1672945234.1358,
+    "parent_id": "cfcfb786",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return self.minY"
+        }
+    },
+    "when_updated": 1672945234.1358,
+    "created_by": "stipan",
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "getMinY",
+    "language": "LANG_S42"
+}

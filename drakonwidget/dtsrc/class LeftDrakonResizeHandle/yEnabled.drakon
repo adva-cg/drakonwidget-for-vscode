@@ -1,0 +1,31 @@
+{
+    "version": 20180619,
+    "tag": "555383132",
+    "when_created": 1671015531.7238,
+    "parent_id": "cd1c5f8a",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return false"
+        }
+    },
+    "language": "LANG_S42",
+    "when_updated": 1671015547.769,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "name": "yEnabled",
+    "created_by": "stipan"
+}

@@ -1,0 +1,81 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": true,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "629500325",
+    "params": "",
+    "when_created": 1661364845.8384,
+    "parent_id": "e0f4b57d",
+    "props": [],
+    "when_updated": 1681385601.2355,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "9",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "11",
+            "content": "selection = self.edit.undoEdit()"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "two": "1",
+            "one": "3",
+            "content": "self.edit"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "one": "4",
+            "two": "1",
+            "content": "isReadonly(self)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "7",
+            "content": "tracing.trace(\"DrakonCanvas.undo\")"
+        },
+        "10": {
+            "type": "action",
+            "one": "1",
+            "id": "10",
+            "content": "onUndoRedo(self, selection)"
+        },
+        "11": {
+            "flag1": 1,
+            "id": "11",
+            "type": "question",
+            "two": "1",
+            "one": "12",
+            "content": "selection"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "10",
+            "content": "await loadImages(self)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "undo",
+    "created_by": "stipan"
+}

@@ -1,0 +1,73 @@
+{
+    "version": 20180619,
+    "tag": "888747222",
+    "params": "widget\nprim",
+    "when_created": 1672740590.1274,
+    "parent_id": "fdabdff8",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return menu"
+        },
+        "4": {
+            "type": "action",
+            "one": "9",
+            "id": "4",
+            "content": "menu = []"
+        },
+        "8": {
+            "type": "action",
+            "one": "15",
+            "id": "8",
+            "content": "pushMenuItem(\n    \"delete_connection\",\n    menu,\n    tr(widget, \"Delete\"),\n    widget.visuals.config.imagePath + \"delete.png\",\n    function () {\n        deleteSelection(widget)\n    }\n)"
+        },
+        "9": {
+            "flag1": 0,
+            "id": "9",
+            "type": "question",
+            "one": "8",
+            "two": "3",
+            "content": "isReadonly(widget)"
+        },
+        "15": {
+            "one": "16",
+            "id": "15",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "16": {
+            "one": "3",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "pushMenuItem(\n    \"format\",\n    menu,\n    tr(widget, \"Format\"),\n    undefined,\n    function () {\n        startEditStyle(widget)\n    }\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "type": "drakon",
+    "when_updated": 1672740650.8744,
+    "name": "buildConnectionMenu",
+    "created_by": "stipan"
+}

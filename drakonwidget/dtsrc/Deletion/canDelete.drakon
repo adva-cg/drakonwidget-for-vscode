@@ -1,0 +1,118 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "447108317",
+    "params": "visuals\nnode",
+    "when_created": 1665041370.2142,
+    "parent_id": "f474e5bd",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return false"
+        },
+        "4": {
+            "one": "14",
+            "id": "4",
+            "type": "case",
+            "two": "11",
+            "content": "\"branch\""
+        },
+        "5": {
+            "one": "3",
+            "id": "5",
+            "type": "case",
+            "two": "8",
+            "content": "\"header\""
+        },
+        "6": {
+            "one": "3",
+            "id": "6",
+            "type": "case",
+            "two": "5",
+            "content": "\"junction\""
+        },
+        "7": {
+            "type": "select",
+            "id": "7",
+            "one": "6",
+            "content": "node.type"
+        },
+        "8": {
+            "one": "3",
+            "id": "8",
+            "type": "case",
+            "two": "9",
+            "content": "\"arrow-loop\""
+        },
+        "9": {
+            "one": "3",
+            "id": "9",
+            "type": "case",
+            "two": "10",
+            "content": "\"address\""
+        },
+        "10": {
+            "one": "3",
+            "id": "10",
+            "type": "case",
+            "two": "4",
+            "content": "\"end\""
+        },
+        "11": {
+            "one": "15",
+            "id": "11",
+            "type": "case",
+            "two": "12",
+            "content": "\"case\""
+        },
+        "12": {
+            "type": "case",
+            "two": null,
+            "one": "13",
+            "id": "12"
+        },
+        "13": {
+            "type": "action",
+            "id": "13",
+            "one": "1",
+            "content": "return true"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "1",
+            "content": "return canDeleteBranch(visuals)"
+        },
+        "15": {
+            "type": "action",
+            "one": "1",
+            "id": "15",
+            "content": "return canDeleteCase(node)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "canDelete",
+    "when_updated": 1665041583.9217
+}

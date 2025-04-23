@@ -1,0 +1,77 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "833038192",
+    "params": "visuals\nnode\nop",
+    "when_created": 1665290777.9438,
+    "parent_id": "41f1c7b9",
+    "props": [],
+    "when_updated": 1665291056.6059,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "lowest = goDown(node)"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "two": "1",
+            "one": "6",
+            "content": "lowest.type === \"end\""
+        },
+        "5": {
+            "type": "action",
+            "one": "7",
+            "id": "5",
+            "content": "socket = createSocket(\n    visuals,\n    node.x - node.w,\n    node.y,\n    op,\n    \"branch\",\n    radius\n)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "5",
+            "content": "radius = visuals.config.socketTouchRadius"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "socket.node = node\nsocket.left = true"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "socket2 = createSocket(\n    visuals,\n    node.x + node.w,\n    node.y,\n    op,\n    \"branch\",\n    radius\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "socket2.node = node"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "showBranchSockets",
+    "created_by": "stipan"
+}

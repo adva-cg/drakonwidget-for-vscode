@@ -1,0 +1,68 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "732040231",
+    "params": "visuals\nelement",
+    "when_created": 1673013675.4441,
+    "parent_id": "6c6f2843",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "5": {
+            "one": "8",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "config = visuals.config"
+        },
+        "6": {
+            "one": "7",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "color = getThemeValue(\n    config,\n    element,\n    \"lines\"\n)"
+        },
+        "7": {
+            "one": "1",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "return color"
+        },
+        "8": {
+            "flag1": 0,
+            "id": "8",
+            "type": "question",
+            "two": "9",
+            "one": "6",
+            "content": "visuals.highlight === element.id"
+        },
+        "9": {
+            "one": "7",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "color = config.theme.highlight"
+        }
+    },
+    "when_updated": 1673013860.1769,
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "name": "getLineColor",
+    "created_by": "stipan"
+}

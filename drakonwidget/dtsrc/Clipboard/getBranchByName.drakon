@@ -1,0 +1,71 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "485148974",
+    "params": "visuals\nname",
+    "when_created": 1665305899.871,
+    "parent_id": "e674bf58",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return undefined"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "3",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "6",
+            "id": "5",
+            "content": "itemId; visuals.branches"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "branch = getNode(visuals, itemId)"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "one": "4",
+            "two": "8",
+            "content": "branch.content === name"
+        },
+        "8": {
+            "type": "action",
+            "one": "1",
+            "id": "8",
+            "content": "return branch"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "getBranchByName",
+    "when_updated": 1665305968.6671
+}

@@ -1,0 +1,77 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "502411688",
+    "params": "visuals\nsrc\ntarget",
+    "when_created": 1664473354.7479,
+    "parent_id": "a07682cb",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return true"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "3",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "9",
+            "id": "5",
+            "content": "link; src.links"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "5",
+            "content": "targetNode = target.finalTarget"
+        },
+        "9": {
+            "type": "action",
+            "one": "10",
+            "id": "9",
+            "content": "node = getNodeByItem(\n    visuals,\n    link.source\n)"
+        },
+        "10": {
+            "flag1": 1,
+            "id": "10",
+            "type": "question",
+            "two": "11",
+            "one": "4",
+            "content": "withinSameLoopCore(node, targetNode, 0)"
+        },
+        "11": {
+            "type": "action",
+            "one": "1",
+            "id": "11",
+            "content": "return false"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "language": "LANG_S42",
+    "name": "withinSameLoop",
+    "when_updated": 1664473447.0254
+}

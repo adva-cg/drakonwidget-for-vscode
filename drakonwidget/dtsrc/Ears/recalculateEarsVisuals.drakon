@@ -1,0 +1,137 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "946658694",
+    "params": "widget\nevt\nears",
+    "when_created": 1672826046.4331,
+    "parent_id": "2ffccec2",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "pos = toDiagram(widget, evt)"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "two": "7",
+            "one": "5",
+            "content": "hitBox(ears.element, pos.x, pos.y)"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "ears.lineTarget = undefined"
+        },
+        "6": {
+            "type": "action",
+            "one": "16",
+            "id": "6",
+            "content": "ears.hideEar = false"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "11",
+            "content": "target = findFree(widget, pos)"
+        },
+        "8": {
+            "flag1": 1,
+            "id": "8",
+            "type": "question",
+            "one": "19",
+            "two": "15",
+            "content": "canConnect(widget, target)"
+        },
+        "9": {
+            "type": "action",
+            "one": "18",
+            "id": "9",
+            "content": "ears.hideEar = true"
+        },
+        "10": {
+            "type": "action",
+            "one": "9",
+            "id": "10",
+            "content": "ears.lineTarget = target"
+        },
+        "11": {
+            "flag1": 1,
+            "id": "11",
+            "type": "question",
+            "one": "8",
+            "two": "15",
+            "content": "target"
+        },
+        "12": {
+            "type": "action",
+            "one": "13",
+            "id": "12",
+            "content": "ears.lineTarget = box"
+        },
+        "13": {
+            "type": "action",
+            "one": "17",
+            "id": "13",
+            "content": "ears.hideEar = false"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "12",
+            "content": "box = ears.boxes[ears.selected]"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "1",
+            "content": "ears.target = undefined"
+        },
+        "17": {
+            "type": "action",
+            "one": "1",
+            "id": "17",
+            "content": "ears.target = undefined"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "1",
+            "content": "ears.target = target"
+        },
+        "19": {
+            "flag1": 0,
+            "id": "19",
+            "type": "question",
+            "two": "15",
+            "one": "10",
+            "content": "areConnected(\n    widget.visuals,\n    ears.element.id,\n    target.id\n)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1672827829.3001,
+    "name": "recalculateEarsVisuals",
+    "created_by": "stipan"
+}

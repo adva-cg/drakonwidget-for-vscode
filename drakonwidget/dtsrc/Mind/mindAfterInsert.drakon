@@ -1,0 +1,53 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "227506853",
+    "params": "widget\nsocket\npayload",
+    "when_created": 1673551912.0181,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "when_updated": 1673678354.077,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "13",
+            "id": "2"
+        },
+        "13": {
+            "one": "14",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "model = widget.model"
+        },
+        "14": {
+            "one": "16",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "parent = socket.node.parent\nordinal = socket.node.ordinal + 1"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "1",
+            "content": "return mindInsertCore(\n    widget,\n    socket,\n    parent,\n    ordinal,\n    payload\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "mindAfterInsert",
+    "language": "LANG_S42"
+}

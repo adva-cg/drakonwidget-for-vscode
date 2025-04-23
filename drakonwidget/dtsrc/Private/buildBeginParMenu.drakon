@@ -1,0 +1,86 @@
+{
+    "version": 20180619,
+    "tag": "596287945",
+    "params": "widget\nnode",
+    "when_created": 1666606245.6342,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1673430284.0358,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "7",
+            "id": "3",
+            "content": "menu = []"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "1",
+            "content": "return menu"
+        },
+        "5": {
+            "flag1": 0,
+            "id": "5",
+            "type": "question",
+            "two": "4",
+            "one": "10",
+            "content": "isFirstPar(node)"
+        },
+        "6": {
+            "type": "action",
+            "one": "4",
+            "id": "6",
+            "content": "pushMenuItem(\n    \"delete_path\",\n    menu,\n    tr(widget, \"Delete path\"),\n    widget.visuals.config.imagePath + \"delete.png\",\n    function () {\n        deleteParPath(widget, node)\n    }\n)"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "one": "8",
+            "two": "4",
+            "content": "isReadonly(widget)"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "pushMenuItem(\n    \"add_path_left\",\n    menu,\n    tr(widget, \"Add path to the left\"),\n    widget.visuals.config.imagePath + \"par.png\",\n    function () {\n        insertPath(widget, node, true)\n    }\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "5",
+            "content": "pushMenuItem(\n    \"add_path_right\",\n    menu,\n    tr(widget, \"Add path to the right\"),\n    widget.visuals.config.imagePath + \"par.png\",\n    function () {\n        insertPath(widget, node, false)\n    }\n)"
+        },
+        "10": {
+            "one": "6",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        }
+    },
+    "updated_by": "stipan",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "buildBeginParMenu",
+    "language": "LANG_S42"
+}

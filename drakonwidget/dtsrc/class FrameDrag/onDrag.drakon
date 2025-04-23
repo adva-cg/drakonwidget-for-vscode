@@ -1,0 +1,54 @@
+{
+    "version": 20180619,
+    "tag": "669223678",
+    "params": "evt",
+    "when_created": 1666978773.2918,
+    "parent_id": "278a1473",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "one": "6",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "updateSelectionFrame(\n    self.widget,\n    self.startX,\n    self.startY,\n    evt\n)"
+        },
+        "5": {
+            "one": "1",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "paintLater(self.widget)"
+        },
+        "6": {
+            "one": "5",
+            "id": "6",
+            "type": "action",
+            "two": "",
+            "content": "blockSelect(self.widget)"
+        }
+    },
+    "updated_by": "stipan",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "onDrag",
+    "when_updated": 1677586577.1431
+}

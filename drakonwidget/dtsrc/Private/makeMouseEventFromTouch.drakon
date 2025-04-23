@@ -1,0 +1,53 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "513634264",
+    "params": "evt\nindex",
+    "when_created": 1687200625.9051,
+    "parent_id": "796aaa28",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "4": {
+            "one": "1",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "return buildMouseEvent(\n    x,\n    y,\n    0,\n    evt.target\n)"
+        },
+        "5": {
+            "one": "6",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "x = evt.touches[index].clientX\ny = evt.touches[index].clientY"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "4",
+            "content": "console.log(x, y)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "makeMouseEventFromTouch",
+    "when_updated": 1687201225.3692
+}

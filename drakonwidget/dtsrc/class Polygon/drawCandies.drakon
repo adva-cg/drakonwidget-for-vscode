@@ -1,0 +1,113 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "363158125",
+    "params": "widget\nelement\nctx",
+    "when_created": 1672936644.4203,
+    "parent_id": "dc56baef",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "9",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "9": {
+            "one": "11",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals"
+        },
+        "10": {
+            "type": "loopend",
+            "id": "10",
+            "one": "1",
+            "content": ""
+        },
+        "11": {
+            "type": "loopbegin",
+            "one": "18",
+            "id": "11",
+            "content": "i = 0; i < element.coords.length; i++"
+        },
+        "12": {
+            "one": "13",
+            "id": "12",
+            "type": "action",
+            "two": "",
+            "content": "handle = VertexHandle()"
+        },
+        "13": {
+            "one": "17",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "setCommonHandleFields(\n    widget,\n    element,\n    handle\n)"
+        },
+        "14": {
+            "one": "10",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "createHandle(visuals, handle, ctx)"
+        },
+        "15": {
+            "one": "16",
+            "id": "15",
+            "type": "action",
+            "two": "",
+            "content": "handle.x = left + point.x\nhandle.y = top + point.y\nhandle.radius = point.radius\nhandle.minX = Number.MIN_SAFE_INTEGER\nhandle.maxX = Number.MAX_SAFE_INTEGER\nhandle.minY = Number.MIN_SAFE_INTEGER\nhandle.maxY = Number.MAX_SAFE_INTEGER"
+        },
+        "16": {
+            "one": "20",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "handle.left = left\nhandle.top = top\nhandle.color = \"yellow\"\nhandle.ordinal = i"
+        },
+        "17": {
+            "one": "19",
+            "id": "17",
+            "type": "action",
+            "two": "",
+            "content": "left = element.left\ntop = element.top"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "12",
+            "content": "point = element.coords[i]"
+        },
+        "19": {
+            "type": "action",
+            "id": "19",
+            "one": "15",
+            "content": "handle.addVertex = addVertex"
+        },
+        "20": {
+            "type": "action",
+            "one": "14",
+            "id": "20",
+            "content": "handle.primId = \"vertex-\" + i + \"-\" + element\n.id"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1673007609.5824,
+    "name": "drawCandies",
+    "language": "LANG_S42"
+}

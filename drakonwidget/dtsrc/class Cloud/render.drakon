@@ -1,0 +1,73 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "552089655",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1672852466.3054,
+    "parent_id": "667297af",
+    "props": [],
+    "when_updated": 1673074060.2575,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "16",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "13",
+            "content": "renderFreeIconShapeComplex(\n    ctx,\n    visuals,\n    element,\n    cloudPath,\n    element.aux\n)"
+        },
+        "11": {
+            "one": "12",
+            "id": "11",
+            "type": "action",
+            "two": "",
+            "content": "top = Math.floor(\n    centerY - element.contentHeight / 2\n)"
+        },
+        "12": {
+            "one": "1",
+            "id": "12",
+            "type": "action",
+            "two": "",
+            "content": "renderContentCore(\n    visuals,\n    element,\n    left,\n    top\n)"
+        },
+        "13": {
+            "one": "11",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "centerY = element.top + element.height /\n3 * 2"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "10",
+            "content": "left = Math.round(\n    element.left + element.width * padding\n)"
+        },
+        "16": {
+            "type": "action",
+            "one": "14",
+            "id": "16",
+            "content": "padding = 0.08"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "render",
+    "language": "LANG_S42"
+}

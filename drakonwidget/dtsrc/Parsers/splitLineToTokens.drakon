@@ -1,0 +1,89 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "635191302",
+    "params": "line\ntype",
+    "when_created": 1667484020.5452,
+    "parent_id": "f2ec426b",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "7",
+            "id": "3",
+            "content": "tokens = splitByWhitespace(line)"
+        },
+        "4": {
+            "type": "action",
+            "one": "1",
+            "id": "4",
+            "content": "return result"
+        },
+        "5": {
+            "type": "loopend",
+            "one": "4",
+            "id": "5",
+            "content": ""
+        },
+        "6": {
+            "type": "loopbegin",
+            "one": "8",
+            "id": "6",
+            "content": "token; tokens"
+        },
+        "7": {
+            "type": "action",
+            "one": "6",
+            "id": "7",
+            "content": "start = true\nresult = []"
+        },
+        "8": {
+            "flag1": 0,
+            "id": "8",
+            "type": "question",
+            "two": "12",
+            "one": "10",
+            "content": "start"
+        },
+        "10": {
+            "type": "action",
+            "one": "11",
+            "id": "10",
+            "content": "result.push({type: \"space\"})"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "5",
+            "content": "result.push({text: token, type: type})"
+        },
+        "12": {
+            "type": "action",
+            "one": "11",
+            "id": "12",
+            "content": "start = false"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "splitLineToTokens",
+    "when_updated": 1667817624.0105
+}

@@ -1,0 +1,108 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "312310752",
+    "params": "node\nwidth",
+    "when_created": 1667581153.5323,
+    "parent_id": "2de72742",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "12",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return {\n    width: width,\n    height: node.flowBlock.height + extraHeight\n}"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "10",
+            "two": "5",
+            "content": "node.textBlock"
+        },
+        "5": {
+            "flag1": 1,
+            "id": "5",
+            "type": "question",
+            "one": "7",
+            "two": "13",
+            "content": "node.topTextBlock"
+        },
+        "6": {
+            "type": "action",
+            "one": "1",
+            "id": "6",
+            "content": "return {\n    width: 0,\n    height: 0\n}"
+        },
+        "7": {
+            "one": "8",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "node.topFlowBlock = flowTextBlock(\n    node.topTextBlock,\n    width\n)"
+        },
+        "8": {
+            "one": "9",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "node.bottomFlowBlock = flowTextBlock(\n    node.bottomTextBlock,\n    width\n)"
+        },
+        "9": {
+            "type": "action",
+            "one": "1",
+            "id": "9",
+            "content": "return {\n    width: width,\n    height: node.topFlowBlock.height + node\n    .bottomFlowBlock.height + extraHeight\n}"
+        },
+        "10": {
+            "one": "3",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "node.flowBlock = flowTextBlock(\n    node.textBlock,\n    width\n)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "4",
+            "content": "extraHeight = node.extraHeight || 0"
+        },
+        "13": {
+            "flag1": 0,
+            "id": "13",
+            "type": "question",
+            "two": "14",
+            "one": "6",
+            "content": "extraHeight"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "1",
+            "content": "return {\n    width: width,\n    height: extraHeight\n}"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "defaultCommit",
+    "when_updated": 1675857219.3952
+}

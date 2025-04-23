@@ -1,0 +1,110 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": true,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "264673453",
+    "params": "raw",
+    "when_created": 1681122528.2222,
+    "parent_id": "73128943",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "18",
+            "id": "2"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "23",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "id": "5",
+            "one": "6",
+            "content": "i = 0; i < raw.length; i++"
+        },
+        "6": {
+            "type": "action",
+            "one": "9",
+            "id": "6",
+            "content": "ch = raw[i]\ncode = raw.charCodeAt(i)"
+        },
+        "7": {
+            "type": "action",
+            "one": "5",
+            "id": "7",
+            "content": "result = \"\""
+        },
+        "9": {
+            "flag1": 0,
+            "id": "9",
+            "type": "question",
+            "two": "16",
+            "one": "17",
+            "content": "isSpace(code)"
+        },
+        "16": {
+            "type": "action",
+            "one": "4",
+            "id": "16",
+            "content": "result += \" \""
+        },
+        "17": {
+            "flag1": 1,
+            "id": "17",
+            "type": "question",
+            "one": "20",
+            "two": "4",
+            "content": "code > 32"
+        },
+        "18": {
+            "type": "action",
+            "one": "7",
+            "id": "18",
+            "content": "checker = createFilenameChecker()"
+        },
+        "20": {
+            "flag1": 1,
+            "id": "20",
+            "type": "question",
+            "one": "21",
+            "two": "22",
+            "content": "checker.isGoodChar(ch)"
+        },
+        "21": {
+            "type": "action",
+            "one": "4",
+            "id": "21",
+            "content": "result += ch"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "4",
+            "content": "result += \" \""
+        },
+        "23": {
+            "type": "action",
+            "one": "1",
+            "id": "23",
+            "content": "return result.trim()"
+        }
+    },
+    "when_updated": 1681123775.7213,
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "name": "sanitizeFilename",
+    "created_by": "stipan"
+}

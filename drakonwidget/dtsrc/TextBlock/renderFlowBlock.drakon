@@ -1,0 +1,116 @@
+{
+    "version": 20180619,
+    "tag": "766921943",
+    "params": "visuals\nflowBlock\nleft\ntop",
+    "when_created": 1667561677.0136,
+    "parent_id": "99e62b4e",
+    "props": [],
+    "when_updated": 1668852181.0088,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 2,
+            "one": "7",
+            "id": "2",
+            "type": "branch",
+            "content": "Draw text"
+        },
+        "4": {
+            "type": "loopend",
+            "one": "9",
+            "id": "4",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "6",
+            "id": "5",
+            "content": "line; flowBlock.lines"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "4",
+            "content": "renderFlowBlockLine(ctx, line, left, top)"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "ctx.fillStyle = flowBlock.options.color"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "5",
+            "content": "ctx.textBaseline = \"bottom\""
+        },
+        "9": {
+            "branchId": 3,
+            "one": "1",
+            "id": "9",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "11": {
+            "branchId": 1,
+            "one": "17",
+            "id": "11",
+            "type": "branch",
+            "content": "Draw icon"
+        },
+        "12": {
+            "type": "action",
+            "one": "13",
+            "id": "12",
+            "content": "y = top + flowBlock.height / 2"
+        },
+        "13": {
+            "type": "action",
+            "id": "13",
+            "one": "16",
+            "content": "x = left + flowBlock.options.paddingLeft\n+ iconSize / 2"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "12",
+            "content": "iconSize = 24"
+        },
+        "15": {
+            "flag1": 1,
+            "id": "15",
+            "type": "question",
+            "two": "2",
+            "one": "14",
+            "content": "flowBlock.options.link"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "2",
+            "content": "drawLinkIcon(ctx, x, y)"
+        },
+        "17": {
+            "type": "action",
+            "id": "17",
+            "one": "15",
+            "content": "ctx = visuals.ctx"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": true,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "renderFlowBlock",
+    "language": "LANG_S42"
+}

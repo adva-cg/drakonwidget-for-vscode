@@ -1,0 +1,57 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "236392201",
+    "params": "text",
+    "when_created": 1667483513.4592,
+    "parent_id": "f2ec426b",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "text = text || \"\""
+        },
+        "4": {
+            "type": "action",
+            "one": "6",
+            "id": "4",
+            "content": "lines = text.split(\"\\n\")"
+        },
+        "5": {
+            "type": "action",
+            "one": "1",
+            "id": "5",
+            "content": "return notEmtpyLines.map(\n    function (line) {\n        return splitLineToTokens(\n            line,\n            \"\"\n        )\n    }\n)"
+        },
+        "6": {
+            "type": "action",
+            "one": "5",
+            "id": "6",
+            "content": "notEmtpyLines = lines.map(\n    function (line) {\n        return line.trim()\n    }\n).filter(\n    function (line) {\n        return line.length\n    }\n)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1667817753.3382,
+    "name": "splitToTokens",
+    "created_by": "stipan"
+}

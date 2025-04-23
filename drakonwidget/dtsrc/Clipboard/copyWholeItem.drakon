@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "835742504",
+    "params": "widget\nitemId\nimages",
+    "when_created": 1665134470.1247,
+    "parent_id": "e674bf58",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "item = widget.model.items[itemId]"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "10",
+            "content": "copy = utils.clone(item)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return copy"
+        },
+        "10": {
+            "type": "action",
+            "one": "11",
+            "id": "10",
+            "content": "imageId = copy.image"
+        },
+        "11": {
+            "type": "action",
+            "one": "6",
+            "id": "11",
+            "content": "takeImageToClipboard(\n    widget,\n    copy,\n    images\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "copyWholeItem",
+    "when_updated": 1676011607.6897
+}

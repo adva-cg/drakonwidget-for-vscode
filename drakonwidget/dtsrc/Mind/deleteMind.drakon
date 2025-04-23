@@ -1,0 +1,224 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "595727081",
+    "params": "widget\nnodes",
+    "when_created": 1673555231.1953,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "23",
+            "id": "2",
+            "type": "branch",
+            "content": "Collect internal parents"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "5",
+            "content": "ids = {}"
+        },
+        "4": {
+            "type": "loopend",
+            "id": "4",
+            "one": "7",
+            "content": ""
+        },
+        "5": {
+            "type": "loopbegin",
+            "one": "8",
+            "id": "5",
+            "content": "node; nodes"
+        },
+        "6": {
+            "branchId": 5,
+            "one": "24",
+            "id": "6",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "7": {
+            "branchId": 2,
+            "one": "9",
+            "id": "7",
+            "type": "branch",
+            "content": "Find roots"
+        },
+        "8": {
+            "type": "action",
+            "one": "4",
+            "id": "8",
+            "content": "ids[node.id] = true"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "11",
+            "content": "parents = {}"
+        },
+        "10": {
+            "branchId": 3,
+            "one": "16",
+            "id": "10",
+            "type": "branch",
+            "content": "Shift down ordinal of siblings"
+        },
+        "11": {
+            "type": "loopbegin",
+            "id": "11",
+            "one": "13",
+            "content": "node; nodes"
+        },
+        "12": {
+            "type": "loopend",
+            "id": "12",
+            "one": "33",
+            "content": ""
+        },
+        "13": {
+            "flag1": 1,
+            "id": "13",
+            "type": "question",
+            "two": "14",
+            "one": "12",
+            "content": "node.parent.id in ids"
+        },
+        "14": {
+            "type": "action",
+            "one": "12",
+            "id": "14",
+            "content": "parents[node.parent.id] = true"
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "10",
+            "content": "parent = getNode(widget.visuals, pids[0])"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "19",
+            "content": "children = parent.children.filter(\n    function (sibling) {\n        return !ids[sibling.id]\n    }\n)"
+        },
+        "17": {
+            "type": "loopend",
+            "id": "17",
+            "one": "25",
+            "content": ""
+        },
+        "18": {
+            "type": "loopbegin",
+            "id": "18",
+            "one": "21",
+            "content": "child; children"
+        },
+        "19": {
+            "type": "action",
+            "id": "19",
+            "one": "18",
+            "content": "ordinal = 0"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "17",
+            "content": "ordinal++"
+        },
+        "21": {
+            "flag1": 1,
+            "id": "21",
+            "type": "question",
+            "two": "20",
+            "one": "22",
+            "content": "child.ordinal != ordinal"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "20",
+            "content": "updateItem(\n    edits,\n    child.id,\n    {ordinal: ordinal}\n)"
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "3",
+            "content": "edits = []"
+        },
+        "24": {
+            "type": "action",
+            "id": "24",
+            "one": "1",
+            "content": "return edits"
+        },
+        "25": {
+            "branchId": 4,
+            "one": "29",
+            "id": "25",
+            "type": "branch",
+            "content": "Delete the items"
+        },
+        "28": {
+            "type": "loopend",
+            "id": "28",
+            "one": "6",
+            "content": ""
+        },
+        "29": {
+            "type": "loopbegin",
+            "one": "30",
+            "id": "29",
+            "content": "node; nodes"
+        },
+        "30": {
+            "type": "action",
+            "one": "34",
+            "id": "30",
+            "content": "deleteItemCore(edits, node.id)"
+        },
+        "31": {
+            "flag1": 1,
+            "id": "31",
+            "type": "question",
+            "one": "15",
+            "two": "32",
+            "content": "pids.length === 1"
+        },
+        "32": {
+            "type": "action",
+            "id": "32",
+            "one": "10",
+            "content": "throw new Error(\n    \"deleteMind: bad number of parents: \"\n    + pids.length\n)"
+        },
+        "33": {
+            "type": "action",
+            "id": "33",
+            "one": "31",
+            "content": "pids = Object.keys(parents)"
+        },
+        "34": {
+            "type": "action",
+            "one": "28",
+            "id": "34",
+            "content": "decrementImageRefCount(\n    widget,\n    node.image\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1676214386.7835,
+    "name": "deleteMind",
+    "language": "LANG_S42"
+}

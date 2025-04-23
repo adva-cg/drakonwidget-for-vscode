@@ -1,0 +1,95 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "46369684",
+    "params": "widget\nelement\nctx",
+    "when_created": 1672895681.712,
+    "parent_id": "5ed6e498",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "62",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "62": {
+            "type": "action",
+            "id": "62",
+            "one": "70",
+            "content": "drawRectCandies(widget, element, ctx)"
+        },
+        "63": {
+            "one": "64",
+            "id": "63",
+            "type": "action",
+            "two": "",
+            "content": "handle = CalloutPointer()"
+        },
+        "64": {
+            "one": "68",
+            "id": "64",
+            "type": "action",
+            "two": "",
+            "content": "setCommonHandleFields(\n    widget,\n    element,\n    handle\n)"
+        },
+        "65": {
+            "one": "1",
+            "id": "65",
+            "type": "action",
+            "two": "",
+            "content": "createHandle(visuals, handle, ctx)"
+        },
+        "66": {
+            "one": "67",
+            "id": "66",
+            "type": "action",
+            "two": "",
+            "content": "handle.x = left + element.px\nhandle.y = top + element.py\nhandle.minX = Number.MIN_SAFE_INTEGER\nhandle.maxX = Number.MAX_SAFE_INTEGER\nhandle.minY = Number.MIN_SAFE_INTEGER\nhandle.maxY = Number.MAX_SAFE_INTEGER"
+        },
+        "67": {
+            "one": "71",
+            "id": "67",
+            "type": "action",
+            "two": "",
+            "content": "handle.left = left\nhandle.top = top\nhandle.color = \"yellow\""
+        },
+        "68": {
+            "one": "66",
+            "id": "68",
+            "type": "action",
+            "two": "",
+            "content": "left = element.left\ntop = element.top"
+        },
+        "70": {
+            "one": "63",
+            "id": "70",
+            "type": "action",
+            "two": "",
+            "content": "visuals = widget.visuals"
+        },
+        "71": {
+            "type": "action",
+            "one": "65",
+            "id": "71",
+            "content": "handle.primId = \"callout-\" + element.id"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1673007462.3701,
+    "name": "drawCandies",
+    "created_by": "stipan"
+}

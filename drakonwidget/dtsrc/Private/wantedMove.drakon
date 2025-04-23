@@ -1,0 +1,66 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "563373368",
+    "params": "x1\ny1\nx2\ny2",
+    "when_created": 1687271362.7769,
+    "parent_id": "796aaa28",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "maxDelta = 4"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "one": "7",
+            "two": "5",
+            "content": "Math.abs(x1 - x2) > maxDelta"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "return true"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return false"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "one": "6",
+            "two": "5",
+            "content": "Math.abs(y1 - y2) > maxDelta"
+        }
+    },
+    "created_by": "stipan",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "wantedMove",
+    "when_updated": 1687365207.0827
+}

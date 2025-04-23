@@ -1,0 +1,120 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "384781752",
+    "params": "visuals\nelement\nsource",
+    "when_created": 1664378845.414,
+    "parent_id": "a07682cb",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "3",
+            "id": "2",
+            "type": "branch",
+            "content": "Analyze"
+        },
+        "3": {
+            "type": "action",
+            "one": "6",
+            "id": "3",
+            "content": "targetId = element.finalTarget.itemId"
+        },
+        "4": {
+            "branchId": 3,
+            "one": "1",
+            "id": "4",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "5": {
+            "branchId": 2,
+            "one": "9",
+            "id": "5",
+            "type": "branch",
+            "content": "Create socket"
+        },
+        "6": {
+            "flag1": 0,
+            "id": "6",
+            "type": "question",
+            "two": "4",
+            "one": "7",
+            "content": "isArrowLoop(element.head)"
+        },
+        "7": {
+            "flag1": 0,
+            "id": "7",
+            "type": "question",
+            "two": "4",
+            "one": "8",
+            "content": "isArrowLoop(element.tail)"
+        },
+        "8": {
+            "flag1": 1,
+            "id": "8",
+            "type": "question",
+            "one": "5",
+            "two": "4",
+            "content": "canTransplant(visuals, targetId, source)"
+        },
+        "9": {
+            "flag1": 1,
+            "id": "9",
+            "type": "question",
+            "one": "12",
+            "two": "4",
+            "content": "element.tail.x < source.tail.x"
+        },
+        "10": {
+            "flag1": 1,
+            "id": "10",
+            "type": "question",
+            "one": "11",
+            "two": "4",
+            "content": "withinSameLoop(\n    visuals,\n    source,\n    element,\n    0\n)"
+        },
+        "11": {
+            "flag1": 0,
+            "id": "11",
+            "type": "question",
+            "two": "4",
+            "one": "13",
+            "content": "hasOtherEntries(\n    visuals,\n    source,\n    element.tail\n)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "10",
+            "content": "targetLoops = element.finalTarget.loops\nsrcLoops = source.finalTarget.loops"
+        },
+        "13": {
+            "type": "action",
+            "one": "14",
+            "id": "13",
+            "content": "socket = createSocketFromEdge(\n    visuals,\n    element,\n    \"arrow\",\n    undefined\n)"
+        },
+        "14": {
+            "type": "action",
+            "one": "4",
+            "id": "14",
+            "content": "utils.addRange(\n    source.links,\n    socket.links\n)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "createArrowSocket",
+    "when_updated": 1675145382.3245
+}

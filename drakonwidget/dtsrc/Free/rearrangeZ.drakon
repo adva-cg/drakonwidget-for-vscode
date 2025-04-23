@@ -1,0 +1,141 @@
+{
+    "version": 20180619,
+    "tag": "610695866",
+    "params": "free\nid\nzets",
+    "when_created": 1690207415.0793,
+    "parent_id": "c7c5feee",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "9": {
+            "branchId": 4,
+            "one": "1",
+            "id": "9",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "21": {
+            "branchId": 1,
+            "one": "49",
+            "id": "21",
+            "type": "branch",
+            "content": "Find item"
+        },
+        "22": {
+            "flag1": 0,
+            "id": "22",
+            "type": "question",
+            "two": "29",
+            "one": "28",
+            "content": "toMove.zIndex < 0"
+        },
+        "26": {
+            "type": "action",
+            "one": "22",
+            "id": "26",
+            "content": "toMove = free[ordinal]"
+        },
+        "28": {
+            "branchId": 2,
+            "one": "32",
+            "id": "28",
+            "type": "branch",
+            "content": "Front plane"
+        },
+        "29": {
+            "branchId": 3,
+            "one": "42",
+            "id": "29",
+            "type": "branch",
+            "content": "Back plane"
+        },
+        "31": {
+            "type": "loopend",
+            "one": "9",
+            "id": "31",
+            "content": ""
+        },
+        "32": {
+            "type": "loopbegin",
+            "id": "32",
+            "one": "34",
+            "content": "i = ordinal + 1; i < free.length; i++"
+        },
+        "34": {
+            "one": "50",
+            "id": "34",
+            "type": "action",
+            "two": "",
+            "content": "element = free[i]"
+        },
+        "41": {
+            "one": "9",
+            "id": "41",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "42": {
+            "one": "44",
+            "id": "42",
+            "type": "loopbegin",
+            "two": "",
+            "content": "i = 0; i < ordinal; i++"
+        },
+        "44": {
+            "one": "52",
+            "id": "44",
+            "type": "action",
+            "two": "",
+            "content": "element = free[i]"
+        },
+        "49": {
+            "type": "action",
+            "one": "26",
+            "id": "49",
+            "content": "ordinal = utils.findIndex(free, \"id\", id)"
+        },
+        "50": {
+            "type": "action",
+            "one": "51",
+            "id": "50",
+            "content": "element.zIndex = element.zIndex - 1"
+        },
+        "51": {
+            "type": "action",
+            "id": "51",
+            "one": "31",
+            "content": "zets[element.id] = element.zIndex"
+        },
+        "52": {
+            "one": "53",
+            "id": "52",
+            "type": "action",
+            "two": "",
+            "content": "element.zIndex = element.zIndex + 1"
+        },
+        "53": {
+            "one": "41",
+            "id": "53",
+            "type": "action",
+            "two": "",
+            "content": "zets[element.id] = element.zIndex"
+        }
+    },
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "rearrangeZ",
+    "when_updated": 1690208550.0191
+}

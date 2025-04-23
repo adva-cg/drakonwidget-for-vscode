@@ -1,0 +1,118 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "617203896",
+    "params": "node\ntarget\ndepth",
+    "when_created": 1664473452.905,
+    "parent_id": "a07682cb",
+    "props": [],
+    "when_updated": 1664473546.512,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return true"
+        },
+        "4": {
+            "type": "case",
+            "one": "10",
+            "id": "4"
+        },
+        "5": {
+            "one": "9",
+            "id": "5",
+            "type": "case",
+            "two": "4",
+            "content": "\"loopend\""
+        },
+        "6": {
+            "one": "8",
+            "id": "6",
+            "type": "case",
+            "two": "5",
+            "content": "\"loopbegin\""
+        },
+        "7": {
+            "type": "select",
+            "id": "7",
+            "one": "6",
+            "content": "node.type"
+        },
+        "8": {
+            "type": "action",
+            "one": "10",
+            "id": "8",
+            "content": "depth--"
+        },
+        "9": {
+            "type": "action",
+            "one": "10",
+            "id": "9",
+            "content": "depth++"
+        },
+        "10": {
+            "flag1": 0,
+            "id": "10",
+            "type": "question",
+            "one": "12",
+            "two": "11",
+            "content": "depth < 0"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "1",
+            "content": "return false"
+        },
+        "12": {
+            "flag1": 1,
+            "id": "12",
+            "type": "question",
+            "one": "3",
+            "two": "14",
+            "content": "node === target"
+        },
+        "13": {
+            "type": "loopend",
+            "one": "3",
+            "id": "13",
+            "content": ""
+        },
+        "14": {
+            "type": "loopbegin",
+            "one": "15",
+            "id": "14",
+            "content": "prev; node.prev"
+        },
+        "15": {
+            "flag1": 1,
+            "id": "15",
+            "type": "question",
+            "two": "11",
+            "one": "13",
+            "content": "withinSameLoopCore(prev, target, depth)"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "withinSameLoopCore",
+    "created_by": "stipan"
+}

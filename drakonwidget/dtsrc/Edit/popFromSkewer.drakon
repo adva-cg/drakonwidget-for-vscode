@@ -1,0 +1,57 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "602195875",
+    "params": "widget\nnode\nedits",
+    "when_created": 1664866148.4079,
+    "parent_id": "f7515898",
+    "props": [],
+    "when_updated": 1684754483.4587,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "dstId = node.one"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "edgeUp = node.up"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "redirectUpperItems(\n    edits,\n    edgeUp.links,\n    dstId\n)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "deleteItem(widget, edits, node)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "popFromSkewer",
+    "language": "LANG_S42"
+}

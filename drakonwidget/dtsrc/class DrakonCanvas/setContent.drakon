@@ -1,0 +1,130 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "357873129",
+    "params": "itemId\ncontent",
+    "when_created": 1660201999.894,
+    "parent_id": "e0f4b57d",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "37",
+            "id": "2"
+        },
+        "4": {
+            "type": "case",
+            "one": "12",
+            "id": "4"
+        },
+        "5": {
+            "one": "13",
+            "id": "5",
+            "type": "case",
+            "two": "4",
+            "content": "\"params\""
+        },
+        "6": {
+            "one": "14",
+            "id": "6",
+            "type": "case",
+            "two": "41",
+            "content": "\"header\""
+        },
+        "7": {
+            "type": "select",
+            "id": "7",
+            "one": "6",
+            "content": "itemId"
+        },
+        "12": {
+            "one": "39",
+            "id": "12",
+            "type": "action",
+            "two": "",
+            "content": "change = {\n    id: itemId,\n    fields: {content: content},\n    op: \"update\"\n}"
+        },
+        "13": {
+            "one": "40",
+            "id": "13",
+            "type": "action",
+            "two": "",
+            "content": "change = {\n    fields: {params: content},\n    op: \"update\"\n}"
+        },
+        "14": {
+            "one": "43",
+            "id": "14",
+            "type": "action",
+            "two": "",
+            "content": "change = {\n    fields: {name: content},\n    op: \"update\"\n}"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "7",
+            "content": "checkNotReadonly(self)"
+        },
+        "35": {
+            "type": "action",
+            "one": "1",
+            "id": "35",
+            "content": "return doEdit(self, [change])"
+        },
+        "36": {
+            "type": "action",
+            "id": "36",
+            "one": "1",
+            "content": "return []"
+        },
+        "37": {
+            "type": "action",
+            "id": "37",
+            "one": "20",
+            "content": "tracing.trace(\n    \"DrakonCanvas.setContent\",\n    itemId\n)"
+        },
+        "39": {
+            "type": "action",
+            "id": "39",
+            "one": "1",
+            "content": "return updateAndKeepSelection(\n    self,\n    [change]\n)"
+        },
+        "40": {
+            "flag1": 0,
+            "id": "40",
+            "type": "question",
+            "one": "35",
+            "two": "39",
+            "content": "content"
+        },
+        "41": {
+            "one": "14",
+            "id": "41",
+            "type": "case",
+            "two": "5",
+            "content": "\"root\""
+        },
+        "43": {
+            "type": "action",
+            "one": "36",
+            "id": "43",
+            "content": "doEditNoRender(self, [change])"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "setContent",
+    "when_updated": 1681378969.4081
+}

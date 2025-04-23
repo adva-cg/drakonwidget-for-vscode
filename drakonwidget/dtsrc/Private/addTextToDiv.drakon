@@ -1,0 +1,77 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "256773582",
+    "params": "options\nconfig\ntextDiv\ntext\nfonts\nfont",
+    "when_created": 1667891644.6159,
+    "parent_id": "f67c537c",
+    "props": [],
+    "when_updated": 1668674788.2443,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "10",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "addHtmltoDom(text, textDiv, fonts, font)"
+        },
+        "5": {
+            "type": "case",
+            "one": "9",
+            "id": "5"
+        },
+        "6": {
+            "one": "1",
+            "id": "6",
+            "type": "case",
+            "two": "5",
+            "content": "\"markdown\""
+        },
+        "7": {
+            "one": "3",
+            "id": "7",
+            "type": "case",
+            "two": "6",
+            "content": "\"html\""
+        },
+        "8": {
+            "type": "select",
+            "one": "7",
+            "id": "8",
+            "content": "textFormat"
+        },
+        "9": {
+            "one": "1",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "splitToParagraphs(textDiv, text)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "8",
+            "content": "textFormat = options.textFormat || config\n.textFormat"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "addTextToDiv",
+    "created_by": "stipan"
+}

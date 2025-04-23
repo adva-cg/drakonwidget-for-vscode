@@ -1,0 +1,51 @@
+{
+    "version": 20180619,
+    "tag": "991405526",
+    "params": "widget\naddress\ntargetId",
+    "when_created": 1665303973.9374,
+    "parent_id": "2de5181c",
+    "props": [],
+    "when_updated": 1671129267.9455,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "5",
+            "content": "edits = []"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "9",
+            "content": "redirectUpperItems(\n    edits,\n    address.up.links,\n    targetId\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "return updateAndKeepSelection(\n    widget,\n    edits\n)"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "redirectAddress",
+    "language": "LANG_S42"
+}

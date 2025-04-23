@@ -1,0 +1,46 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "449497438",
+    "params": "pos",
+    "when_created": 1672850989.9905,
+    "parent_id": "3915d73e",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return item"
+        },
+        "4": {
+            "one": "3",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "item = {\n    type: \"f_ptr_right\",\n    left: pos.x,\n    top: pos.y,\n    width: 200,\n    height: 50,\n    aux: 30\n}"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1672851105.9227,
+    "name": "create",
+    "created_by": "stipan"
+}

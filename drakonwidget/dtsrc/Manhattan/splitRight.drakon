@@ -1,0 +1,75 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "164691489",
+    "params": "visuals\nrightEdge",
+    "when_created": 1657630873.2801,
+    "parent_id": "82d2ccaf",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "leftNode = rightEdge.head\nrightNode = rightEdge.tail\nfinalTarget = rightEdge.finalTarget\nrole = rightEdge.role"
+        },
+        "4": {
+            "type": "action",
+            "one": "5",
+            "id": "4",
+            "content": "removeEdge(visuals, rightEdge.id)"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "jun = createJunction(\n    visuals,\n    finalTarget\n)"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "leftPart = makeRightEdge(\n    visuals,\n    leftNode,\n    jun,\n    finalTarget\n)"
+        },
+        "7": {
+            "type": "action",
+            "one": "8",
+            "id": "7",
+            "content": "leftPart.role = role"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "makeRightLoopEdge(\n    visuals,\n    jun,\n    rightNode,\n    finalTarget\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "return jun"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "splitRight",
+    "when_updated": 1657630989.6225
+}

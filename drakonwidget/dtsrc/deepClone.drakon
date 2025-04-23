@@ -1,0 +1,44 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": true,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "16751460232798",
+    "params": "obj",
+    "when_created": 1672747357.5185,
+    "parent_id": "73128943",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "visited = new Set()"
+        },
+        "4": {
+            "type": "action",
+            "one": "1",
+            "id": "4",
+            "content": "return deepCloneCore(visited, obj)"
+        }
+    },
+    "created_by": "stipan",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "name": "deepClone",
+    "when_updated": 1675146023.28
+}

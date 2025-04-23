@@ -1,0 +1,83 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "392038945",
+    "params": "node",
+    "when_created": 1664373910.4423,
+    "parent_id": "a07682cb",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return true"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "6",
+            "two": "10",
+            "content": "node.up"
+        },
+        "5": {
+            "flag1": 1,
+            "id": "5",
+            "type": "question",
+            "two": "8",
+            "one": "3",
+            "content": "above.type === \"address\""
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "5",
+            "content": "above = getUp(node)"
+        },
+        "8": {
+            "flag1": 1,
+            "id": "8",
+            "type": "question",
+            "two": "10",
+            "one": "9",
+            "content": "node.right"
+        },
+        "9": {
+            "flag1": 1,
+            "id": "9",
+            "type": "question",
+            "one": "3",
+            "two": "10",
+            "content": "node.right.role == \"floor\""
+        },
+        "10": {
+            "type": "action",
+            "one": "1",
+            "id": "10",
+            "content": "return false"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "isAddressJun",
+    "when_updated": 1664374014.4711
+}

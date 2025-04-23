@@ -1,0 +1,130 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "453191280",
+    "params": "widget",
+    "when_created": 1671303063.6459,
+    "parent_id": "35f7b123",
+    "props": [],
+    "when_updated": 1672909503.4191,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "11",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return added"
+        },
+        "4": {
+            "one": "3",
+            "id": "4",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "5": {
+            "one": "15",
+            "id": "5",
+            "type": "loopbegin",
+            "two": "",
+            "content": "element; visuals.free"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "5",
+            "content": "added = false"
+        },
+        "11": {
+            "type": "action",
+            "one": "10",
+            "id": "11",
+            "content": "visuals = widget.visuals\nselection = widget.selection"
+        },
+        "12": {
+            "flag1": 1,
+            "id": "12",
+            "type": "question",
+            "one": "13",
+            "two": "14",
+            "content": "element.innerBox"
+        },
+        "13": {
+            "type": "action",
+            "one": "22",
+            "id": "13",
+            "content": "box = element.innerBox"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "22",
+            "content": "box = element.box"
+        },
+        "15": {
+            "flag1": 0,
+            "id": "15",
+            "type": "question",
+            "one": "12",
+            "two": "4",
+            "content": "isSelected(widget, element.id)"
+        },
+        "16": {
+            "one": "17",
+            "id": "16",
+            "type": "action",
+            "two": "",
+            "content": "selection.prims[element.id] = \"free\""
+        },
+        "17": {
+            "type": "action",
+            "one": "4",
+            "id": "17",
+            "content": "added = true"
+        },
+        "19": {
+            "flag1": 0,
+            "id": "19",
+            "type": "question",
+            "one": "16",
+            "two": "21",
+            "content": "element.boxes"
+        },
+        "21": {
+            "flag1": 1,
+            "id": "21",
+            "type": "question",
+            "one": "16",
+            "two": "4",
+            "content": "intersectBoxes(\n    element,\n    visuals.selectionFrame\n)"
+        },
+        "22": {
+            "flag1": 1,
+            "id": "22",
+            "type": "question",
+            "two": "4",
+            "one": "19",
+            "content": "boxesIntersect(\n    visuals.selectionFrame,\n    box\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "tryAddFreeToBlock",
+    "language": "LANG_S42"
+}

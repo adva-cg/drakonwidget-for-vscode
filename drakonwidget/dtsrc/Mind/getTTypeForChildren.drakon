@@ -1,0 +1,67 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "962489138",
+    "params": "parent",
+    "when_created": 1673606569.4396,
+    "parent_id": "b3d6c272",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "7",
+            "id": "2"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "two": "9",
+            "one": "5",
+            "content": "parent.type === \"header\""
+        },
+        "5": {
+            "flag1": 1,
+            "id": "5",
+            "type": "question",
+            "one": "6",
+            "two": "9",
+            "content": "parentType === \"vertical\""
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return \"treeview\""
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "4",
+            "content": "parentType = getTType(parent)"
+        },
+        "9": {
+            "type": "action",
+            "one": "1",
+            "id": "9",
+            "content": "return parentType"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "when_updated": 1673606717.7185,
+    "name": "getTTypeForChildren",
+    "created_by": "stipan"
+}

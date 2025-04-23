@@ -1,0 +1,65 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "652150699",
+    "params": "text",
+    "when_created": 1675757531.9715,
+    "parent_id": "99e62b4e",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "flag1": 1,
+            "id": "3",
+            "type": "question",
+            "one": "5",
+            "two": "4",
+            "content": "isUrl(text)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "1",
+            "content": "return undefined"
+        },
+        "5": {
+            "type": "action",
+            "one": "6",
+            "id": "5",
+            "content": "link = document.createElement(\"a\")"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "7",
+            "content": "link.href = text\nappendTextNode(link, text)"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "1",
+            "content": "return link"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "tryCreateLink",
+    "when_updated": 1675759317.3821
+}

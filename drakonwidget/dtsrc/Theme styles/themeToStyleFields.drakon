@@ -1,0 +1,31 @@
+{
+    "version": 20180619,
+    "tag": "533918391",
+    "when_created": 1667727039.8492,
+    "parent_id": "b01ba575",
+    "props": [],
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "1",
+            "content": "return [\n    \"background\",\n    \"color\",\n    \"iconBack\",\n    \"lines\",\n    \"backText\",\n    \"iconBorder\",\n    \"internalLine\",\n    \"shadowColor\",\n    \"shadowBlur\",\n    \"lineWidth\",\n    \"borderWidth\",\n    \"borderStyle\",\n    \"shadowOffsetX\",\n    \"shadowOffsetY\"\n]"
+        }
+    },
+    "when_updated": 1672745771.1629,
+    "created_by": "stipan",
+    "type": "drakon",
+    "updated_by": "stipan",
+    "name": "themeToStyleFields",
+    "language": "LANG_S42"
+}

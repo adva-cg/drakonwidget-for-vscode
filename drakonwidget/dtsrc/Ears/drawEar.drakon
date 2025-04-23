@@ -1,0 +1,157 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "66869404",
+    "params": "ctx\nkey\nbox\nlineWidth\nfill\nborder",
+    "when_created": 1677653287.1104,
+    "parent_id": "2ffccec2",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 2,
+            "one": "7",
+            "id": "2",
+            "type": "branch",
+            "content": "Branch1"
+        },
+        "4": {
+            "one": "9",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "ctx.fill()"
+        },
+        "5": {
+            "one": "4",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "earArrowPath(\n    ctx,\n    box.left,\n    box.top,\n    box.width,\n    box.height\n)"
+        },
+        "7": {
+            "one": "8",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "clearShadow(ctx)"
+        },
+        "8": {
+            "type": "action",
+            "id": "8",
+            "one": "5",
+            "content": "ctx.fillStyle = fill\nctx.strokeStyle = border"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "23",
+            "content": "ctx.stroke()"
+        },
+        "10": {
+            "branchId": 4,
+            "one": "1",
+            "id": "10",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "11": {
+            "branchId": 3,
+            "one": "10",
+            "id": "11",
+            "type": "branch",
+            "content": "Branch2"
+        },
+        "12": {
+            "branchId": 1,
+            "one": "18",
+            "id": "12",
+            "type": "branch",
+            "content": "Branch3"
+        },
+        "13": {
+            "one": "21",
+            "id": "13",
+            "type": "case",
+            "two": "17",
+            "content": "\"down\""
+        },
+        "14": {
+            "one": "20",
+            "id": "14",
+            "type": "case",
+            "two": "13",
+            "content": "\"right\""
+        },
+        "15": {
+            "one": "19",
+            "id": "15",
+            "type": "case",
+            "two": "14",
+            "content": "\"left\""
+        },
+        "16": {
+            "type": "select",
+            "id": "16",
+            "one": "15",
+            "content": "key"
+        },
+        "17": {
+            "type": "case",
+            "two": null,
+            "one": "2",
+            "id": "17"
+        },
+        "18": {
+            "type": "action",
+            "one": "22",
+            "id": "18",
+            "content": "centerX = box.left + box.width / 2\ncenterY = box.top + box.height / 2"
+        },
+        "19": {
+            "type": "action",
+            "id": "19",
+            "one": "2",
+            "content": "rotateAround(\n    ctx,\n    centerX,\n    centerY,\n    -Math.PI / 2\n)"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "2",
+            "content": "rotateAround(\n    ctx,\n    centerX,\n    centerY,\n    Math.PI / 2\n)"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "2",
+            "content": "rotateAround(\n    ctx,\n    centerX,\n    centerY,\n    Math.PI\n)"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "16",
+            "content": "ctx.save()"
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "11",
+            "content": "ctx.restore()"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "drawEar",
+    "when_updated": 1677656104.2083
+}

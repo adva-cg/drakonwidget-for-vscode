@@ -1,0 +1,58 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "327416636",
+    "params": "node",
+    "when_created": 1657701509.3479,
+    "parent_id": "794efc2c",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "5",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "4",
+            "content": "node = getLeft(node)"
+        },
+        "4": {
+            "flag1": 1,
+            "id": "4",
+            "type": "question",
+            "one": "6",
+            "two": "5",
+            "content": "node.up"
+        },
+        "5": {
+            "type": "arrow-loop",
+            "one": "3",
+            "id": "5"
+        },
+        "6": {
+            "type": "action",
+            "one": "1",
+            "id": "6",
+            "content": "return node"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "when_updated": 1657701524.5762,
+    "name": "getNextUp",
+    "created_by": "stipan"
+}

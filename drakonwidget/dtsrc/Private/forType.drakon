@@ -1,0 +1,63 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "780932262",
+    "params": "visuals\ntype\naction",
+    "when_created": 1657640499.1961,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1657959328.8358,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "8",
+            "id": "3",
+            "content": "nodes = getCreateList(\n    visuals.byType,\n    type\n)"
+        },
+        "7": {
+            "type": "loopend",
+            "id": "7",
+            "one": "1",
+            "content": ""
+        },
+        "8": {
+            "type": "loopbegin",
+            "one": "10",
+            "id": "8",
+            "content": "nodeId; nodes"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "7",
+            "content": "action(visuals, node)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "9",
+            "content": "node = visuals.nodes[nodeId]"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "forType",
+    "created_by": "stipan"
+}

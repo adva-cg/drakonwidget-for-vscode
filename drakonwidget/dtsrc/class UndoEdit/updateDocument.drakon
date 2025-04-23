@@ -1,0 +1,105 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "206270091",
+    "params": "changes\nbefore\nafter",
+    "when_created": 1661097657.1192,
+    "parent_id": "a41d7412",
+    "props": [],
+    "when_updated": 1681385517.9138,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "20",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "12": {
+            "type": "action",
+            "one": "24",
+            "id": "12",
+            "content": "undoRecord = createEdit(self, changes)"
+        },
+        "14": {
+            "type": "action",
+            "one": "15",
+            "id": "14",
+            "content": "initial = createInitialEdit(self.diagram)"
+        },
+        "15": {
+            "flag1": 0,
+            "id": "15",
+            "type": "question",
+            "one": "12",
+            "two": "18",
+            "content": "initial"
+        },
+        "17": {
+            "one": "22",
+            "id": "17",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "18": {
+            "one": "19",
+            "id": "18",
+            "type": "loopbegin",
+            "two": "",
+            "content": "change; initial.changes"
+        },
+        "19": {
+            "one": "17",
+            "id": "19",
+            "type": "action",
+            "two": "",
+            "content": "applyChange(self.diagram, change)"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "14",
+            "content": "changesToSave = []"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "1",
+            "content": "return changesToSave"
+        },
+        "22": {
+            "type": "action",
+            "one": "12",
+            "id": "22",
+            "content": "changesToSave.push(initial)"
+        },
+        "23": {
+            "type": "action",
+            "id": "23",
+            "one": "21",
+            "content": "changesToSave.push(undoRecord.redo)"
+        },
+        "24": {
+            "type": "action",
+            "id": "24",
+            "one": "23",
+            "content": "undoRecord.before = before\nundoRecord.after = after"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "updateDocument",
+    "language": "LANG_S42"
+}

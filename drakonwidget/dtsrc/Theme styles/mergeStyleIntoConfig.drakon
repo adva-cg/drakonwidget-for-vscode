@@ -1,0 +1,119 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "96226896",
+    "params": "diagramStyle\nconfig",
+    "when_created": 1667726815.8382,
+    "parent_id": "b01ba575",
+    "props": [],
+    "when_updated": 1675145987.6572,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "30",
+            "id": "2"
+        },
+        "15": {
+            "type": "action",
+            "one": "16",
+            "id": "15",
+            "content": "result = {}"
+        },
+        "16": {
+            "type": "action",
+            "one": "17",
+            "id": "16",
+            "content": "Object.assign(result, config)"
+        },
+        "17": {
+            "one": "21",
+            "id": "17",
+            "type": "action",
+            "two": "",
+            "content": "copyFieldsWithValue(\n    result,\n    diagramStyle,\n    configToStyleFields()\n)"
+        },
+        "18": {
+            "one": "25",
+            "id": "18",
+            "type": "action",
+            "two": "",
+            "content": "copyFieldsWithValue(\n    result.theme,\n    diagramStyle,\n    themeToStyleFields()\n)"
+        },
+        "19": {
+            "type": "action",
+            "one": "1",
+            "id": "19",
+            "content": "return result"
+        },
+        "20": {
+            "type": "action",
+            "id": "20",
+            "one": "15",
+            "content": "diagramStyle = diagramStyle || {}"
+        },
+        "21": {
+            "type": "action",
+            "id": "21",
+            "one": "22",
+            "content": "result.theme = {icons: {}}"
+        },
+        "22": {
+            "type": "action",
+            "one": "18",
+            "id": "22",
+            "content": "Object.assign(result.theme, config.theme)"
+        },
+        "23": {
+            "one": "26",
+            "id": "23",
+            "type": "action",
+            "two": "",
+            "content": "setIconProps(\n    result.theme.icons,\n    [\"header\"],\n    {font: diagramStyle.headerFont}\n)"
+        },
+        "24": {
+            "one": "19",
+            "id": "24",
+            "type": "action",
+            "two": "",
+            "content": "setIconProps(\n    result.theme.icons,\n    [\"branch\"],\n    {font: diagramStyle.branchFont}\n)"
+        },
+        "25": {
+            "flag1": 1,
+            "id": "25",
+            "type": "question",
+            "two": "26",
+            "one": "23",
+            "content": "diagramStyle.headerFont"
+        },
+        "26": {
+            "flag1": 1,
+            "id": "26",
+            "type": "question",
+            "two": "19",
+            "one": "24",
+            "content": "diagramStyle.branchFont"
+        },
+        "30": {
+            "type": "action",
+            "one": "20",
+            "id": "30",
+            "content": "config = utils.deepClone(config)"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "mergeStyleIntoConfig",
+    "language": "LANG_S42"
+}

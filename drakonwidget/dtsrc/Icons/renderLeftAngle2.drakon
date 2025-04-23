@@ -1,0 +1,71 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "752270904",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1673159148.0471,
+    "parent_id": "f298c153",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "one": "5",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "ctx.lineWidth = getLineWidth(\n    visuals,\n    element\n)"
+        },
+        "5": {
+            "one": "7",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "ctx.strokeStyle = getLineColor(\n    visuals,\n    element\n)"
+        },
+        "7": {
+            "type": "action",
+            "one": "10",
+            "id": "7",
+            "content": "w = element.width / 2\nh = element.height / 2\nx = element.left + w\ny = element.top + h"
+        },
+        "8": {
+            "type": "action",
+            "one": "9",
+            "id": "8",
+            "content": "leftAngle(ctx, x + dx, y, w, h)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "1",
+            "content": "leftAngle(ctx, x - dx, y, w, h)"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "8",
+            "content": "dx = w / 3"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "renderLeftAngle2",
+    "when_updated": 1673159187.4195
+}

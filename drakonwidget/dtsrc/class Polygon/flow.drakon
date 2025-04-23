@@ -1,0 +1,47 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "732912179",
+    "params": "visuals\nelement",
+    "when_created": 1672936644.4292,
+    "parent_id": "dc56baef",
+    "props": [],
+    "when_updated": 1672941798.3762,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "9",
+            "id": "2"
+        },
+        "8": {
+            "one": "1",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "return buildTextContent(\n    visuals,\n    element,\n    options,\n    element.width\n)"
+        },
+        "9": {
+            "one": "8",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "options = {}"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "flow",
+    "language": "LANG_S42"
+}

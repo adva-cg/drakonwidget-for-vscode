@@ -1,0 +1,81 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "294398357",
+    "params": "visuals\nelement\nctx",
+    "when_created": 1673158341.9066,
+    "parent_id": "f298c153",
+    "props": [],
+    "when_updated": 1673159625.5575,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "one": "5",
+            "id": "4",
+            "type": "action",
+            "two": "",
+            "content": "ctx.lineWidth = getLineWidth(\n    visuals,\n    element\n)"
+        },
+        "5": {
+            "one": "7",
+            "id": "5",
+            "type": "action",
+            "two": "",
+            "content": "ctx.strokeStyle = getLineColor(\n    visuals,\n    element\n)"
+        },
+        "7": {
+            "type": "action",
+            "one": "10",
+            "id": "7",
+            "content": "w = element.width / 2\nh = element.height / 2\nx = element.left + w\ny = element.top + h"
+        },
+        "8": {
+            "flag1": 0,
+            "id": "8",
+            "type": "question",
+            "one": "12",
+            "two": "9",
+            "content": "mustShift(visuals.config, line)"
+        },
+        "9": {
+            "one": "12",
+            "id": "9",
+            "type": "action",
+            "two": "",
+            "content": "x += 0.5\ny += 0.5"
+        },
+        "10": {
+            "one": "8",
+            "id": "10",
+            "type": "action",
+            "two": "",
+            "content": "line = ctx.lineWidth || 1"
+        },
+        "12": {
+            "type": "action",
+            "one": "1",
+            "id": "12",
+            "content": "xp = Math.round(w * 0.5)\nyp = Math.round(h * 0.5)\nx0 = x - w + xp\nx1 = x + w - xp\ny0 = y - h + yp\ny1 = y + h - yp\nline1(ctx, x0, y0, x1, y0)\nline1(ctx, x0, y, x1, y)\nline1(ctx, x0, y1, x1, y1)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "renderMenu",
+    "language": "LANG_S42"
+}

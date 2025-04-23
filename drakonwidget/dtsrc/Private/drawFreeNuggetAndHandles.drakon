@@ -1,0 +1,216 @@
+{
+    "version": 20180619,
+    "tag": "539129667",
+    "params": "widget\nctx",
+    "when_created": 1671389599.5803,
+    "parent_id": "befd80d4",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 1,
+            "one": "18",
+            "id": "2",
+            "type": "branch",
+            "content": "Draw icons"
+        },
+        "4": {
+            "branchId": 6,
+            "one": "1",
+            "id": "4",
+            "type": "branch",
+            "content": "Exit"
+        },
+        "5": {
+            "branchId": 2,
+            "one": "16",
+            "id": "5",
+            "type": "branch",
+            "content": "Find nugget pos"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "10",
+            "content": "visuals = widget.visuals"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "39",
+            "content": "ctx.setLineDash([])"
+        },
+        "11": {
+            "one": "20",
+            "id": "11",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "12": {
+            "one": "13",
+            "id": "12",
+            "type": "loopbegin",
+            "two": "",
+            "content": "id, type; widget.selection.prims"
+        },
+        "13": {
+            "flag1": 1,
+            "id": "13",
+            "type": "question",
+            "one": "38",
+            "two": "11",
+            "content": "type === \"free\""
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "12",
+            "content": "common = {\n    left: Number.MAX_SAFE_INTEGER,\n    top: Number.MAX_SAFE_INTEGER,\n    right: Number.MIN_SAFE_INTEGER,\n    bottom: Number.MIN_SAFE_INTEGER\n}"
+        },
+        "17": {
+            "type": "action",
+            "one": "26",
+            "id": "17",
+            "content": "calculateBoxFromFree(element, common)"
+        },
+        "18": {
+            "type": "action",
+            "id": "18",
+            "one": "6",
+            "content": "showNugget = false"
+        },
+        "20": {
+            "branchId": 3,
+            "one": "21",
+            "id": "20",
+            "type": "branch",
+            "content": "Nugget"
+        },
+        "21": {
+            "flag1": 1,
+            "id": "21",
+            "type": "question",
+            "one": "22",
+            "two": "27",
+            "content": "showNugget"
+        },
+        "22": {
+            "type": "action",
+            "id": "22",
+            "one": "23",
+            "content": "x = Math.floor(\n    (common.right + common.left) / 2 + 20\n)\ny = Math.floor(common.top - 40)"
+        },
+        "23": {
+            "type": "action",
+            "one": "32",
+            "id": "23",
+            "content": "visuals.nugget = drawNugget(ctx, x, y)"
+        },
+        "25": {
+            "flag1": 0,
+            "id": "25",
+            "type": "question",
+            "one": "17",
+            "two": "11",
+            "content": "element.type === \"group-duration\""
+        },
+        "26": {
+            "type": "action",
+            "id": "26",
+            "one": "11",
+            "content": "showNugget = true"
+        },
+        "27": {
+            "type": "action",
+            "id": "27",
+            "one": "32",
+            "content": "visuals.nugget = undefined"
+        },
+        "29": {
+            "branchId": 5,
+            "one": "31",
+            "id": "29",
+            "type": "branch",
+            "content": "Ears"
+        },
+        "31": {
+            "type": "action",
+            "id": "31",
+            "one": "4",
+            "content": "drawEars(visuals, ctx)"
+        },
+        "32": {
+            "branchId": 4,
+            "one": "34",
+            "id": "32",
+            "type": "branch",
+            "content": "Draw candies"
+        },
+        "33": {
+            "one": "29",
+            "id": "33",
+            "type": "loopend",
+            "two": "",
+            "content": ""
+        },
+        "34": {
+            "one": "35",
+            "id": "34",
+            "type": "loopbegin",
+            "two": "",
+            "content": "id, type; widget.selection.prims"
+        },
+        "35": {
+            "flag1": 1,
+            "id": "35",
+            "type": "question",
+            "two": "33",
+            "one": "36",
+            "content": "type === \"free\""
+        },
+        "36": {
+            "one": "37",
+            "id": "36",
+            "type": "action",
+            "two": "",
+            "content": "element = getFree(visuals, id)"
+        },
+        "37": {
+            "one": "33",
+            "id": "37",
+            "type": "action",
+            "two": "",
+            "content": "drawFreeCandies(widget, element, ctx)"
+        },
+        "38": {
+            "one": "25",
+            "id": "38",
+            "type": "action",
+            "two": "",
+            "content": "element = getFree(visuals, id)"
+        },
+        "39": {
+            "type": "action",
+            "one": "5",
+            "id": "39",
+            "content": "clearShadow(ctx)"
+        }
+    },
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "type": "drakon",
+    "updated_by": "stipan",
+    "language": "LANG_S42",
+    "name": "drawFreeNuggetAndHandles",
+    "when_updated": 1690026280.5569
+}

@@ -1,0 +1,69 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "643956379",
+    "params": "widget\nsocket\ntype",
+    "when_created": 1663149388.8793,
+    "parent_id": "f7515898",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "9",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "id": "3",
+            "one": "5",
+            "content": "edits = []"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "1",
+            "content": "return edits"
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "6",
+            "content": "item = {\n    type: type,\n    content: \"\",\n    one: socket.target\n}"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "7",
+            "content": "newId = createItem(model, edits, item)"
+        },
+        "7": {
+            "type": "action",
+            "one": "4",
+            "id": "7",
+            "content": "redirectUpperItems(\n    edits,\n    socket.links,\n    newId\n)"
+        },
+        "9": {
+            "type": "action",
+            "id": "9",
+            "one": "3",
+            "content": "model = widget.model"
+        }
+    },
+    "type": "drakon",
+    "version": 20180619,
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "simpleInsert",
+    "when_updated": 1676124565.5061
+}

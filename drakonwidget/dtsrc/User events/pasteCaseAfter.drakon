@@ -1,0 +1,45 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "625126052",
+    "params": "widget\ncaseNode",
+    "when_created": 1673427769.2307,
+    "parent_id": "b0881e64",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "14",
+            "content": "tracing.trace(\n    \"pasteCaseAfter\",\n    caseNode.id\n)"
+        },
+        "14": {
+            "type": "action",
+            "id": "14",
+            "one": "1",
+            "content": "insertCaseCore(\n    widget,\n    caseNode,\n    false,\n    \"paste\"\n)"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1673427877.7564,
+    "name": "pasteCaseAfter",
+    "language": "LANG_S42"
+}

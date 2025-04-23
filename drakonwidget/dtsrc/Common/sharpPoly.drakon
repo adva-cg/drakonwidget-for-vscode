@@ -1,0 +1,87 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "122289577",
+    "params": "ctx\npoints",
+    "when_created": 1672558665.1053,
+    "parent_id": "2bccae93",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "p0 = points[0]"
+        },
+        "4": {
+            "type": "action",
+            "one": "7",
+            "id": "4",
+            "content": "ctx.beginPath()"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "ctx.closePath()"
+        },
+        "7": {
+            "type": "action",
+            "id": "7",
+            "one": "10",
+            "content": "ctx.moveTo(p0.x, p0.y)"
+        },
+        "8": {
+            "type": "loopend",
+            "id": "8",
+            "one": "6",
+            "content": ""
+        },
+        "9": {
+            "type": "loopbegin",
+            "id": "9",
+            "one": "12",
+            "content": "i = 1; i < length; i++"
+        },
+        "10": {
+            "type": "action",
+            "id": "10",
+            "one": "9",
+            "content": "length = points.length"
+        },
+        "11": {
+            "type": "action",
+            "id": "11",
+            "one": "8",
+            "content": "ctx.lineTo(p.x, p.y)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "11",
+            "content": "p = points[i]"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "sharpPoly",
+    "when_updated": 1672558782.9362
+}

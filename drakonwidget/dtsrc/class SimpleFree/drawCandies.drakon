@@ -1,0 +1,40 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "",
+    "params": "widget\nelement\nctx",
+    "when_created": 1673074125.7874,
+    "parent_id": "9aef9dd4",
+    "props": [],
+    "language": "LANG_S42",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "62",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "62": {
+            "type": "action",
+            "id": "62",
+            "one": "1",
+            "content": "drawRectCandies(widget, element, ctx)"
+        }
+    },
+    "version": 20180619,
+    "updated_by": "stipan",
+    "type": "drakon",
+    "created_by": "stipan",
+    "name": "drawCandies",
+    "when_updated": 1673074125.7874
+}

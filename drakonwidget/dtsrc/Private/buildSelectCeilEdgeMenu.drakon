@@ -1,0 +1,100 @@
+{
+    "version": 20180619,
+    "tag": "474490552",
+    "params": "widget\nedge",
+    "when_created": 1673420632.3452,
+    "parent_id": "befd80d4",
+    "props": [],
+    "when_updated": 1689925543.074,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "return menu"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "9",
+            "content": "menu = []"
+        },
+        "6": {
+            "type": "action",
+            "one": "7",
+            "id": "6",
+            "content": "pushMenuItem(\n    \"paste_case\",\n    menu,\n    tr(widget, \"Paste\"),\n    undefined,\n    function () {\n        pasteCaseAfter(widget, caseNode)\n    }\n)"
+        },
+        "7": {
+            "one": "15",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "menu.push({type: \"separator\"})"
+        },
+        "9": {
+            "flag1": 0,
+            "id": "9",
+            "type": "question",
+            "one": "16",
+            "two": "3",
+            "content": "isReadonly(widget)"
+        },
+        "12": {
+            "type": "action",
+            "id": "12",
+            "one": "13",
+            "content": "clipboard = getClipboardClone(widget)"
+        },
+        "13": {
+            "flag1": 1,
+            "id": "13",
+            "type": "question",
+            "one": "14",
+            "two": "15",
+            "content": "clipboard"
+        },
+        "14": {
+            "flag1": 1,
+            "id": "14",
+            "type": "question",
+            "two": "15",
+            "one": "6",
+            "content": "clipboard.type === \"case\""
+        },
+        "15": {
+            "type": "action",
+            "id": "15",
+            "one": "3",
+            "content": "pushMenuItem(\n    \"insert_case\",\n    menu,\n    tr(widget, \"Insert Case\"),\n    widget.visuals.config.imagePath + \"case.png\",\n    function () {\n        insertCase(\n            widget,\n            caseNode,\n            false\n        )\n    }\n)"
+        },
+        "16": {
+            "type": "action",
+            "id": "16",
+            "one": "12",
+            "content": "caseNode = edge.head.down.tail"
+        }
+    },
+    "type": "drakon",
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "buildSelectCeilEdgeMenu",
+    "language": "LANG_S42"
+}

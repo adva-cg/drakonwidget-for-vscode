@@ -1,0 +1,65 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "333905230",
+    "params": "widget\nstartX1\nstartY1\nstartX2\nstartY2",
+    "when_created": 1687367869.4603,
+    "parent_id": "f4e542f6",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "3",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "4",
+            "id": "3",
+            "content": "cx = Math.round((startX1 + startX2) / 2)"
+        },
+        "4": {
+            "type": "action",
+            "id": "4",
+            "one": "8",
+            "content": "cy = Math.round((startY1 + startY2) / 2)"
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "1",
+            "content": "return {\n    cx: cx,\n    cy: cy,\n    startDist: startDist,\n    startZoom: widget.zoom\n}"
+        },
+        "7": {
+            "one": "6",
+            "id": "7",
+            "type": "action",
+            "two": "",
+            "content": "startDist = Math.sqrt(\n    kx * kx + ky * ky\n)"
+        },
+        "8": {
+            "one": "7",
+            "id": "8",
+            "type": "action",
+            "two": "",
+            "content": "kx = startX2 - startX1\nky = startY2 - startY1"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "when_updated": 1687411236.1309,
+    "name": "createZoomer",
+    "language": "LANG_S42"
+}

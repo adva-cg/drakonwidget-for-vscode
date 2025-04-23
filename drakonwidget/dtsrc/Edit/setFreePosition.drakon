@@ -1,0 +1,53 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "39286881",
+    "params": "element\nx\ny",
+    "when_created": 1671351688.3738,
+    "parent_id": "f7515898",
+    "props": [],
+    "when_updated": 1671351776.4819,
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "type": "branch",
+            "branchId": 0,
+            "one": "4",
+            "id": "2"
+        },
+        "3": {
+            "type": "action",
+            "one": "1",
+            "id": "3",
+            "content": "element.left = x\nelement.top = y"
+        },
+        "4": {
+            "flag1": 0,
+            "id": "4",
+            "type": "question",
+            "one": "3",
+            "two": "5",
+            "content": "element.type === \"group-duration\""
+        },
+        "5": {
+            "type": "action",
+            "id": "5",
+            "one": "1",
+            "content": "element.x = x\nelement.y = y"
+        }
+    },
+    "version": 20180619,
+    "type": "drakon",
+    "updated_by": "stipan",
+    "created_by": "stipan",
+    "name": "setFreePosition",
+    "language": "LANG_S42"
+}

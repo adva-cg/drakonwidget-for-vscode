@@ -1,0 +1,46 @@
+{
+    "keywords": {
+        "scenario": false,
+        "async": false,
+        "export": false,
+        "function": true,
+        "algoprop": false
+    },
+    "tag": "54658797",
+    "params": "left\ntop\nwidth\nheight\npadding",
+    "when_created": 1666197578.2925,
+    "parent_id": "683f5bbe",
+    "props": [],
+    "created_by": "stipan",
+    "items": {
+        "1": {
+            "type": "end",
+            "id": "1"
+        },
+        "2": {
+            "branchId": 0,
+            "one": "6",
+            "id": "2",
+            "type": "branch",
+            "content": ""
+        },
+        "6": {
+            "type": "action",
+            "id": "6",
+            "one": "7",
+            "content": "y = top + height / 2\nright = left + width\nbottom = top + height\nx1 = left + padding"
+        },
+        "7": {
+            "type": "action",
+            "one": "1",
+            "id": "7",
+            "content": "return [\n    {x: left, y: top},\n    {x: right, y: top},\n    {x: right, y: bottom},\n    {x: left, y: bottom},\n    {x: x1, y: y}\n]"
+        }
+    },
+    "updated_by": "stipan",
+    "version": 20180619,
+    "type": "drakon",
+    "language": "LANG_S42",
+    "name": "buildSimpleInputCoords",
+    "when_updated": 1672563829.3427
+}
