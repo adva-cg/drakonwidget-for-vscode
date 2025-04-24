@@ -3,19 +3,16 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 
 const drakongen = require('../drakongen/src/index.js');
-//const { toPseudocode } = drakongen;
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
-
 
 interface WebviewMessage {
     command: string;
     diagram?: any;
     filename?: string;
-    theme?: string; // Добавляем поле для темы
+    theme?: string;
 }
-
 
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     constructor(private readonly context: vscode.ExtensionContext) { }
@@ -25,7 +22,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     private static isChangeView = false;
     private static readonly viewType = 'drakonEditor';
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
-    private static customTheme: string | null = null; // Для ручного управления
+    private static customTheme: string | null = null;
 
     public static hasCustomTheme(): boolean {
         return this.customTheme !== null;
@@ -62,12 +59,10 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         this.updateThemeForAllPanels();
     }
 
-
     private async handleDiagramUpdate(document: vscode.TextDocument, diagram: any, webviewPanel: vscode.WebviewPanel) {
         try {
             const currentName = path.basename(document.fileName, '.drakon');
 
-            // Для существующих файлов с измененным именем
             if (currentName !== diagram.name) {
                 const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
 
@@ -86,7 +81,6 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 }
             }
 
-            // Обычное сохранение
             const edit = new vscode.WorkspaceEdit();
             delete diagram.name;
             delete diagram.id;
@@ -149,9 +143,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
 
         // Определяем текущую тему при открытии
         const currentTheme = DrakonEditorProvider.customTheme ||
-            (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light
-                ? 'vscode-light'
-                : 'vscode-dark');
+            (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark');
 
         // Генерируем/получаем ID
         async function getDocumentId(doc: vscode.TextDocument, context: vscode.ExtensionContext): Promise<string> {
@@ -276,6 +268,52 @@ function hashString(str: string): string {
     return Math.abs(hash).toString(36).slice(0, 8);
 }
 
+async function generateOutput(generationType: 'pseudo' | 'ast') {
+    try {
+        if (!DrakonEditorProvider.activeFilename) {
+            vscode.window.showErrorMessage('Нет открытого файла!');
+            return;
+        }
+
+        const fileUri = vscode.Uri.file(DrakonEditorProvider.activeFilename);
+        const fileContent = await vscode.workspace.fs.readFile(fileUri);
+        const drakonContent = new TextDecoder().decode(fileContent);
+        const diagramName = path.basename(DrakonEditorProvider.activeFilename, '.drakon');
+
+        const config = vscode.workspace.getConfiguration('Drakonwidget');
+        const languageSetting = config.get<string>('languageForPseudoCode', 'russian');
+        const lang = languageSetting === 'russian' ? 'ru' : 'en';
+
+        let output: string;
+        let command: string;
+
+        if (generationType === 'pseudo') {
+            output = drakongen.toPseudocode(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
+            command = 'Псевдокод';
+        } else {
+            output = drakongen.toTree(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
+            command = 'AST';
+        }
+
+        const doc = await vscode.workspace.openTextDocument({
+            content: output,
+            language: 'plaintext'
+        });
+
+        await vscode.window.showTextDocument(doc, {
+            preview: false,
+            viewColumn: vscode.ViewColumn.Beside
+        });
+
+        vscode.window.showInformationMessage(`${command} успешно сгенерирован`);
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
+        vscode.window.showErrorMessage(`Ошибка генерации: ${errorMessage}`);
+        console.error('Ошибка:', error);
+    }
+}
+
 export function activate(context: vscode.ExtensionContext) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);
@@ -286,7 +324,6 @@ export function activate(context: vscode.ExtensionContext) {
             { supportsMultipleEditorsPerDocument: false }
         )
     );
-
 
     // Команда создания новой диаграммы
     context.subscriptions.push(
@@ -325,45 +362,14 @@ export function activate(context: vscode.ExtensionContext) {
     // Генерация псевдокода
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.genPseudo', async () => {
-            try {
-                // Проверка активного файла
-                if (!DrakonEditorProvider.activeFilename) {
-                    vscode.window.showErrorMessage('Нет открытого файла!');
-                    return;
-                }
+            await generateOutput('pseudo');
+        })
+    );
 
-                // Получаем конфигурацию
-                const config = vscode.workspace.getConfiguration('Drakonwidget');
-                const languageSetting = config.get<string>('languageForPseudoCode', 'russian');
-                const lang = languageSetting === 'russian' ? 'ru' : 'en';
-
-                // Получаем содержимое диаграммы
-                const fileUri = vscode.Uri.file(DrakonEditorProvider.activeFilename);
-                const fileContent = await vscode.workspace.fs.readFile(fileUri);
-                const drakonContent = new TextDecoder().decode(fileContent);
-                const diagramName = path.basename(DrakonEditorProvider.activeFilename, '.drakon');
-
-                // Генерация псевдокода
-                const pseudoCode = drakongen.toPseudocode(drakonContent, diagramName, DrakonEditorProvider.activeFilename, lang);
-
-                // Создаем и открываем новый документ
-                const doc = await vscode.workspace.openTextDocument({
-                    content: pseudoCode,
-                    language: 'plaintext'
-                });
-
-                await vscode.window.showTextDocument(doc, {
-                    preview: false,
-                    viewColumn: vscode.ViewColumn.Beside
-                });
-
-                vscode.window.showInformationMessage('Псевдокод успешно сгенерирован');
-
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Неизвестная ошибка';
-                vscode.window.showErrorMessage(`Ошибка генерации: ${errorMessage}`);
-                console.error('Ошибка:', error);
-            }
+    // Генерация AST
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.generateAST', async () => {
+            await generateOutput('ast');
         })
     );
 
@@ -408,7 +414,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     // При старте обновляем все открытые редакторы
     DrakonEditorProvider.updateThemeForAllPanels();
-
 }
 
 export function deactivate() { }

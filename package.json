@@ -24,6 +24,11 @@
     },
     "commands": [
       {
+        "command": "drakon.generateAST",
+        "title": "Генерировать AST",
+        "category": "ДРАКОН"
+      },
+      {
         "command": "drakon.newDiagram",
         "title": "Новая схема",
         "category": "ДРАКОН"
@@ -80,8 +85,7 @@
     "drakongen:build": "cd drakongen && npm install",
     "vscode:prepublish": "npm run drakongen:build && npm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "package": "vsce package --yarn"
+    "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
