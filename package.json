@@ -7,6 +7,7 @@
   "engines": {
     "vscode": "^1.99.0"
   },
+  "type": "commonjs",
   "categories": [
     "Other"
   ],
@@ -82,7 +83,7 @@
     }
   },
   "scripts": {
-    "drakongen:build": "cd drakongen && npm install",
+    "drakongen:build": "cd src/drakongen && npm install",
     "vscode:prepublish": "npm run drakongen:build && npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",

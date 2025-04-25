@@ -3,16 +3,14 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
-    "lib": ["es6"],
-    "rootDir": "src",  // Ключевое изменение!
+    "lib": ["es6", "dom"],
+    "rootDir": "src",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types", "./src/typings", "./src/types"],
-    "allowJs": true, // Разрешить использование JavaScript-файлов
-    "checkJs": true  // Проверять JavaScript-файлы
+    "typeRoots": ["./node_modules/@types", "./src/typings", "./src/types"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

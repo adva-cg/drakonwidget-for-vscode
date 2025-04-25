@@ -47,7 +47,7 @@ exports.deactivate = deactivate;
 const os = __importStar(require("os"));
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
-const drakongen = require('../drakongen/src/index.js');
+const drakongen = require('../src/drakongen/src/index.js');
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
 class DrakonEditorProvider {
@@ -179,7 +179,7 @@ class DrakonEditorProvider {
                 localResourceRoots: [this.context.extensionUri]
             };
             // Получаем URI для ресурсов
-            const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'drakonwidget'));
+            const resourcesUri = webviewPanel.webview.asWebviewUri(vscode.Uri.joinPath(this.context.extensionUri, 'src/drakonwidget'));
             // Определяем текущую тему при открытии
             const currentTheme = DrakonEditorProvider.customTheme ||
                 (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark');

@@ -6,9 +6,17 @@ const dom = new JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8
 
 global.document = dom.window.document;
 global.window = dom.window as any; // Type assertion
-global.navigator = {
-    userAgent: 'node.js'
-} as any; // Type assertion
+
+// Use Object.defineProperty to define userAgent on the existing navigator object
+if (!global.navigator) {
+    global.navigator = {} as any;
+}
+Object.defineProperty(global.navigator, 'userAgent', {
+    value: 'node.js',
+    writable: false, // Make it read-only
+    configurable: true, // Allow it to be redefined later if needed
+});
+
 global.HTMLElement = dom.window.HTMLElement;
 global.HTMLCanvasElement = dom.window.HTMLCanvasElement;
 global.Image = dom.window.Image;
@@ -34,3 +42,6 @@ function copyProps(src: object, target: object) { // Type annotations
 }
 
 copyProps(dom.window, global);
+
+// Add AsyncIteratorPrototype to global
+(global as any).AsyncIteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(async function* () {}).prototype);

@@ -1,4 +1,17 @@
 "use strict";
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsdom_1 = require("jsdom");
 const dom = new jsdom_1.JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body></body></html>', {
@@ -6,9 +19,15 @@ const dom = new jsdom_1.JSDOM('<!DOCTYPE html><html lang="en"><head><meta charse
 });
 global.document = dom.window.document;
 global.window = dom.window; // Type assertion
-global.navigator = {
-    userAgent: 'node.js'
-}; // Type assertion
+// Use Object.defineProperty to define userAgent on the existing navigator object
+if (!global.navigator) {
+    global.navigator = {};
+}
+Object.defineProperty(global.navigator, 'userAgent', {
+    value: 'node.js',
+    writable: false, // Make it read-only
+    configurable: true, // Allow it to be redefined later if needed
+});
 global.HTMLElement = dom.window.HTMLElement;
 global.HTMLCanvasElement = dom.window.HTMLCanvasElement;
 global.Image = dom.window.Image;
@@ -29,4 +48,6 @@ function copyProps(src, target) {
     Object.defineProperties(target, Object.assign(Object.assign({}, Object.getOwnPropertyDescriptors(src)), Object.getOwnPropertyDescriptors(target)));
 }
 copyProps(dom.window, global);
+// Add AsyncIteratorPrototype to global
+global.AsyncIteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(function () { return __asyncGenerator(this, arguments, function* () { }); }).prototype);
 //# sourceMappingURL=setupJSDOM.js.map
