@@ -8,12 +8,15 @@ require('./setupJSDOM');
 // Define the directory containing .drakon files
 const drakonFilesDir = path.resolve(__dirname, '../../src/drakongen/examples'); // Changed directory here
 
+// Now require drakongen
+const drakongen = require('../../src/drakongen/src/index.js');
+
 describe('Drakon Extension Validation', () => {
     // Get a list of .drakon files before running tests
     const drakonFiles: string[] = fs.readdirSync(drakonFilesDir).filter((file: string) => file.endsWith('.drakon')); // Explicit type annotation for file
 
     // Create a test case for each .drakon file
-    drakonFiles.forEach((drakonFile: string) => { // Explicit type annotation for drakonFile
+    drakonFiles.forEach((drakonFile => { // Explicit type annotation for drakonFile
         it(`should load ${drakonFile} successfully`, async () => {
             const drakonFilePath = path.join(drakonFilesDir, drakonFile);
             console.log(`Testing file: ${drakonFilePath}`);
@@ -29,17 +32,44 @@ describe('Drakon Extension Validation', () => {
             const widget = drakonWidget.createDrakonWidget();
             assert.ok(widget, 'Drakon widget should be created');
 
+            // Generate a unique diagramId for each file
+            const diagramId = `diagram-${drakonFile}`;
+
             // Attempt to load the .drakon file content into the widget
             try {
-                // Assuming there's a method like loadDiagram or setDiagram on the widget
+                // Parse the drakonFileContent into a JavaScript object
+                let diagramData;
+                try {
+                    diagramData = JSON.parse(drakonFileContent);
+                } catch (parseError) {
+                    assert.fail(`Failed to parse ${drakonFile}: ${parseError}`);
+                    return; // Exit the test case if parsing fails
+                }
+
+                // Assuming there's a method like setDiagram on the widget
                 // Replace 'setDiagram' with the actual method name if it's different
-                widget.setDiagram(drakonFileContent);
+                widget.setDiagram(diagramId, diagramData, {
+                    pushEdit: (edit: any) => {
+                        console.log('pushEdit', edit);
+                    }
+                }); // Pass diagramId and parsed diagramData
                 // If no error is thrown, the file loaded successfully
                 console.log(`File ${drakonFile} loaded successfully.`);
             } catch (error) {
                 // If an error is thrown, the file failed to load
+                console.log(`File ${drakonFile} failed to load: ${error}`);
                 assert.fail(`Failed to load ${drakonFile}: ${error}`);
             }
+
+            try {
+                const language = 'ru'; // Default language for tests
+                const treeString = drakongen.toTree(drakonFileContent, drakonFile, drakonFilePath, language); // Added language parameter
+                const struct = JSON.parse(treeString);
+                console.log(`drakongen.toTree for ${drakonFile} completed successfully.`);
+            } catch (error) {
+                console.log(`drakongen.toTree failed for ${drakonFile}: ${error}`);
+                assert.fail(`drakongen.toTree failed for ${drakonFile}: ${error}`);
+            }
         });
-    });
+    }));
 });

@@ -32,25 +32,24 @@
 			"sourceMaps": true
 		},
 		{
-			"type": "node",
-			"request": "launch",
-			"name": "Mocha Tests",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-			"args": [
-				"-r",
-				"ts-node/register",
-				"src/test/**/*.test.ts"
-			],
-			"cwd": "${workspaceFolder}",
-			"console": "integratedTerminal",
-			"internalConsoleOptions": "neverOpen",
-			"sourceMaps": true,
-			"env": {
-				"NODE_ENV": "test"
-			}
-		}
+            "type": "node",
+            "request": "launch",
+            "name": "Debug Mocha Tests",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/node_modules/mocha/bin/mocha",
+            "args": [
+                "-r",
+                "ts-node/register",
+                "src/test/**/*.test.ts",
+                "--jobs=1"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "runtimeArgs": [
+                "--nolazy"
+            ]
+        }
 	]
 }

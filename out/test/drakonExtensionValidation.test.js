@@ -19,7 +19,7 @@ describe('Drakon Extension Validation', () => {
     // Get a list of .drakon files before running tests
     const drakonFiles = fs.readdirSync(drakonFilesDir).filter((file) => file.endsWith('.drakon')); // Explicit type annotation for file
     // Create a test case for each .drakon file
-    drakonFiles.forEach((drakonFile) => {
+    drakonFiles.forEach((drakonFile => {
         it(`should load ${drakonFile} successfully`, () => __awaiter(void 0, void 0, void 0, function* () {
             const drakonFilePath = path.join(drakonFilesDir, drakonFile);
             console.log(`Testing file: ${drakonFilePath}`);
@@ -33,17 +33,27 @@ describe('Drakon Extension Validation', () => {
             assert.ok(widget, 'Drakon widget should be created');
             // Attempt to load the .drakon file content into the widget
             try {
-                // Assuming there's a method like loadDiagram or setDiagram on the widget
+                // Parse the drakonFileContent into a JavaScript object
+                let diagramData;
+                try {
+                    diagramData = JSON.parse(drakonFileContent);
+                }
+                catch (parseError) {
+                    assert.fail(`Failed to parse ${drakonFile}: ${parseError}`);
+                    return; // Exit the test case if parsing fails
+                }
+                // Assuming there's a method like setDiagram on the widget
                 // Replace 'setDiagram' with the actual method name if it's different
-                widget.setDiagram(drakonFileContent);
+                widget.setDiagram("diagramId", diagramData); // Pass diagramId and parsed diagramData
                 // If no error is thrown, the file loaded successfully
                 console.log(`File ${drakonFile} loaded successfully.`);
             }
             catch (error) {
                 // If an error is thrown, the file failed to load
+                console.log(`File ${drakonFile} failed to load: ${error}`);
                 assert.fail(`Failed to load ${drakonFile}: ${error}`);
             }
         }));
-    });
+    }));
 });
 //# sourceMappingURL=drakonExtensionValidation.test.js.map
