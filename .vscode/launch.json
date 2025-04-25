@@ -5,6 +5,7 @@
 {
 	"version": "0.2.0",
 	"configurations": [
+
 		{
 			"name": "Run Extension",
 			"type": "extensionHost",
@@ -15,6 +16,36 @@
 				"--disable-extensions",
 				"--enable-extension=drakonwidget-for-vscode"
 			]
-		}
+		},
+		{
+			"name": "Run Extension (with Debugging)",
+			"type": "extensionHost",
+			"request": "launch",
+			"preLaunchTask": "tsc-build", // Должен совпадать с label в tasks.json
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--disable-extensions",
+				"--enable-extension=drakonwidget-for-vscode"
+			],
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Extension Tests",
+			"program": "${workspaceFolder}/node_modules/@vscode/test-electron/out/index.js",
+			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "${execPath}",
+			"outFiles": ["${workspaceFolder}/out/**/*.js"],
+			"preLaunchTask": "npm: compile",
+			"sourceMaps": true,
+			"env": {
+			  "NODE_ENV": "test"
+			}
+		  }
 	]
 }

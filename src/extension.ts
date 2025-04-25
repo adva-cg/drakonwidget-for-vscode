@@ -12,10 +12,15 @@ interface WebviewMessage {
     diagram?: any;
     filename?: string;
     theme?: string;
+    ready?: boolean;
 }
 
 class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
-    constructor(private readonly context: vscode.ExtensionContext) { }
+    constructor(private readonly context: vscode.ExtensionContext) {
+        // Initialize the output channel in the constructor
+        this.outputChannel = vscode.window.createOutputChannel("Drakon Extension Logs");
+        this.log("DrakonEditorProvider initialized");
+    }
 
     public static activeFilename = '';
 
@@ -24,11 +29,27 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     private static activeWebviews: Set<vscode.WebviewPanel> = new Set();
     private static customTheme: string | null = null;
 
+    // Add an output channel for logging
+    private outputChannel: vscode.OutputChannel;
+    // Add a string to store the output
+    private outputContent: string = '';
+
+    // Helper function for logging
+    private log(message: string, ...args: any[]) {
+        const timestamp = new Date().toISOString();
+        const logMessage = `[${timestamp}] ${message} ${args.length > 0 ? JSON.stringify(args) : ''}`;
+        this.outputChannel.appendLine(logMessage);
+        // Append to the outputContent
+        this.outputContent += logMessage + '\n';
+        console.log(logMessage, ...args); // Also log to the console
+    }
+
     public static hasCustomTheme(): boolean {
         return this.customTheme !== null;
     }
 
     private async getWebviewContent(resourcesUri: vscode.Uri, theme: string, namespace: string): Promise<string> {
+        this.log("getWebviewContent called", { resourcesUri: resourcesUri.toString(), theme, namespace });
         const templatePath = vscode.Uri.joinPath(
             this.context.extensionUri,
             'templates',
@@ -38,6 +59,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         let html = (await vscode.workspace.fs.readFile(templatePath)).toString();
         html = html.replace(/\${extPathUri}/g, resourcesUri.toString());
         html = html.replace(/\${namespace}/g, namespace);
+        this.log("getWebviewContent completed");
         return html;
     }
 
@@ -60,6 +82,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
     }
 
     private async handleDiagramUpdate(document: vscode.TextDocument, diagram: any, webviewPanel: vscode.WebviewPanel) {
+        this.log("handleDiagramUpdate called", { documentUri: document.uri.toString(), diagram });
         try {
             const currentName = path.basename(document.fileName, '.drakon');
 
@@ -67,11 +90,13 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 const newUri = vscode.Uri.file(path.join(path.dirname(document.fileName), `${diagram.name}.drakon`));
 
                 try {
-                    await vscode.workspace.fs.rename(document.uri, newUri, { overwrite: false });
+                    await vscode.workspace.fs.rename(document.uri, newUri, { overwrite: true });
+                    this.log("File renamed", { oldUri: document.uri.toString(), newUri: newUri.toString() });
                     setTimeout(() => webviewPanel.dispose(), 100);
                     return;
                 } catch (error: unknown) {
                     const errorMessage = error instanceof Error ? error.message : 'Failed to rename file';
+                    this.log("Error renaming file", { error: errorMessage });
                     vscode.window.showErrorMessage(`Could not rename file: ${errorMessage}`);
                     webviewPanel.webview.postMessage({
                         command: 'revertFilename',
@@ -91,27 +116,35 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             );
             await vscode.workspace.applyEdit(edit);
             await document.save();
+            this.log("Diagram updated and saved");
 
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to save diagram';
+            this.log("Error saving diagram", errorMessage);
             vscode.window.showErrorMessage(`Error saving diagram: ${errorMessage}`);
         }
     }
 
     public async showSaveDialog(defaultName: string): Promise<vscode.Uri | undefined> {
+        this.log("showSaveDialog called", { defaultName });
         const sanitizedName = defaultName.replace(/[\\/:*?"<>|]/g, '_');
-        return await vscode.window.showSaveDialog({
+        const result = await vscode.window.showSaveDialog({
             defaultUri: vscode.Uri.file(path.join(this.getWorkspaceFolder(), `${sanitizedName}.drakon`)),
             filters: { 'Drakon Diagrams': ['drakon'] },
             saveLabel: 'Save Diagram'
         });
+        this.log("showSaveDialog result", result?.toString());
+        return result;
     }
 
     public async saveToNewFile(uri: vscode.Uri, diagram: any): Promise<void> {
+        this.log("saveToNewFile called", { uri: uri.toString(), diagram });
         try {
             const data = JSON.stringify(diagram, null, 2);
             await vscode.workspace.fs.writeFile(uri, new TextEncoder().encode(data));
+            this.log("File saved successfully", uri.toString());
         } catch (err) {
+            this.log("Failed to save diagram", err);
             vscode.window.showErrorMessage(`Failed to save diagram: ${err}`);
         }
     }
@@ -127,6 +160,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         document: vscode.TextDocument,
         webviewPanel: vscode.WebviewPanel
     ): Promise<void> {
+        this.log("resolveCustomTextEditor called", { documentUri: document.uri.toString() });
 
         DrakonEditorProvider.activeFilename = document.fileName;
 
@@ -183,22 +217,32 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
                 command: 'loadDiagram',
                 diagram: diagram
             });
+            this.log("Diagram loaded", diagram);
         } catch (error) {
+            this.log("Error loading diagram", error);
             vscode.window.showErrorMessage(`Error loading diagram: ${error}`);
         }
 
         // Обработчик сообщений от Webview
         webviewPanel.webview.onDidReceiveMessage(async (message: WebviewMessage) => {
+            this.log("Message received from webview", message);
             switch (message.command) {
                 case 'updateDiagram':
                     if (message.diagram) {
                         await this.handleDiagramUpdate(document, message.diagram, webviewPanel);
                     }
                     return;
+                case 'checkReady':
+                    webviewPanel.webview.postMessage({
+                        command: 'ready',
+                        ready: true
+                    });
+                    return;
             }
         });
 
         webviewPanel.onDidChangeViewState((e) => {
+            this.log("onDidChangeViewState", e.webviewPanel.visible);
             if (e.webviewPanel.visible) {
                 const content = document.getText();
                 const diagram = content ? JSON.parse(content) : { type: "drakon", items: {} };
@@ -231,6 +275,7 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
             }
         });
         webviewPanel.onDidDispose(() => {
+            this.log("webviewPanel disposed");
             webviewPanel.webview.postMessage({
                 command: 'deleteState'
             });
@@ -238,6 +283,14 @@ class DrakonEditorProvider implements vscode.CustomTextEditorProvider {
         });
 
 
+    }
+    // Add a method to get the output content
+    public getOutputContent(): string {
+        return this.outputContent;
+    }
+    // Add a method to clear the output content
+    public clearOutputContent(): void {
+        this.outputContent = '';
     }
 
 }
@@ -259,11 +312,11 @@ function getCurrentDateTimeString() {
 
 
 function hashString(str: string): string {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
     let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
+    for (let byte of data) {
+        hash = (hash * 31 + byte) % 0x100000000; // Simple hash function
     }
     return Math.abs(hash).toString(36).slice(0, 8);
 }
@@ -324,6 +377,7 @@ export function activate(context: vscode.ExtensionContext) {
             { supportsMultipleEditorsPerDocument: false }
         )
     );
+    exports.provider = provider;
 
     // Команда создания новой диаграммы
     context.subscriptions.push(
@@ -414,6 +468,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     // При старте обновляем все открытые редакторы
     DrakonEditorProvider.updateThemeForAllPanels();
+
+
 }
 
 export function deactivate() { }
