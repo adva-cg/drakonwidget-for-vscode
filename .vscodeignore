@@ -10,7 +10,8 @@ vsc-extension-quickstart.md
 **/.vscode-test.*
 
 # Включаем drakongen (локальная папка)
-!src/drakongen/**
 
 # Исключаем node_modules/drakongen (если нужно)
 node_modules/drakongen/
+src/drakonwidget/dtsrc
+src/drakongen/examples
