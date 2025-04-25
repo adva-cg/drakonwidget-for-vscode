@@ -1,4 +1,5 @@
-import { JSDOM } from 'jsdom';
+//import { JSDOM } from 'jsdom'; // Remove this line
+const { JSDOM } = require('jsdom'); // Add this line
 
 const dom = new JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body></body></html>', {
     url: "http://localhost/" // Optional: Set a base URL

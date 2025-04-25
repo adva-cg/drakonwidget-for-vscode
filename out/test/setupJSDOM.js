@@ -12,9 +12,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsdom_1 = require("jsdom");
-const dom = new jsdom_1.JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body></body></html>', {
+//import { JSDOM } from 'jsdom'; // Remove this line
+const { JSDOM } = require('jsdom'); // Add this line
+const dom = new JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body></body></html>', {
     url: "http://localhost/" // Optional: Set a base URL
 });
 global.document = dom.window.document;

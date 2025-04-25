@@ -1,15 +1,15 @@
-declare module '../src/drakongen/src/index.js' {
-    export function toPseudocode(
+declare module 'drakongen' {
+  export function toPseudocode(
       drakon: string,
       name: string,
       filename: string,
       language: 'en' | 'no' | 'ru'
-    ): string;
-  
-    export function toTree(
+  ): string;
+
+  export function toTree(
       drakon: string,
       name: string,
       filename: string,
       language: 'en' | 'no' | 'ru'
-    ): string;
-  }
+  ): string;
+}
