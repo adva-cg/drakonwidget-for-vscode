@@ -86,6 +86,7 @@
     "drakongen:build": "cd src/drakongen && npm install",
     "vscode:prepublish": "npm run drakongen:build && npm run compile",
     "compile": "tsc -p ./",
+    "build": "npm run compile",
     "watch": "tsc -watch -p ./",
     "test": "mocha -r ts-node/register -r src/test/setupJSDOM.ts src/test/**/*.test.ts"
   },
