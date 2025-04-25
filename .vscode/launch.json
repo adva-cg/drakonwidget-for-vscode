@@ -5,7 +5,6 @@
 {
 	"version": "0.2.0",
 	"configurations": [
-
 		{
 			"name": "Run Extension",
 			"type": "extensionHost",
@@ -35,17 +34,23 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Debug Extension Tests",
-			"program": "${workspaceFolder}/node_modules/@vscode/test-electron/out/index.js",
-			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+			"name": "Mocha Tests",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+			"args": [
+				"-r",
+				"ts-node/register",
+				"src/test/**/*.test.ts"
+			],
 			"cwd": "${workspaceFolder}",
-			"runtimeExecutable": "${execPath}",
-			"outFiles": ["${workspaceFolder}/out/**/*.js"],
-			"preLaunchTask": "npm: compile",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
 			"sourceMaps": true,
 			"env": {
-			  "NODE_ENV": "test"
+				"NODE_ENV": "test"
 			}
-		  }
+		}
 	]
 }

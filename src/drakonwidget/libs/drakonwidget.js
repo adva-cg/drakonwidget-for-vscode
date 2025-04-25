@@ -1,3 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+
+let drakonCanvas;
+
 function createDrakonWidget() {
     function utils() {
         var unit = {};
@@ -36579,7 +36584,7 @@ function createDrakonWidget() {
         return unit;
     }    
 
-    var tracing = {
+   var tracing = {
         trace: function (name, value) { console.log(name, value) },
         setTimeout: function (action, delay) { return window.setTimeout(action, delay) },
         registerEvent: function (element, name, action, options) { element.addEventListener(name, action, options) }
@@ -36595,5 +36600,14 @@ function createDrakonWidget() {
     drakon.tracing = tracing
     var widget = drakon.DrakonCanvas()
     widget.init()
+    drakonCanvas = drakon;
     return widget
 }
+
+createDrakonWidget();
+
+module.exports = {
+    createDrakonWidget: createDrakonWidget,
+    utils: drakonCanvas.utils,
+    edit_tools: drakonCanvas.edit_tools
+};

@@ -1,161 +1,83 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-const mocha_1 = require("mocha");
-const vscode = __importStar(require("vscode"));
-const assert = __importStar(require("assert"));
-const path = __importStar(require("path"));
-const fs = __importStar(require("fs"));
-suite('DRAKON Examples Validation (VS Code Extension)', () => {
-    (0, mocha_1.describe)('DRAKON Examples Validation (VS Code Extension)', () => {
-        let extension;
-        let outputChannel;
-        let provider;
-        (0, mocha_1.before)(async () => {
-            extension = vscode.extensions.getExtension('VitalyAdadurov.drakonwidget-for-vscode');
-            assert.ok(extension, 'Extension not found');
-            await extension.activate();
-            console.log('Extension activated');
-            outputChannel = vscode.window.createOutputChannel("Drakon Extension Logs");
-            provider = extension.exports.provider;
-        });
-        (0, mocha_1.afterEach)(() => {
-            outputChannel.clear();
-            provider.clearOutputContent();
-        });
-        const examplesDir = path.join(__dirname, '..', '..', 'drakongen', 'examples');
-        if (!fs.existsSync(examplesDir)) {
-            throw new Error(`Examples directory not found: ${examplesDir}`);
-        }
-        async function waitForDrakonRender() {
-            // Wait for a short period to allow the extension to initialize
-            await new Promise(resolve => setTimeout(resolve, 500));
-            // Check if the webview is ready by sending a message and waiting for a response
-            const webviewPanel = vscode.window.visibleTextEditors.find(editor => editor.document.uri.scheme === 'vscode-webview')?.viewColumn;
-            if (!webviewPanel) {
-                console.warn('No webview panel found');
-                return;
-            }
-            const message = { command: 'checkReady' };
-            const responsePromise = new Promise(resolve => {
-                const disposable = vscode.window.onDidChangeVisibleTextEditors(editors => {
-                    const webviewEditor = editors.find(editor => editor.document.uri.scheme === 'vscode-webview');
-                    if (webviewEditor) {
-                        webviewEditor.document.getText().includes('ready');
-                        disposable.dispose();
-                        resolve(true);
-                    }
-                });
-                setTimeout(() => {
-                    disposable.dispose();
-                    resolve(false);
-                }, 10000); // Timeout after 10 seconds
-            });
-            vscode.commands.executeCommand('workbench.action.webview.postMessage', webviewPanel, message);
-            const isReady = await responsePromise;
-            if (!isReady) {
-                console.warn('Webview did not become ready in time');
-            }
-        }
-        async function openAndValidateDrakonFile(filePath) {
-            const uri = vscode.Uri.file(filePath);
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+// Import the Drakonwidget library (adjust path as needed)
+const drakonWidgetPath = require.resolve('../../drakonwidget/libs/drakonwidget.js');
+console.log('drakonWidgetPath:', drakonWidgetPath);
+const drakonWidget = require('../../drakonwidget/libs/drakonwidget.js'); //const createHtml = require('../../../drakonwidget/libs/simplewidgets.js');
+//const drakongen = require('../drakongen/src/index.js');
+const createDrakonWidget = drakonWidget.createDrakonWidget;
+const createEditTools = createDrakonWidget.edit_tools;
+const createUtils = createDrakonWidget.utils;
+// Helper function to check if a diagram has a specific item
+function hasItem(widget, itemId) {
+    return widget.model && widget.model.items && widget.model.items[itemId] !== undefined;
+}
+// Helper function to check item type
+function checkItemType(widget, itemId, expectedType) {
+    var _a;
+    const item = (_a = widget.model) === null || _a === void 0 ? void 0 : _a.items[itemId];
+    return item && item.type === expectedType;
+}
+// Helper function to check item content
+function checkItemContent(widget, itemId, expectedContent) {
+    var _a;
+    const item = (_a = widget.model) === null || _a === void 0 ? void 0 : _a.items[itemId];
+    return item && item.content === expectedContent;
+}
+describe('Drakon Diagram Loading', () => {
+    const diagramsDir = path.join(__dirname, '../../../drakongen/examples');
+    const diagramFiles = fs.readdirSync(diagramsDir).filter((file) => file.endsWith('.drakon'));
+    diagramFiles.forEach(diagramFile => {
+        const diagramFilePath = path.join(diagramsDir, diagramFile);
+        const diagramName = path.basename(diagramFile, '.drakon');
+        it(`Should load diagram: ${diagramName}`, () => {
+            // 1. Instantiate Drakonwidget
+            const widget = createDrakonWidget();
+            // 2. Create a mock sender (we don't need to inspect edits for now)
+            const mockSender = {
+                pushEdit: (edit) => {
+                    // In a real test, you might want to inspect the edit object here
+                    // to ensure that the correct changes are being tracked.
+                    console.log("pushEdit", edit);
+                }
+            };
+            // 3. Load JSON data
+            const diagramJson = fs.readFileSync(diagramFilePath, 'utf8');
+            let diagramData;
             try {
-                // Open the file in VS Code
-                await vscode.window.showTextDocument(uri);
-                // Wait for drakonwidget to load and render
-                await waitForDrakonRender();
-                // Check for errors in the output panel
-                const outputContent = provider.getOutputContent();
-                if (outputContent.includes("Error") || outputContent.includes("Failed")) {
-                    console.error(`Errors found in output panel for file ${path.basename(filePath)}:`, outputContent);
-                    assert.fail(`File ${path.basename(filePath)} is invalid due to errors in output`);
+                diagramData = JSON.parse(diagramJson);
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    assert.fail(`Failed to parse JSON in ${diagramFile}: ${error.message}`);
                 }
                 else {
-                    console.log(`No errors found in the output panel for file ${path.basename(filePath)}`);
+                    assert.fail(`Failed to parse JSON in ${diagramFile}: Unknown error`);
                 }
-                // If no errors, the file is considered valid
-                assert.ok(true, `File ${path.basename(filePath)} is valid`);
+                return;
             }
-            catch (error) {
-                console.error(`Error validating file ${path.basename(filePath)}:`, error);
-                assert.fail(`File ${path.basename(filePath)} is invalid`);
-            }
-        }
-        const drakonFiles = fs.readdirSync(examplesDir).filter(file => file.endsWith('.drakon'));
-        drakonFiles.forEach(drakonFile => {
-            (0, mocha_1.it)(`should validate ${drakonFile}`, async () => {
-                const filePath = path.join(examplesDir, drakonFile);
-                await openAndValidateDrakonFile(filePath);
+            // 4. Call setDiagram
+            return widget.setDiagram(diagramName, diagramData, mockSender)
+                .then(() => {
+                // 5. Assert success
+                // Check if the diagram loaded correctly by inspecting the widget's model
+                assert.ok(widget.model, 'Diagram model should be created');
+                assert.ok(widget.model.items, 'Diagram model should have items');
+                assert.ok(Object.keys(widget.model.items).length > 0, 'Diagram should have at least one item');
+                // Add more specific assertions based on the expected structure of your diagram
+                if (diagramName === 'valid_diagram') {
+                    assert.ok(hasItem(widget, '1'), 'Diagram should have item 1');
+                    assert.ok(checkItemType(widget, '1', 'action'), 'Item 1 should be an action');
+                    assert.ok(checkItemContent(widget, '1', 'Do something'), 'Item 1 should have content "Do something"');
+                    assert.ok(hasItem(widget, '2'), 'Diagram should have item 2');
+                    assert.ok(checkItemType(widget, '2', 'end'), 'Item 2 should be an end');
+                }
+            })
+                .catch((error) => {
+                assert.fail(`Diagram loading failed for ${diagramFile}: ${error.message}`);
             });
-        });
-        (0, mocha_1.it)('should handle missing examples directory gracefully', () => {
-            const invalidDir = path.join(__dirname, '..', '..', 'nonexistent', 'examples');
-            try {
-                fs.readdirSync(invalidDir);
-                assert.fail('Expected an error for missing directory');
-            }
-            catch (error) {
-                assert.ok(error, 'Error was thrown as expected for missing directory');
-            }
-        });
-        (0, mocha_1.it)('should handle empty examples directory gracefully', () => {
-            const emptyDir = path.join(__dirname, '..', '..', 'empty_examples');
-            try {
-                fs.mkdirSync(emptyDir, { recursive: true });
-                const files = fs.readdirSync(emptyDir);
-                assert.strictEqual(files.length, 0, 'Empty directory should have no files');
-            }
-            finally {
-                if (fs.existsSync(emptyDir)) {
-                    fs.rmdirSync(emptyDir, { recursive: true });
-                }
-            }
-            ;
-        });
-        (0, mocha_1.it)('should validate non-`.drakon` files are ignored', () => {
-            const tempFile = path.join(examplesDir, 'temp.txt');
-            try {
-                fs.writeFileSync(tempFile, 'Temporary file content');
-                const drakonFiles = fs.readdirSync(examplesDir).filter(file => file.endsWith('.drakon'));
-                assert.ok(!drakonFiles.includes('temp.txt'), 'Non-`.drakon` files should be ignored');
-            }
-            finally {
-                if (fs.existsSync(tempFile)) {
-                    fs.unlinkSync(tempFile);
-                }
-            }
         });
     });
 });
