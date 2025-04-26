@@ -1,8 +1,12 @@
-//import { JSDOM } from 'jsdom'; // Remove this line
-const { JSDOM } = require('jsdom'); // Add this line
+const { JSDOM } = require('jsdom');
+const { Canvas, createCanvas } = require('canvas'); // Remove ImageData from import
 
 const dom = new JSDOM('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body></body></html>', {
-    url: "http://localhost/" // Optional: Set a base URL
+    url: "http://localhost/", // Optional: Set a base URL
+    canvas: {
+        createCanvas,
+        //ImageData // Remove this line
+    }
 });
 
 global.document = dom.window.document;
@@ -21,6 +25,7 @@ Object.defineProperty(global.navigator, 'userAgent', {
 global.HTMLElement = dom.window.HTMLElement;
 global.HTMLCanvasElement = dom.window.HTMLCanvasElement;
 global.Image = dom.window.Image;
+global.ImageData = dom.window.ImageData; // Add this line
 global.MouseEvent = dom.window.MouseEvent;
 global.HTMLInputElement = dom.window.HTMLInputElement;
 global.HTMLTextAreaElement = dom.window.HTMLTextAreaElement;

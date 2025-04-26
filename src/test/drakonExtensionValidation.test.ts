@@ -35,6 +35,16 @@ describe('Drakon Extension Validation', () => {
             // Generate a unique diagramId for each file
             const diagramId = `diagram-${drakonFile}`;
 
+            // Create a config object
+            const config = {
+                startEditContent: () => { },
+                showContextMenu: () => { }
+            };
+
+            // Call render() and append to the DOM
+            const widgetElement = widget.render(800, 600, config); // Example width and height
+            document.body.appendChild(widgetElement);
+
             // Attempt to load the .drakon file content into the widget
             try {
                 // Parse the drakonFileContent into a JavaScript object
@@ -61,6 +71,7 @@ describe('Drakon Extension Validation', () => {
                 assert.fail(`Failed to load ${drakonFile}: ${error}`);
             }
 
+            // Now run drakongen.toTree
             try {
                 const language = 'ru'; // Default language for tests
                 const treeString = drakongen.toTree(drakonFileContent, drakonFile, drakonFilePath, language); // Added language parameter

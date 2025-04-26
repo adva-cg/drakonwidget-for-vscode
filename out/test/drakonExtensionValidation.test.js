@@ -15,6 +15,8 @@ const fs = require('fs');
 require('./setupJSDOM');
 // Define the directory containing .drakon files
 const drakonFilesDir = path.resolve(__dirname, '../../src/drakongen/examples'); // Changed directory here
+// Now require drakongen
+const drakongen = require('../../src/drakongen/src/index.js');
 describe('Drakon Extension Validation', () => {
     // Get a list of .drakon files before running tests
     const drakonFiles = fs.readdirSync(drakonFilesDir).filter((file) => file.endsWith('.drakon')); // Explicit type annotation for file
@@ -31,6 +33,16 @@ describe('Drakon Extension Validation', () => {
             // Create a Drakon widget
             const widget = drakonWidget.createDrakonWidget();
             assert.ok(widget, 'Drakon widget should be created');
+            // Generate a unique diagramId for each file
+            const diagramId = `diagram-${drakonFile}`;
+            // Create a config object
+            const config = {
+                startEditContent: () => { },
+                showContextMenu: () => { }
+            };
+            // Call render() and append to the DOM
+            const widgetElement = widget.render(800, 600, config); // Example width and height
+            document.body.appendChild(widgetElement);
             // Attempt to load the .drakon file content into the widget
             try {
                 // Parse the drakonFileContent into a JavaScript object
@@ -44,7 +56,11 @@ describe('Drakon Extension Validation', () => {
                 }
                 // Assuming there's a method like setDiagram on the widget
                 // Replace 'setDiagram' with the actual method name if it's different
-                widget.setDiagram("diagramId", diagramData); // Pass diagramId and parsed diagramData
+                widget.setDiagram(diagramId, diagramData, {
+                    pushEdit: (edit) => {
+                        console.log('pushEdit', edit);
+                    }
+                }); // Pass diagramId and parsed diagramData
                 // If no error is thrown, the file loaded successfully
                 console.log(`File ${drakonFile} loaded successfully.`);
             }
@@ -52,6 +68,17 @@ describe('Drakon Extension Validation', () => {
                 // If an error is thrown, the file failed to load
                 console.log(`File ${drakonFile} failed to load: ${error}`);
                 assert.fail(`Failed to load ${drakonFile}: ${error}`);
+            }
+            // Now run drakongen.toTree
+            try {
+                const language = 'ru'; // Default language for tests
+                const treeString = drakongen.toTree(drakonFileContent, drakonFile, drakonFilePath, language); // Added language parameter
+                const struct = JSON.parse(treeString);
+                console.log(`drakongen.toTree for ${drakonFile} completed successfully.`);
+            }
+            catch (error) {
+                console.log(`drakongen.toTree failed for ${drakonFile}: ${error}`);
+                assert.fail(`drakongen.toTree failed for ${drakonFile}: ${error}`);
             }
         }));
     }));
