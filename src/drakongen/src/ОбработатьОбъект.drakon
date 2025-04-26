@@ -1,0 +1,94 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "19"
+    },
+    "18": {
+      "type": "loopend",
+      "one": "1",
+      "content": "элемент Из объектДляОбработки"
+    },
+    "19": {
+      "type": "loopbegin",
+      "one": "21",
+      "content": "элемент Из объектДляОбработки"
+    },
+    "21": {
+      "type": "question",
+      "content": "элемент.type = address",
+      "one": "23",
+      "two": "22",
+      "flag1": 1
+    },
+    "22": {
+      "type": "action",
+      "content": "новаяИкона = добавить икону в items и заполнить, если нужно",
+      "one": "24",
+      "two": ""
+    },
+    "23": {
+      "type": "action",
+      "content": "предыдущаяИкона.oneBranchId = (Ищем в branchs branch с name, равным элемент.content).branchId",
+      "one": "18",
+      "two": ""
+    },
+    "24": {
+      "type": "question",
+      "content": "ЭтоПервыйЭлемент",
+      "one": "26",
+      "two": "33",
+      "flag1": 1
+    },
+    "26": {
+      "type": "action",
+      "content": "иконаДлянаправления [направление] = новаяИкона.id",
+      "one": "30",
+      "two": ""
+    },
+    "27": {
+      "type": "question",
+      "content": "элемент имеет \"no\"",
+      "one": "34",
+      "two": "32",
+      "flag1": 0
+    },
+    "30": {
+      "type": "action",
+      "content": "ЭтоПервыйЭлемент = ложь",
+      "one": "27",
+      "two": ""
+    },
+    "32": {
+      "type": "insertion",
+      "content": "ОбработатьОбъект (items, элемент.no, 'two', новаяИкона)",
+      "one": "34",
+      "two": ""
+    },
+    "33": {
+      "type": "action",
+      "content": "иконаДлянапреления.out = новаяИкона.id",
+      "one": "30",
+      "two": ""
+    },
+    "34": {
+      "type": "question",
+      "content": "элемент имеет \"yes\"",
+      "one": "18",
+      "two": "35",
+      "flag1": 1
+    },
+    "35": {
+      "type": "insertion",
+      "content": "ОбработатьОбъект (items, элемент.yes, 'one', новаяИкона)",
+      "one": "18",
+      "two": ""
+    }
+  },
+  "params": "items\nобъектДляОбработки\nнаправление\nиконаДляНаправления"
+}

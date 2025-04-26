@@ -1,0 +1,44 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "4"
+    },
+    "3": {
+      "type": "loopend",
+      "one": "1",
+      "two": ""
+    },
+    "4": {
+      "type": "loopbegin",
+      "one": "5",
+      "content": "Для Каждого item в items",
+      "two": ""
+    },
+    "5": {
+      "type": "question",
+      "content": "Заполнен oneBranchId",
+      "one": "6",
+      "two": "3",
+      "flag1": 1
+    },
+    "6": {
+      "type": "action",
+      "content": "заполняем one по branchIds и oneBranchId",
+      "one": "7",
+      "two": ""
+    },
+    "7": {
+      "type": "action",
+      "content": "oneBranchId удаляем",
+      "one": "3",
+      "two": ""
+    }
+  },
+  "params": "items\nbranchIds"
+}
