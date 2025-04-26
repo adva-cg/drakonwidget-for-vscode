@@ -9,36 +9,9 @@
       "branchId": 0,
       "one": "10"
     },
-    "3": {
-      "type": "question",
-      "content": "branches = []",
-      "one": "5",
-      "two": "1",
-      "flag1": 0
-    },
-    "5": {
-      "type": "question",
-      "content": "branches.Количество = 1",
-      "one": "9",
-      "two": "6",
-      "flag1": 0
-    },
-    "6": {
-      "type": "question",
-      "content": "Branch.Body = []",
-      "one": "9",
-      "two": "1",
-      "flag1": 0
-    },
     "8": {
       "type": "action",
       "content": "Имя файла результата = ast.name",
-      "one": "3",
-      "two": ""
-    },
-    "9": {
-      "type": "action",
-      "content": "добавляем в ОбъектРезультат.Items икону с type = \"end\" без one (иконаEnd)",
       "one": "11",
       "two": ""
     },

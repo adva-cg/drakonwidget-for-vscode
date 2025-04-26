@@ -7,7 +7,7 @@
     "2": {
       "type": "branch",
       "branchId": 0,
-      "one": "19"
+      "one": "39"
     },
     "18": {
       "type": "loopend",
@@ -17,7 +17,7 @@
     "19": {
       "type": "loopbegin",
       "one": "21",
-      "content": "элемент Из объектДляОбработки"
+      "content": "элемент Из объектыДляОбработки"
     },
     "21": {
       "type": "question",
@@ -34,7 +34,7 @@
     },
     "23": {
       "type": "action",
-      "content": "предыдущаяИкона.oneBranchId = (Ищем в branchs branch с name, равным элемент.content).branchId",
+      "content": "иконаДляНаправления.oneBranchId = (Ищем в branchs branch с name, равным элемент.content).branchId",
       "one": "18",
       "two": ""
     },
@@ -42,7 +42,7 @@
       "type": "question",
       "content": "ЭтоПервыйЭлемент",
       "one": "26",
-      "two": "33",
+      "two": "64",
       "flag1": 1
     },
     "26": {
@@ -53,42 +53,94 @@
     },
     "27": {
       "type": "question",
-      "content": "элемент имеет \"no\"",
-      "one": "34",
-      "two": "32",
-      "flag1": 0
+      "content": "элемент.type = question",
+      "one": "55",
+      "two": "62",
+      "flag1": 1
     },
     "30": {
       "type": "action",
       "content": "ЭтоПервыйЭлемент = ложь",
+      "one": "60",
+      "two": ""
+    },
+    "39": {
+      "type": "action",
+      "content": "ЭтоПервыйЭлемент = Истина",
+      "one": "46"
+    },
+    "46": {
+      "type": "action",
+      "content": "ИконыДляНаправления = []",
+      "one": "19"
+    },
+    "52": {
+      "type": "insertion",
+      "content": "ОбработатьОбъект ( items, элемент.no, 'two', иконаTwo )",
+      "one": "57",
+      "two": ""
+    },
+    "53": {
+      "type": "insertion",
+      "content": "ОбработатьОбъект ( items, элемент.yes, 'one', иконаOne )",
+      "one": "58",
+      "two": ""
+    },
+    "55": {
+      "type": "action",
+      "content": "иконаOne = НоваяИкона",
+      "one": "56",
+      "two": ""
+    },
+    "56": {
+      "type": "action",
+      "content": "иконаTwo = НоваяИкона",
+      "one": "52",
+      "two": ""
+    },
+    "57": {
+      "type": "action",
+      "content": "ИконыДляНаправления добавить { item: иконаTwo, dir: 'two' }",
+      "one": "53",
+      "two": ""
+    },
+    "58": {
+      "type": "action",
+      "content": "ИконыДляНаправления добавить { item: иконаOne, dir: 'one' }",
+      "one": "18",
+      "two": ""
+    },
+    "60": {
+      "type": "action",
+      "content": "ИконыДляНаправления = []",
       "one": "27",
       "two": ""
     },
-    "32": {
-      "type": "insertion",
-      "content": "ОбработатьОбъект (items, элемент.no, 'two', новаяИкона)",
-      "one": "34",
-      "two": ""
-    },
-    "33": {
+    "61": {
       "type": "action",
-      "content": "иконаДлянапреления.out = новаяИкона.id",
-      "one": "30",
-      "two": ""
-    },
-    "34": {
-      "type": "question",
-      "content": "элемент имеет \"yes\"",
-      "one": "18",
-      "two": "35",
-      "flag1": 1
-    },
-    "35": {
-      "type": "insertion",
-      "content": "ОбработатьОбъект (items, элемент.yes, 'one', новаяИкона)",
+      "content": "ИконыДляНаправления добавить { item: иконаДляНаплавления , dir: 'one' }",
       "one": "18",
       "two": ""
+    },
+    "62": {
+      "type": "action",
+      "content": "иконаДляНаплавления = НоваяИкона",
+      "one": "61"
+    },
+    "63": {
+      "type": "loopend",
+      "one": "30"
+    },
+    "64": {
+      "type": "loopbegin",
+      "one": "65",
+      "content": "для каждого эл Из ИконыДляНаправления"
+    },
+    "65": {
+      "type": "action",
+      "content": "эл.item [ эл.dir ] = новаяИкона.id",
+      "one": "63"
     }
   },
-  "params": "items\nобъектДляОбработки\nнаправление\nиконаДляНаправления"
+  "params": "items\nобъектыДляОбработки\nнаправление\nиконаДляНаправления"
 }

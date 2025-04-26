@@ -11,7 +11,7 @@
     },
     "3": {
       "type": "loopend",
-      "one": "1",
+      "one": "8",
       "two": ""
     },
     "4": {
@@ -24,7 +24,7 @@
       "type": "question",
       "content": "Заполнен oneBranchId",
       "one": "6",
-      "two": "3",
+      "two": "11",
       "flag1": 1
     },
     "6": {
@@ -36,6 +36,26 @@
     "7": {
       "type": "action",
       "content": "oneBranchId удаляем",
+      "one": "11",
+      "two": ""
+    },
+    "8": {
+      "type": "question",
+      "content": "Есть икона end",
+      "one": "9",
+      "two": "1",
+      "flag1": 1,
+      "id": "8"
+    },
+    "9": {
+      "type": "action",
+      "content": "В последней item ставим One = ИконаEnd.id",
+      "one": "1",
+      "id": "9"
+    },
+    "11": {
+      "type": "action",
+      "content": "",
       "one": "3",
       "two": ""
     }

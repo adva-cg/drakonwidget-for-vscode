@@ -19,15 +19,14 @@ function astToDrakon(astJson) {
     let previousIcon = null;
 
     function defineFirstItem() {
-      const objectJs = ast;
+      //const objectJs = ast;
 
-      if (objectJs.branches && objectJs.branches.length > 0 && (objectJs.branches.length !== 1 || objectJs.branches[0].body.length > 0)) {
-        const endNodeId = String(nextNodeId++);
-        drakon.items[endNodeId] = { type: "end" };
-        previousIcon = endNodeId;
-      } else {
-        drakon.items = {};
-      }
+      // if (objectJs.branches && objectJs.branches.length > 0 && (objectJs.branches.length !== 1 || objectJs.branches[0].body.length > 0)) {
+      //   const endNodeId = String(nextNodeId++);
+      //   drakon.items[endNodeId] = { type: "end" };
+      // } else {
+      //   drakon.items = {};
+      // }
       processBranches();
       exit();
     }
@@ -45,60 +44,85 @@ function astToDrakon(astJson) {
           if (ast.branches.length !== 1) {
             iconBranch.content = branch.name;
           }
-          processObject(branch.body, "one");
+          processObject(drakon.items, branch.body, "one", iconBranch);
         }
       }
     }
 
-    function processObject(objectForProcessing, direction) {
+    function processObject(items, objectsForProcessing, direction, iconForDirection) {
       let isFirstElement = true;
-      if (!objectForProcessing || objectForProcessing.length === 0) {
+      const iconsForDirection = [];
+      if (!objectsForProcessing || objectsForProcessing.length === 0) {
         return;
       }
-      for (let i = objectForProcessing.length - 1; i >= 0; i--) {
-        const element = objectForProcessing[i];
+      let newIcon;
+      for (const element of objectsForProcessing) {
         if (element.type === "address") {
-          previousIcon.oneBranchId = element.content;
-        } else if (element.type === "question") {
-          const questionIconId = String(nextNodeId++);
-          const questionIcon = {
-            type: "question",
-            content: element.content,
-          };
-          drakon.items[questionIconId] = questionIcon;
-          if (isFirstElement) {
-            previousIcon[direction] = questionIconId;
+          const targetBranch = ast.branches.find(b => b.name === element.content);
+          if (targetBranch) {
+            iconForDirection.oneBranchId = targetBranch.branchId;
           }
-          questionIcon.one = previousIcon?.one;
-          questionIcon.two = previousIcon?.two;
-          previousIcon = questionIcon;
-          isFirstElement = false;
-          processObject(element.yes, "one");
-          processObject(element.no, "two");
         } else {
           const newIconId = String(nextNodeId++);
-          const newIcon = {
-            type: "action",
+          newIcon = {
             content: element.content,
+            type: element.type
           };
-          drakon.items[newIconId] = newIcon;
+          if (element.type === "question") {
+            newIcon.flag1 = 1;
+          };
+          items[newIconId] = newIcon;
+
           if (isFirstElement) {
-            previousIcon[direction] = newIconId;
+            iconForDirection[direction] = newIconId;
+          } else {
+            for (const itemDir of iconsForDirection) {
+              itemDir.item[itemDir.dir] = newIconId;
+            }
           }
-          newIcon.one = previousIcon?.one;
-          previousIcon = newIcon;
+
           isFirstElement = false;
+          iconsForDirection.length = 0;
+
+          if (element.type === "question") {
+            const iconOne = newIcon;
+            const iconTwo = newIcon;
+
+            if (element.no) {
+              processObject(items, element.no, "two", iconTwo);
+            }
+            iconsForDirection.push({ item: iconTwo, dir: "two" });
+
+            if (element.yes) {
+              processObject(items, element.yes, "one", iconOne);
+            }
+            iconsForDirection.push({ item: iconOne, dir: "one" });
+          } else  {
+            const iconForFlow = newIcon;
+            iconsForDirection.push({ item: iconForFlow, dir: "one" });
+          }
         }
+      //iconForDirection = newIcon;
       }
     }
 
     function exit() {
+      let lastItemId = null;
+      let endNodeId = null;
       for (const key in drakon.items) {
         const item = drakon.items[key];
         if (item.oneBranchId) {
           item.one = branchIds[item.oneBranchId];
           delete item.oneBranchId;
         }
+        if (item.type === "end") {
+          endNodeId = key;
+        }
+        lastItemId = key;
+      }
+
+      if (endNodeId && lastItemId && lastItemId !== endNodeId) {
+        drakon.items[lastItemId].one = endNodeId;
       }
     }
 
@@ -177,8 +201,7 @@ function generateDrakonFiles(inputDir, outputDir) {
   });
 }
 
-
 // Example Usage:
-const inputDirectory = '../examples'; // Replace with your input directory
-const outputDirectory = '../examples/outdr'; // Replace with your output directory
+const inputDirectory = '../examples'; // Corrected input directory
+const outputDirectory = '../examples/outdr'; // Corrected output directory
 generateDrakonFiles(inputDirectory, outputDirectory);
