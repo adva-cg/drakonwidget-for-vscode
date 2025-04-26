@@ -1,0 +1,251 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 1,
+      "one": "33",
+      "content": "Определение первой item"
+    },
+    "6": {
+      "type": "question",
+      "content": "branches = []",
+      "one": "13",
+      "two": "16",
+      "flag1": 0
+    },
+    "7": {
+      "type": "branch",
+      "content": "Exit",
+      "one": "72",
+      "branchId": 4
+    },
+    "8": {
+      "type": "branch",
+      "content": "Обработка branches",
+      "one": "74",
+      "branchId": 2
+    },
+    "11": {
+      "type": "action",
+      "content": "Получаем объектJs из astJson",
+      "one": "18"
+    },
+    "13": {
+      "type": "question",
+      "content": "branches.Количество = 1",
+      "one": "20",
+      "two": "14",
+      "flag1": 0
+    },
+    "14": {
+      "type": "question",
+      "content": "Branch.Body = []",
+      "one": "20",
+      "two": "16",
+      "flag1": 0
+    },
+    "16": {
+      "type": "action",
+      "content": "ОбъектРезультат.Items = {}",
+      "one": "51"
+    },
+    "18": {
+      "type": "action",
+      "content": "Имя файла результата = объектJs.name",
+      "one": "6"
+    },
+    "20": {
+      "type": "action",
+      "content": "добавляем в ОбъектРезультат.Items икону с type = \"end\" без one (иконаEnd)",
+      "one": "69"
+    },
+    "23": {
+      "type": "action",
+      "content": "иконаBranch = добавляем в ОбъектРезультат.Items икону с type = \"branch\"",
+      "one": "27"
+    },
+    "24": {
+      "type": "question",
+      "content": "Если количество branches = 1",
+      "one": "25",
+      "two": "85",
+      "flag1": 0
+    },
+    "25": {
+      "type": "action",
+      "content": "иконаBranch.content = branch.name",
+      "one": "85"
+    },
+    "27": {
+      "type": "action",
+      "content": "иконаBranch.branchId = branch.branchId",
+      "one": "35"
+    },
+    "33": {
+      "type": "simpleinput",
+      "content": "при добавлении нового item генерируем ему ключ (id). Все ссылки в one и two на этот id в виде item.id",
+      "one": "11"
+    },
+    "35": {
+      "type": "action",
+      "content": "обновляем branchIds",
+      "one": "24"
+    },
+    "51": {
+      "type": "branch",
+      "branchId": 3,
+      "content": "Обработка объекта",
+      "one": "76"
+    },
+    "69": {
+      "type": "action",
+      "content": "Создаем соответствие branchIds, в которое при добавлении иноны branch будем добавлять иконаBranch.branchId и иконаBranch.id",
+      "one": "8"
+    },
+    "71": {
+      "type": "loopend",
+      "one": "1",
+      "two": ""
+    },
+    "72": {
+      "type": "loopbegin",
+      "one": "84",
+      "content": "Для Каждого item в items",
+      "two": ""
+    },
+    "74": {
+      "type": "question",
+      "content": "Получаем очередной branch для обработки (ОбъектJs.branches)",
+      "one": "23",
+      "two": "7",
+      "flag1": 1
+    },
+    "75": {
+      "type": "action",
+      "content": "объектДляОбработки = branch",
+      "one": "108"
+    },
+    "76": {
+      "type": "simpleinput",
+      "content": "объектДляОбработки",
+      "one": "101"
+    },
+    "84": {
+      "type": "question",
+      "content": "Заполнен oneBranchId",
+      "one": "86",
+      "two": "71",
+      "flag1": 1
+    },
+    "85": {
+      "type": "action",
+      "content": "предыдущаяИкона = иконаBranch",
+      "one": "75"
+    },
+    "86": {
+      "type": "action",
+      "content": "заполняем one по branchIds и oneBranchId",
+      "one": "103"
+    },
+    "89": {
+      "type": "question",
+      "content": "элемент.type = address",
+      "one": "92",
+      "two": "90",
+      "flag1": 1
+    },
+    "90": {
+      "type": "action",
+      "content": "новаяИкона = добавить икону в items и заполнить, если нужно",
+      "one": "93",
+      "two": ""
+    },
+    "92": {
+      "type": "action",
+      "content": "предыдущаяИкона.oneBranchId = branchId из бранча с name, равным элемент.content",
+      "one": "8",
+      "two": ""
+    },
+    "93": {
+      "type": "question",
+      "content": "ЭтоПервыйЭлемент",
+      "one": "106",
+      "two": "95",
+      "flag1": 1
+    },
+    "95": {
+      "type": "action",
+      "content": "предудущаяИкона.one = новаяИкона.id",
+      "one": "102",
+      "two": ""
+    },
+    "96": {
+      "type": "action",
+      "content": "предудущаяИкона.two = новаяИкона.id",
+      "one": "102",
+      "two": ""
+    },
+    "97": {
+      "type": "question",
+      "content": "элемент имеет \"no\" или \"yes\"",
+      "one": "8",
+      "two": "104",
+      "flag1": 0
+    },
+    "100": {
+      "type": "question",
+      "content": "получаем очередной элемент для обработки из объектДляОбработки.body / yes / no",
+      "one": "89",
+      "two": "8",
+      "flag1": 1
+    },
+    "101": {
+      "type": "action",
+      "content": "ЭтоПервыйЭлемент = Истина",
+      "one": "100"
+    },
+    "102": {
+      "type": "action",
+      "content": "предыдущаяИкона = НоваяИкона",
+      "one": "105"
+    },
+    "103": {
+      "type": "action",
+      "content": "oneBranchId удаляем",
+      "one": "71"
+    },
+    "104": {
+      "type": "action",
+      "content": "объектДляОбработки = элемент",
+      "one": "107"
+    },
+    "105": {
+      "type": "action",
+      "content": "ЭтоПервыйЭлемент = ложь",
+      "one": "97"
+    },
+    "106": {
+      "type": "question",
+      "content": "обрабатывается объектДляОбработки.no",
+      "one": "96",
+      "two": "95",
+      "flag1": 1
+    },
+    "107": {
+      "type": "insertion",
+      "content": "Обработка объекта (элемент)",
+      "one": "8"
+    },
+    "108": {
+      "type": "insertion",
+      "content": "Обработка объекта (branch)",
+      "one": "51"
+    }
+  },
+  "params": "astJson",
+  "style": ""
+}

@@ -15,17 +15,16 @@ function astToDrakon(astJson) {
       items: {},
     };
     const branchIds = {};
-    let nextNodeId = 2;
+    let nextNodeId = 1;
     let previousIcon = null;
-    let isFirstElement = true;
 
     function defineFirstItem() {
       const objectJs = ast;
-      const resultFileName = objectJs.name;
 
       if (objectJs.branches && objectJs.branches.length > 0 && (objectJs.branches.length !== 1 || objectJs.branches[0].body.length > 0)) {
         const endNodeId = String(nextNodeId++);
         drakon.items[endNodeId] = { type: "end" };
+        previousIcon = endNodeId;
       } else {
         drakon.items = {};
       }
@@ -46,36 +45,49 @@ function astToDrakon(astJson) {
           if (ast.branches.length !== 1) {
             iconBranch.content = branch.name;
           }
-          previousIcon = iconBranch;
-          processObject(branch);
+          processObject(branch.body, "one");
         }
       }
     }
 
-    function processObject(objectForProcessing) {
-      isFirstElement = true;
-      if (objectForProcessing.body) {
-        for (const element of objectForProcessing.body) {
-          if (element.type === "address") {
-            previousIcon.oneBranchId = element.content;
-          } else {
-            const newIconId = String(nextNodeId++);
-            const newIcon = {
-              type: "action",
-              content: element.content,
-            };
-            drakon.items[newIconId] = newIcon;
-            if (isFirstElement && objectForProcessing.no) {
-              previousIcon.two = newIconId;
-            } else {
-              previousIcon.one = newIconId;
-            }
-            previousIcon = newIcon;
-            isFirstElement = false;
-            if (element.yes || element.no) {
-              processObject(element);
-            }
+    function processObject(objectForProcessing, direction) {
+      let isFirstElement = true;
+      if (!objectForProcessing || objectForProcessing.length === 0) {
+        return;
+      }
+      for (let i = objectForProcessing.length - 1; i >= 0; i--) {
+        const element = objectForProcessing[i];
+        if (element.type === "address") {
+          previousIcon.oneBranchId = element.content;
+        } else if (element.type === "question") {
+          const questionIconId = String(nextNodeId++);
+          const questionIcon = {
+            type: "question",
+            content: element.content,
+          };
+          drakon.items[questionIconId] = questionIcon;
+          if (isFirstElement) {
+            previousIcon[direction] = questionIconId;
           }
+          questionIcon.one = previousIcon?.one;
+          questionIcon.two = previousIcon?.two;
+          previousIcon = questionIcon;
+          isFirstElement = false;
+          processObject(element.yes, "one");
+          processObject(element.no, "two");
+        } else {
+          const newIconId = String(nextNodeId++);
+          const newIcon = {
+            type: "action",
+            content: element.content,
+          };
+          drakon.items[newIconId] = newIcon;
+          if (isFirstElement) {
+            previousIcon[direction] = newIconId;
+          }
+          newIcon.one = previousIcon?.one;
+          previousIcon = newIcon;
+          isFirstElement = false;
         }
       }
     }
