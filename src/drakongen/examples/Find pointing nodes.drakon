@@ -6,7 +6,7 @@
         "2": {
             "type": "branch",
             "branchId": 0,
-            "one": "1"
+            "one": "3"
         },
         "3": {
             "type": "action",
