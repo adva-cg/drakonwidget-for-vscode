@@ -64,8 +64,8 @@ function astToDrakon(astJson) {
           iconsForDirection.length = 0;
 
           if (element.type === "question") {
-            const iconOne = newIcon;
-            const iconTwo = newIcon;
+            var iconOne = newIcon;
+            var iconTwo = newIcon;
 
             if (element.no && element.no.length > 0) {
               iconsForDirection.push(...processObject(items, element.no, [{item: iconTwo, dir: "two"}]));
@@ -73,11 +73,32 @@ function astToDrakon(astJson) {
               iconsForDirection.push({ item: iconTwo, dir: "two" });
             }
 
+            // Check directly if newIcon.content is an object with operator: "and"
+            if (typeof newIcon.content === 'object' && newIcon.content.operator === "and") {
+              const newIconAndId = String(nextNodeId++);
+              const newIconAnd = {
+                ...newIcon,
+                content: newIcon.content.right, // Access properties directly
+                one: null
+              };
+              newIcon.content = newIcon.content.left; // Access properties directly
+              newIcon.one = newIconAndId;
+              items[newIconAndId] = newIconAnd;
+
+              if (newIcon.two) {
+                // тут не добавляем, т.к. будет ссылаться туда же
+              } else {
+                iconsForDirection.push(...processObject(items, element.no, [{item: newIconAnd, dir: "two"}]));
+              }
+              iconOne = newIconAnd;
+            }
+
             if (element.yes && element.yes.length > 0) {
               iconsForDirection.push(...processObject(items, element.yes, [{item: iconOne, dir: "one"}]));
             } else {
               iconsForDirection.push({ item: iconOne, dir: "one" });
             }
+
           } else {
             const iconForFlow = newIcon;
             iconsForDirection.push({ item: iconForFlow, dir: "one" });
