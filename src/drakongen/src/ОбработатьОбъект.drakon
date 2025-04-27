@@ -7,7 +7,7 @@
     "2": {
       "type": "branch",
       "branchId": 0,
-      "one": "39"
+      "one": "68"
     },
     "18": {
       "type": "loopend",
@@ -80,12 +80,6 @@
       "one": "57",
       "two": ""
     },
-    "53": {
-      "type": "insertion",
-      "content": "ОбработатьОбъект ( items, элемент.yes, 'one', иконаOne )",
-      "one": "58",
-      "two": ""
-    },
     "55": {
       "type": "action",
       "content": "иконаOne = НоваяИкона",
@@ -95,18 +89,12 @@
     "56": {
       "type": "action",
       "content": "иконаTwo = НоваяИкона",
-      "one": "52",
+      "one": "66",
       "two": ""
     },
     "57": {
       "type": "action",
       "content": "ИконыДляНаправления добавить { item: иконаTwo, dir: 'two' }",
-      "one": "53",
-      "two": ""
-    },
-    "58": {
-      "type": "action",
-      "content": "ИконыДляНаправления добавить { item: иконаOne, dir: 'one' }",
       "one": "18",
       "two": ""
     },
@@ -140,6 +128,25 @@
       "type": "action",
       "content": "эл.item [ эл.dir ] = новаяИкона.id",
       "one": "63"
+    },
+    "66": {
+      "type": "insertion",
+      "content": "ОбработатьОбъект ( items, элемент.yes, 'one', иконаOne )",
+      "one": "67",
+      "two": ""
+    },
+    "67": {
+      "type": "action",
+      "content": "ИконыДляНаправления добавить { item: иконаOne, dir: 'one' }",
+      "one": "52",
+      "two": ""
+    },
+    "68": {
+      "type": "question",
+      "content": "Есть объектыДляОбработки",
+      "one": "39",
+      "two": "1",
+      "flag1": 1
     }
   },
   "params": "items\nобъектыДляОбработки\nнаправление\nиконаДляНаправления"

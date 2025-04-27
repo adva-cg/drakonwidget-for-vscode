@@ -1,0 +1,32 @@
+{
+  "type": "drakon",
+  "items": {
+    "4": {
+      "type": "action",
+      "content": "1",
+      "one": "3"
+    },
+    "1": {
+      "type": "end",
+      "id": "1"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 1,
+      "one": "5",
+      "content": "Branch1"
+    },
+    "3": {
+      "type": "branch",
+      "content": "Exit",
+      "one": "1",
+      "branchId": 2,
+      "id": "3"
+    },
+    "5": {
+      "type": "comment",
+      "content": "d",
+      "one": "4"
+    }
+  }
+}
