@@ -1,0 +1,41 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "5",
+      "content": ""
+    },
+    "3": {
+      "type": "insertion",
+      "content": "astToDrakon",
+      "one": "4"
+    },
+    "4": {
+      "type": "insertion",
+      "content": "generateDrakonFiles",
+      "one": "6"
+    },
+    "5": {
+      "type": "simpleinput",
+      "content": "const fs = require('fs');\nconst path = require('path');",
+      "one": "3"
+    },
+    "6": {
+      "type": "action",
+      "content": "const inputDirectory = '../examples';\nconst outputDirectory = '../examples/outdr';",
+      "one": "7"
+    },
+    "7": {
+      "type": "action",
+      "content": "generateDrakonFiles(inputDirectory, outputDirectory);",
+      "one": "1"
+    }
+  },
+  "params": "",
+  "style": "{\"maxWidth\":390}"
+}

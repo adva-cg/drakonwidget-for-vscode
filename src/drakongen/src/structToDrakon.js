@@ -11,11 +11,6 @@ function astToDrakon(astJson) {
     const branchIds = {};
     let nextNodeId = 1;
 
-    function defineFirstItem() {
-      const iconsForDirection = processBranches();
-      exit(iconsForDirection);
-    }
-
     function processBranches() {
       let iconsForDirection = [];
       if (ast.branches) {
@@ -91,7 +86,7 @@ function astToDrakon(astJson) {
               iconsForDirection.push({ item: iconOne, dir: "one" });
 
               let iconsLoop = [];
-              if (newIcon.flag1 = 1) {
+              if (newIcon.flag1 === 1) {
                 iconsLoop = processObject(items, element.no, [{ item: iconTwo, dir: "two" }]);
               } else {
                 iconsLoop = processObject(items, element.yes, [{ item: iconTwo, dir: "two" }]);
@@ -275,7 +270,8 @@ function astToDrakon(astJson) {
       }
     }
 
-    defineFirstItem();
+    const iconsForDirection = processBranches();
+    exit(iconsForDirection);
 
     return {
       fileName: ast.name,

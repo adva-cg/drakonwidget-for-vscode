@@ -1,0 +1,19 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "3"
+    },
+    "3": {
+      "type": "action",
+      "content": "if (!fs.existsSync(outputDir)) {\n    try {\n      fs.mkdirSync(outputDir, { recursive: true });\n      console.log(`Created output directory: ${outputDir}`);\n    } catch (err) {\n      console.error(`Error creating output directory ${outputDir}:`, err);\n      return;\n    }\n  }\n\n  fs.readdir(inputDir, (err, files) => {\n    if (err) {\n      console.error(\"Error reading input directory:\", err);\n      return;\n    }\n\n    const jsonFiles = files.filter(file => path.extname(file) === '.json');\n\n    jsonFiles.forEach(file => {\n      const jsonFilePath = path.join(inputDir, file);\n\n      fs.readFile(jsonFilePath, 'utf8', (err, data) => {\n        if (err) {\n          console.error(`Error reading file ${file}:`, err);\n          return;\n        }\n\n        const result = astToDrakon(data);\n\n        if (result.content === \"\") {\n          console.error(`Error converting AST to DRAKON for file ${file}`);\n          return;\n        }\n\n        const drakonFileName = result.fileName + '.drakon';\n        const drakonFilePath = path.join(outputDir, drakonFileName);\n        fs.writeFile(drakonFilePath, result.content, 'utf8', (err) => {\n          if (err) {\n            console.error(`Error writing file ${drakonFileName}:`, err);\n            return;\n          }\n\n          console.log(`Generated ${drakonFileName}`);\n        });\n      });\n    });\n  });",
+      "one": "1"
+    }
+  },
+  "style": "{\"maxWidth\":650}"
+}

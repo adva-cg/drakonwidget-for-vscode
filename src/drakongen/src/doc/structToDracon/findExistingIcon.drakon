@@ -1,0 +1,45 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "4"
+    },
+    "3": {
+      "type": "loopend",
+      "one": "8"
+    },
+    "4": {
+      "type": "loopbegin",
+      "one": "5",
+      "content": "for (const key in items)"
+    },
+    "5": {
+      "type": "action",
+      "content": "const item = items[key];",
+      "one": "6"
+    },
+    "6": {
+      "type": "question",
+      "content": "item.type === type && item.content === content",
+      "one": "3",
+      "two": "7",
+      "flag1": 0
+    },
+    "7": {
+      "type": "action",
+      "content": "return true;",
+      "one": "1"
+    },
+    "8": {
+      "type": "action",
+      "content": "return false;",
+      "one": "1"
+    }
+  },
+  "params": "items\ntype\ncontent"
+}

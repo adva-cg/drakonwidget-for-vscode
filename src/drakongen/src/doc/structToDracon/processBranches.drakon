@@ -1,0 +1,70 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "13"
+    },
+    "3": {
+      "type": "loopend",
+      "one": "19",
+      "content": "",
+      "two": ""
+    },
+    "4": {
+      "type": "loopbegin",
+      "one": "14",
+      "content": "for (const branch of ast.branches)",
+      "two": ""
+    },
+    "11": {
+      "type": "action",
+      "content": "let iconsForDirection = [];",
+      "one": "12"
+    },
+    "12": {
+      "type": "question",
+      "content": "ast.branches",
+      "one": "4",
+      "two": "19",
+      "flag1": 1
+    },
+    "13": {
+      "type": "simpleinput",
+      "content": "ast\ndrakon",
+      "one": "11"
+    },
+    "14": {
+      "type": "action",
+      "content": "const branchNodeId = String(nextNodeId++);\n          const iconBranch = {\n            type: \"branch\",\n            branchId: branch.branchId,\n          };\n          drakon.items[branchNodeId] = iconBranch;\n          branchIds[branch.branchId] = branchNodeId;",
+      "one": "15"
+    },
+    "15": {
+      "type": "question",
+      "content": "ast.branches.length !== 1",
+      "one": "16",
+      "two": "17",
+      "flag1": 1
+    },
+    "16": {
+      "type": "action",
+      "content": "iconBranch.content = branch.name;",
+      "one": "17"
+    },
+    "17": {
+      "type": "insertion",
+      "content": "iconsForDirection = processObject(drakon.items, branch.body, [{ item: iconBranch, dir: \"one\" }]);",
+      "one": "3"
+    },
+    "19": {
+      "type": "action",
+      "content": "return iconsForDirection",
+      "one": "1"
+    }
+  },
+  "style": "{\"maxWidth\":330}"
+}

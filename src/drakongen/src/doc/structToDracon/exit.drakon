@@ -1,0 +1,240 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "12"
+    },
+    "12": {
+      "type": "action",
+      "content": "let endNodeId = null;",
+      "one": "14"
+    },
+    "13": {
+      "type": "loopend",
+      "one": "20"
+    },
+    "14": {
+      "type": "loopbegin",
+      "one": "15",
+      "content": "for (const key in drakon.items)"
+    },
+    "15": {
+      "type": "action",
+      "content": "const item = drakon.items[key];",
+      "one": "16"
+    },
+    "16": {
+      "type": "question",
+      "content": "item.oneBranchId",
+      "one": "17",
+      "two": "18",
+      "flag1": 1
+    },
+    "17": {
+      "type": "action",
+      "content": "item.one = branchIds[item.oneBranchId];\n          delete item.oneBranchId;",
+      "one": "18"
+    },
+    "18": {
+      "type": "question",
+      "content": "item.type === \"end\"",
+      "one": "19",
+      "two": "13",
+      "flag1": 1
+    },
+    "19": {
+      "type": "action",
+      "content": "endNodeId = key;",
+      "one": "13"
+    },
+    "20": {
+      "type": "action",
+      "content": "const errorIconIds = [];",
+      "one": "26"
+    },
+    "21": {
+      "type": "loopend",
+      "one": "32"
+    },
+    "22": {
+      "type": "loopbegin",
+      "one": "23",
+      "content": "for (const key in drakon.items)"
+    },
+    "23": {
+      "type": "action",
+      "content": "const item = drakon.items[key];",
+      "one": "24"
+    },
+    "24": {
+      "type": "question",
+      "content": "item.type === \"error\"",
+      "one": "25",
+      "two": "21",
+      "flag1": 1
+    },
+    "25": {
+      "type": "action",
+      "content": "errorIconIds.push(key);\n          delete drakon.items[key];",
+      "one": "21"
+    },
+    "26": {
+      "type": "comment",
+      "content": "Удаление икон с типом error и ссылок на них",
+      "one": "22"
+    },
+    "31": {
+      "type": "loopend",
+      "one": "38"
+    },
+    "32": {
+      "type": "loopbegin",
+      "one": "33",
+      "content": "for (const key in drakon.items)"
+    },
+    "33": {
+      "type": "action",
+      "content": "const item = drakon.items[key];",
+      "one": "34"
+    },
+    "34": {
+      "type": "question",
+      "content": "errorIconIds.includes(item.one)",
+      "one": "35",
+      "two": "36",
+      "flag1": 1
+    },
+    "35": {
+      "type": "action",
+      "content": "delete item.one;",
+      "one": "36"
+    },
+    "36": {
+      "type": "question",
+      "content": "errorIconIds.includes(item.two)",
+      "one": "37",
+      "two": "31",
+      "flag1": 1
+    },
+    "37": {
+      "type": "action",
+      "content": "delete item.two",
+      "one": "31"
+    },
+    "38": {
+      "type": "question",
+      "content": "!endNodeId",
+      "one": "39",
+      "two": "41",
+      "flag1": 1
+    },
+    "39": {
+      "type": "action",
+      "content": "endNodeId = String(nextNodeId++);\n        drakon.items[endNodeId] = { type: \"end\" };",
+      "one": "41"
+    },
+    "40": {
+      "type": "loopend",
+      "one": "45"
+    },
+    "41": {
+      "type": "loopbegin",
+      "one": "42",
+      "content": "for (const itemDir of iconsForDirection)"
+    },
+    "42": {
+      "type": "question",
+      "content": "!itemDir.item[itemDir.dir]",
+      "one": "43",
+      "two": "40",
+      "flag1": 1
+    },
+    "43": {
+      "type": "action",
+      "content": "itemDir.item[itemDir.dir] = endNodeId;",
+      "one": "40"
+    },
+    "44": {
+      "type": "loopend",
+      "one": "1"
+    },
+    "45": {
+      "type": "loopbegin",
+      "one": "46",
+      "content": "for (const key in drakon.items)"
+    },
+    "46": {
+      "type": "action",
+      "content": "const item = drakon.items[key];",
+      "one": "47"
+    },
+    "47": {
+      "type": "question",
+      "content": "item.type === \"question\"",
+      "one": "48",
+      "two": "53",
+      "flag1": 1
+    },
+    "48": {
+      "type": "question",
+      "content": "item.one === null",
+      "one": "51",
+      "two": "50",
+      "flag1": 1
+    },
+    "50": {
+      "type": "question",
+      "content": "item.two === null",
+      "one": "52",
+      "two": "53",
+      "flag1": 1
+    },
+    "51": {
+      "type": "action",
+      "content": "item.one = endNodeId;",
+      "one": "50"
+    },
+    "52": {
+      "type": "action",
+      "content": "item.two = endNodeId;",
+      "one": "53"
+    },
+    "53": {
+      "type": "question",
+      "content": "item.type === \"action\"",
+      "one": "54",
+      "two": "56",
+      "flag1": 1
+    },
+    "54": {
+      "type": "question",
+      "content": "!item.one",
+      "one": "55",
+      "two": "56",
+      "flag1": 1
+    },
+    "55": {
+      "type": "action",
+      "content": "item.one = endNodeId;",
+      "one": "56"
+    },
+    "56": {
+      "type": "question",
+      "content": "item.type === \"end\"",
+      "one": "57",
+      "two": "44",
+      "flag1": 1
+    },
+    "57": {
+      "type": "action",
+      "content": "delete item.one;\n          delete item.two;",
+      "one": "44"
+    }
+  },
+  "params": "iconsForDirection"
+}

@@ -1,0 +1,109 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "3"
+    },
+    "3": {
+      "type": "question",
+      "content": "typeof newIcon.content === 'object'",
+      "one": "4",
+      "two": "18",
+      "flag1": 1
+    },
+    "4": {
+      "type": "action",
+      "content": "let dirNewItem = null;",
+      "one": "5"
+    },
+    "5": {
+      "type": "question",
+      "content": "newIcon.content.operator === \"and\"",
+      "one": "6",
+      "two": "7",
+      "flag1": 1
+    },
+    "6": {
+      "type": "action",
+      "content": "dirNewItem = 'one';",
+      "one": "11"
+    },
+    "7": {
+      "type": "question",
+      "content": "newIcon.content.operator === \"or\"",
+      "one": "8",
+      "two": "9",
+      "flag1": 1
+    },
+    "8": {
+      "type": "action",
+      "content": "dirNewItem = 'two';",
+      "one": "11"
+    },
+    "9": {
+      "type": "question",
+      "content": "newIcon.content.operator === \"not\"",
+      "one": "10",
+      "two": "11",
+      "flag1": 1
+    },
+    "10": {
+      "type": "action",
+      "content": "dirNewItem = 'one';",
+      "one": "11"
+    },
+    "11": {
+      "type": "question",
+      "content": "newIcon.content.operator === \"not\"",
+      "one": "12",
+      "two": "13",
+      "flag1": 1
+    },
+    "12": {
+      "type": "action",
+      "content": "newIcon.content = newIcon.content.operand;\n                  newIcon.flag1 = 0;",
+      "one": "18"
+    },
+    "13": {
+      "type": "action",
+      "content": "const newIcon2Id = String(nextNodeId++);\n                  const newIcon2 = {\n                    ...newIcon,\n                    content: newIcon.content.right,\n                    id: newIcon2Id\n                  };\n                  newIcon[dirNewItem] = newIcon2Id;\n                  items[newIcon2Id] = newIcon2;\n                  newIcon.content = newIcon.content.left;\n                  processQuestionContent(newIcon);\n                  processQuestionContent(newIcon2);",
+      "one": "14"
+    },
+    "14": {
+      "type": "question",
+      "content": "!newIcon2.two",
+      "one": "15",
+      "two": "16",
+      "flag1": 1
+    },
+    "15": {
+      "type": "action",
+      "content": "iconsForDirection.push({ item: newIcon2, dir: \"two\" });",
+      "one": "16"
+    },
+    "16": {
+      "type": "question",
+      "content": "!newIcon2.one",
+      "one": "17",
+      "two": "18",
+      "flag1": 1
+    },
+    "17": {
+      "type": "action",
+      "content": "iconsForDirection.push({ item: newIcon2, dir: \"one\" });",
+      "one": "18"
+    },
+    "18": {
+      "type": "action",
+      "content": "iconsForDirection = iconsForDirection.filter(itemDir => {\n                // Проверяем, определено ли свойство 'one' или 'two' у иконы\n                if (itemDir.item[itemDir.dir]) {\n                  // Если определено, то удаляем элемент (возвращаем false)\n                  return false;\n                } else {\n                  // Если не определено, то оставляем элемент (возвращаем true)\n                  return true;\n                }\n              });",
+      "one": "1"
+    }
+  },
+  "params": "newIcon",
+  "style": "{\"maxWidth\":460}"
+}

@@ -1,0 +1,59 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "10"
+    },
+    "10": {
+      "type": "simpleinput",
+      "content": "при добавлении нового item генерируем ему ключ (id). Все ссылки в one и two на этот id в виде item.id",
+      "one": "40",
+      "two": ""
+    },
+    "31": {
+      "type": "action",
+      "content": "ОбъектРезультат = {type: drakon, items: {} }",
+      "one": "37"
+    },
+    "34": {
+      "type": "action",
+      "content": "const ast = JSON.parse(astJson);\n    const drakon = {\n      type: \"drakon\",\n      items: {},\n    };\n    const branchIds = {};\n    let nextNodeId = 1;",
+      "one": "35"
+    },
+    "35": {
+      "type": "insertion",
+      "content": "processBranches",
+      "one": "36"
+    },
+    "36": {
+      "type": "insertion",
+      "content": "processObject",
+      "one": "31"
+    },
+    "37": {
+      "type": "insertion",
+      "content": "exit",
+      "one": "38"
+    },
+    "38": {
+      "type": "action",
+      "content": "const iconsForDirection = processBranches();\n    exit(iconsForDirection);",
+      "one": "39"
+    },
+    "39": {
+      "type": "action",
+      "content": "return {\n      fileName: ast.name,\n      content: JSON.stringify(drakon, null, 4),\n    };",
+      "one": "1"
+    },
+    "40": {
+      "type": "comment",
+      "content": "Создаем соответствие branchIds, в которое при добавлении иноны branch будем добавлять иконаBranch.branchId и иконаBranch.id",
+      "one": "34"
+    }
+  }
+}
