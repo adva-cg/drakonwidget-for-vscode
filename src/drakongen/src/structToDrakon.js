@@ -30,13 +30,16 @@ function astToDrakon(astJson) {
           if (ast.branches.length !== 1) {
             iconBranch.content = branch.name;
           }
-          iconsForDirection = processObject(drakon.items, branch.body, [{item: iconBranch, dir: "one"}]);
+          iconsForDirection = processObject(drakon.items, branch.body, [{ item: iconBranch, dir: "one" }]);
         }
       }
       return iconsForDirection;
     }
 
     function processObject(items, objectsForProcessing, iconsForDirection) {
+
+      let firstAddedIconId = null;
+      let firstIconsForDirection = iconsForDirection;
       if (!objectsForProcessing || objectsForProcessing.length === 0) {
         return iconsForDirection;
       }
@@ -46,58 +49,121 @@ function astToDrakon(astJson) {
           if (targetBranch) {
             iconsForDirection[0].item.oneBranchId = targetBranch.branchId;
           }
+        } else if (element.type === "loop") {
+          iconsForDirection = processObject(items, element.body, iconsForDirection)
         } else {
           const newIconId = String(nextNodeId++);
           const newIcon = {
             content: element.content,
             type: element.type
           };
-          if (element.type === "question") {
-            newIcon.flag1 = 1;
+          if (element.type === "loopend") {
+            newIcon.type = "arrow-loop";
+            newIcon.content = "";
+            // //newIcon.one = firstAddedIconId;
+            // for (const itemDir of firstIconsForDirection) {
+            //   itemDir.item[itemDir.dir] = newIconId;
+            // }
+              
           }
           items[newIconId] = newIcon;
+          if (firstAddedIconId === null) {
+            firstAddedIconId = newIconId;
+          }
 
           for (const itemDir of iconsForDirection) {
             itemDir.item[itemDir.dir] = newIconId;
           }
 
-          iconsForDirection.length = 0;
+          iconsForDirection = [];
 
           if (element.type === "question") {
             var iconOne = newIcon;
             var iconTwo = newIcon;
 
-            if (element.no && element.no.length > 0) {
-              iconsForDirection.push(...processObject(items, element.no, [{item: iconTwo, dir: "two"}]));
-            } else {
-              iconsForDirection.push({ item: iconTwo, dir: "two" });
+            newIcon.flag1 = 1;
+
+            // Convert pseudocode to code
+            let firstIconIsBreak = false;
+            if (element.no && element.no.length > 0 && element.no[0].type === "break") {
+              firstIconIsBreak = true;
+              newIcon.flag1 = 0;
+            } else if (element.yes && element.yes.length > 0 && element.yes[0].type === "break") {
+              firstIconIsBreak = true;
             }
 
-            // Check directly if newIcon.content is an object with operator: "and"
-            if (typeof newIcon.content === 'object' && newIcon.content.operator === "and") {
-              const newIconAndId = String(nextNodeId++);
-              const newIconAnd = {
-                ...newIcon,
-                content: newIcon.content.right, // Access properties directly
-                one: null
-              };
-              newIcon.content = newIcon.content.left; // Access properties directly
-              newIcon.one = newIconAndId;
-              items[newIconAndId] = newIconAnd;
+            if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
+              // ... (rest of the code that depends on this condition)
 
-              if (newIcon.two) {
-                // тут не добавляем, т.к. будет ссылаться туда же
-              } else {
-                iconsForDirection.push(...processObject(items, element.no, [{item: newIconAnd, dir: "two"}]));
-              }
-              iconOne = newIconAnd;
-            }
-
-            if (element.yes && element.yes.length > 0) {
-              iconsForDirection.push(...processObject(items, element.yes, [{item: iconOne, dir: "one"}]));
-            } else {
               iconsForDirection.push({ item: iconOne, dir: "one" });
-            }
+
+              let iconsLoop = [];
+              if (newIcon.flag1 = 1) {
+                iconsLoop = processObject(items, element.no, [{ item: iconTwo, dir: "two" }]);
+              } else {
+                iconsLoop = processObject(items, element.yes, [{ item: iconTwo, dir: "two" }]);
+              };
+
+              for (const itemDir of iconsLoop) {
+                itemDir.item[itemDir.dir] = firstAddedIconId;
+              }
+              for (const itemDir of firstIconsForDirection) {
+                itemDir.item[itemDir.dir] = nextNodeId-1;
+              }
+
+            } else {
+
+              if (element.no && element.no.length > 0) {
+                iconsForDirection.push(...processObject(items, element.no, [{ item: iconTwo, dir: "two" }]));
+              } else {
+                iconsForDirection.push({ item: iconTwo, dir: "two" });
+              }
+
+              if (element.yes && element.yes.length > 0) {
+                iconsForDirection.push(...processObject(items, element.yes, [{ item: iconOne, dir: "one" }]));
+               } else {
+                iconsForDirection.push({ item: iconOne, dir: "one" });
+              }
+
+              // Check directly if newIcon.content is an object with operator: "and"
+              if (typeof newIcon.content === 'object') {
+                let dirNewItem = null;
+                if (newIcon.content.operator === "and") {
+                  dirNewItem = 'one';
+                } else if (newIcon.content.operator === "or") {
+                  dirNewItem = 'two';
+                };
+                const newIcon2Id = String(nextNodeId++);
+                const newIcon2 = {
+                  ...newIcon,
+                  content: newIcon.content.right
+                };
+                newIcon[dirNewItem] = newIcon2Id;
+                items[newIcon2Id] = newIcon2;
+                newIcon.content = newIcon.content.left;
+                
+                if (newIcon2.two) {
+                } else {
+                  iconsForDirection.push({ item: newIcon2, dir: "two" });
+                }
+                if (newIcon2.one) {
+                } else {
+                  iconsForDirection.push({ item: newIcon2, dir: "one" });
+                }
+                iconsForDirection = iconsForDirection.filter(itemDir => {
+                  // Проверяем, определено ли свойство 'one' или 'two' у иконы
+                  if (itemDir.item[itemDir.dir]) {
+                    // Если определено, то удаляем элемент (возвращаем false)
+                    return false;
+                  } else {
+                    // Если не определено, то оставляем элемент (возвращаем true)
+                    return true;
+                  }
+                });
+  
+              }
+
+            };
 
           } else {
             const iconForFlow = newIcon;
