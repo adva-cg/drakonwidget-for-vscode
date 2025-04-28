@@ -60,11 +60,6 @@ function astToDrakon(astJson) {
           if (element.type === "loopend") {
             newIcon.type = "arrow-loop";
             newIcon.content = "";
-            // //newIcon.one = firstAddedIconId;
-            // for (const itemDir of firstIconsForDirection) {
-            //   itemDir.item[itemDir.dir] = newIconId;
-            // }
-
           }
           items[newIconId] = newIcon;
           if (firstAddedIconId === null) {
@@ -153,57 +148,57 @@ function astToDrakon(astJson) {
                 iconsForDirection.push({ item: iconOne, dir: "one" });
               }
 
-              function processQuestionContent(newIcon) {
-                // Check directly if newIcon.content is an object with operator: "and"
-                if (typeof newIcon.content === 'object') {
-                  let dirNewItem = null;
-                  if (newIcon.content.operator === "and") {
-                    dirNewItem = 'one';
-                  } else if (newIcon.content.operator === "or") {
-                    dirNewItem = 'two';
-                  } else if (newIcon.content.operator === "not") {
-                    dirNewItem = 'one';
-                  };
-
-                  if (newIcon.content.operator === "not") {
-                    newIcon.content = newIcon.content.operand;
-                    newIcon.flag1 = 0;
-                  } else {
-                    const newIcon2Id = String(nextNodeId++);
-                    const newIcon2 = {
-                      ...newIcon,
-                      content: newIcon.content.right,
-                      id: newIcon2Id
-                    };
-                    newIcon[dirNewItem] = newIcon2Id;
-                    items[newIcon2Id] = newIcon2;
-                    newIcon.content = newIcon.content.left;
-                    processQuestionContent(newIcon);
-                    processQuestionContent(newIcon2);
-                    if (!newIcon2.two) {
-                      iconsForDirection.push({ item: newIcon2, dir: "two" });
-                    }
-                    if (!newIcon2.one) {
-                      iconsForDirection.push({ item: newIcon2, dir: "one" });
-                    }
-                  }
-                }
-                iconsForDirection = iconsForDirection.filter(itemDir => {
-                  // Проверяем, определено ли свойство 'one' или 'two' у иконы
-                  if (itemDir.item[itemDir.dir]) {
-                    // Если определено, то удаляем элемент (возвращаем false)
-                    return false;
-                  } else {
-                    // Если не определено, то оставляем элемент (возвращаем true)
-                    return true;
-                  }
-                });
-
-              }
-
-              processQuestionContent(newIcon)
 
             };
+            function processQuestionContent(newIcon) {
+              // Check directly if newIcon.content is an object with operator: "and"
+              if (typeof newIcon.content === 'object') {
+                let dirNewItem = null;
+                if (newIcon.content.operator === "and") {
+                  dirNewItem = 'one';
+                } else if (newIcon.content.operator === "or") {
+                  dirNewItem = 'two';
+                } else if (newIcon.content.operator === "not") {
+                  dirNewItem = 'one';
+                };
+
+                if (newIcon.content.operator === "not") {
+                  newIcon.content = newIcon.content.operand;
+                  newIcon.flag1 = 0;
+                } else {
+                  const newIcon2Id = String(nextNodeId++);
+                  const newIcon2 = {
+                    ...newIcon,
+                    content: newIcon.content.right,
+                    id: newIcon2Id
+                  };
+                  newIcon[dirNewItem] = newIcon2Id;
+                  items[newIcon2Id] = newIcon2;
+                  newIcon.content = newIcon.content.left;
+                  processQuestionContent(newIcon);
+                  processQuestionContent(newIcon2);
+                  if (!newIcon2.two) {
+                    iconsForDirection.push({ item: newIcon2, dir: "two" });
+                  }
+                  if (!newIcon2.one) {
+                    iconsForDirection.push({ item: newIcon2, dir: "one" });
+                  }
+                }
+              }
+              iconsForDirection = iconsForDirection.filter(itemDir => {
+                // Проверяем, определено ли свойство 'one' или 'two' у иконы
+                if (itemDir.item[itemDir.dir]) {
+                  // Если определено, то удаляем элемент (возвращаем false)
+                  return false;
+                } else {
+                  // Если не определено, то оставляем элемент (возвращаем true)
+                  return true;
+                }
+              });
+
+            }
+
+            processQuestionContent(newIcon)
 
           } else {
             const iconForFlow = newIcon;
