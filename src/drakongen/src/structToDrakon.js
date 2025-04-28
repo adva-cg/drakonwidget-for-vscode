@@ -130,11 +130,11 @@ function astToDrakon(astJson) {
                   selectIcon = { type: 'select', content: newIcon.content.left };
                   selectIcon.one = newIconId;
                   items[selectIconId] = selectIcon;
-                  
+
                   for (const itemDir of firstIconsForDirection) {
                     itemDir.item[itemDir.dir] = selectIconId;
                   }
-    
+
                 }
 
                 newIcon.type = 'case';
@@ -161,23 +161,31 @@ function astToDrakon(astJson) {
                     dirNewItem = 'one';
                   } else if (newIcon.content.operator === "or") {
                     dirNewItem = 'two';
+                  } else if (newIcon.content.operator === "not") {
+                    dirNewItem = 'one';
                   };
-                  const newIcon2Id = String(nextNodeId++);
-                  const newIcon2 = {
-                    ...newIcon,
-                    content: newIcon.content.right,
-                    id: newIcon2Id
-                  };
-                  newIcon[dirNewItem] = newIcon2Id;
-                  items[newIcon2Id] = newIcon2;
-                  newIcon.content = newIcon.content.left;
-                  processQuestionContent(newIcon);
-                  processQuestionContent(newIcon2);
-                  if (!newIcon2.two) {
-                    iconsForDirection.push({ item: newIcon2, dir: "two" });
-                  }
-                  if (!newIcon2.one) {
-                    iconsForDirection.push({ item: newIcon2, dir: "one" });
+
+                  if (newIcon.content.operator === "not") {
+                    newIcon.content = newIcon.content.operand;
+                    newIcon.flag1 = 0;
+                  } else {
+                    const newIcon2Id = String(nextNodeId++);
+                    const newIcon2 = {
+                      ...newIcon,
+                      content: newIcon.content.right,
+                      id: newIcon2Id
+                    };
+                    newIcon[dirNewItem] = newIcon2Id;
+                    items[newIcon2Id] = newIcon2;
+                    newIcon.content = newIcon.content.left;
+                    processQuestionContent(newIcon);
+                    processQuestionContent(newIcon2);
+                    if (!newIcon2.two) {
+                      iconsForDirection.push({ item: newIcon2, dir: "two" });
+                    }
+                    if (!newIcon2.one) {
+                      iconsForDirection.push({ item: newIcon2, dir: "one" });
+                    }
                   }
                 }
                 iconsForDirection = iconsForDirection.filter(itemDir => {
