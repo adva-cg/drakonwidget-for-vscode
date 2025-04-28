@@ -25,27 +25,27 @@ function astToDrakon(astJson) {
           if (ast.branches.length !== 1) {
             iconBranch.content = branch.name;
           }
-          iconsForDirection = processObject(drakon.items, branch.body, [{ item: iconBranch, dir: "one" }]);
+          iconsForDirection = processObjects(drakon.items, branch.body, [{ item: iconBranch, dir: "one" }]);
         }
       }
       return iconsForDirection;
     }
 
-    function processObject(items, objectsForProcessing, iconsForDirection) {
+    function processObjects(items, objectsForProcessing, iconsForLink) {
 
       let firstAddedIconId = null;
-      let firstIconsForDirection = iconsForDirection;
+      let firstIconsForLink = iconsForLink;
       if (!objectsForProcessing || objectsForProcessing.length === 0) {
-        return iconsForDirection;
+        return iconsForLink;
       }
       for (const element of objectsForProcessing) {
         if (element.type === "address") {
           const targetBranch = ast.branches.find(b => b.name === element.content);
           if (targetBranch) {
-            iconsForDirection[0].item.oneBranchId = targetBranch.branchId;
+            iconsForLink[0].item.oneBranchId = targetBranch.branchId;
           }
         } else if (element.type === "loop") {
-          iconsForDirection = processObject(items, element.body, iconsForDirection)
+          iconsForLink = processObjects(items, element.body, iconsForLink)
         } else {
           const newIconId = String(nextNodeId++);
           const newIcon = {
@@ -61,11 +61,11 @@ function astToDrakon(astJson) {
             firstAddedIconId = newIconId;
           }
 
-          for (const itemDir of iconsForDirection) {
+          for (const itemDir of iconsForLink) {
             itemDir.item[itemDir.dir] = newIconId;
           }
 
-          iconsForDirection = [];
+          iconsForLink = [];
 
           if (element.type === "question") {
             var iconOne = newIcon;
@@ -83,19 +83,19 @@ function astToDrakon(astJson) {
 
             if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
 
-              iconsForDirection.push({ item: iconOne, dir: "one" });
+              iconsForLink.push({ item: iconOne, dir: "one" });
 
               let iconsLoop = [];
               if (newIcon.flag1 === 1) {
-                iconsLoop = processObject(items, element.no, [{ item: iconTwo, dir: "two" }]);
+                iconsLoop = processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]);
               } else {
-                iconsLoop = processObject(items, element.yes, [{ item: iconTwo, dir: "two" }]);
+                iconsLoop = processObjects(items, element.yes, [{ item: iconTwo, dir: "two" }]);
               };
 
               for (const itemDir of iconsLoop) {
                 itemDir.item[itemDir.dir] = firstAddedIconId;
               }
-              for (const itemDir of firstIconsForDirection) {
+              for (const itemDir of firstIconsForLink) {
                 itemDir.item[itemDir.dir] = nextNodeId - 1;
               }
 
@@ -121,7 +121,7 @@ function astToDrakon(astJson) {
                   selectIcon.one = newIconId;
                   items[selectIconId] = selectIcon;
 
-                  for (const itemDir of firstIconsForDirection) {
+                  for (const itemDir of firstIconsForLink) {
                     itemDir.item[itemDir.dir] = selectIconId;
                   }
 
@@ -132,15 +132,15 @@ function astToDrakon(astJson) {
               }
 
               if (element.no && element.no.length > 0) {
-                iconsForDirection.push(...processObject(items, element.no, [{ item: iconTwo, dir: "two" }]));
+                iconsForLink.push(...processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]));
               } else {
-                iconsForDirection.push({ item: iconTwo, dir: "two" });
+                iconsForLink.push({ item: iconTwo, dir: "two" });
               }
 
               if (element.yes && element.yes.length > 0) {
-                iconsForDirection.push(...processObject(items, element.yes, [{ item: iconOne, dir: "one" }]));
+                iconsForLink.push(...processObjects(items, element.yes, [{ item: iconOne, dir: "one" }]));
               } else {
-                iconsForDirection.push({ item: iconOne, dir: "one" });
+                iconsForLink.push({ item: iconOne, dir: "one" });
               }
 
 
@@ -173,14 +173,14 @@ function astToDrakon(astJson) {
                   processQuestionContent(newIcon);
                   processQuestionContent(newIcon2);
                   if (!newIcon2.two) {
-                    iconsForDirection.push({ item: newIcon2, dir: "two" });
+                    iconsForLink.push({ item: newIcon2, dir: "two" });
                   }
                   if (!newIcon2.one) {
-                    iconsForDirection.push({ item: newIcon2, dir: "one" });
+                    iconsForLink.push({ item: newIcon2, dir: "one" });
                   }
                 }
               }
-              iconsForDirection = iconsForDirection.filter(itemDir => {
+              iconsForLink = iconsForLink.filter(itemDir => {
                 // Проверяем, определено ли свойство 'one' или 'two' у иконы
                 if (itemDir.item[itemDir.dir]) {
                   // Если определено, то удаляем элемент (возвращаем false)
@@ -197,14 +197,14 @@ function astToDrakon(astJson) {
 
           } else {
             const iconForFlow = newIcon;
-            iconsForDirection.push({ item: iconForFlow, dir: "one" });
+            iconsForLink.push({ item: iconForFlow, dir: "one" });
           }
         }
       }
-      return iconsForDirection;
+      return iconsForLink;
     }
 
-    function exit(iconsForDirection) {
+    function exit(iconsForLink) {
       let endNodeId = null;
       for (const key in drakon.items) {
         const item = drakon.items[key];
@@ -242,7 +242,7 @@ function astToDrakon(astJson) {
         drakon.items[endNodeId] = { type: "end" };
       }
 
-      for (const itemDir of iconsForDirection) {
+      for (const itemDir of iconsForLink) {
         if (!itemDir.item[itemDir.dir]) {
           itemDir.item[itemDir.dir] = endNodeId;
         }
@@ -270,8 +270,8 @@ function astToDrakon(astJson) {
       }
     }
 
-    const iconsForDirection = processBranches();
-    exit(iconsForDirection);
+    const iconsForLink = processBranches();
+    exit(iconsForLink);
 
     return {
       fileName: ast.name,
