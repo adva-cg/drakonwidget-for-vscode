@@ -64,7 +64,7 @@ function astToDrakon(astJson) {
             // for (const itemDir of firstIconsForDirection) {
             //   itemDir.item[itemDir.dir] = newIconId;
             // }
-              
+
           }
           items[newIconId] = newIcon;
           if (firstAddedIconId === null) {
@@ -83,7 +83,6 @@ function astToDrakon(astJson) {
 
             newIcon.flag1 = 1;
 
-            // Convert pseudocode to code
             let firstIconIsBreak = false;
             if (element.no && element.no.length > 0 && element.no[0].type === "break") {
               firstIconIsBreak = true;
@@ -107,10 +106,40 @@ function astToDrakon(astJson) {
                 itemDir.item[itemDir.dir] = firstAddedIconId;
               }
               for (const itemDir of firstIconsForDirection) {
-                itemDir.item[itemDir.dir] = nextNodeId-1;
+                itemDir.item[itemDir.dir] = nextNodeId - 1;
               }
 
             } else {
+
+              let selectIcon = null;
+
+              function findExistingIcon(items, type, content) {
+                for (const key in items) {
+                  const item = items[key];
+                  if (item.type === type && item.content === content) {
+                    return true;
+                  }
+                }
+                return false;
+              }
+
+              if (typeof newIcon.content === 'object' && newIcon.content.operator === 'equal') {
+
+                if (!findExistingIcon(items, 'select', newIcon.content.left)) {
+                  let selectIconId = String(nextNodeId++);
+                  selectIcon = { type: 'select', content: newIcon.content.left };
+                  selectIcon.one = newIconId;
+                  items[selectIconId] = selectIcon;
+                  
+                  for (const itemDir of firstIconsForDirection) {
+                    itemDir.item[itemDir.dir] = selectIconId;
+                  }
+    
+                }
+
+                newIcon.type = 'case';
+                newIcon.content = newIcon.content.right;
+              }
 
               if (element.no && element.no.length > 0) {
                 iconsForDirection.push(...processObject(items, element.no, [{ item: iconTwo, dir: "two" }]));
@@ -120,7 +149,7 @@ function astToDrakon(astJson) {
 
               if (element.yes && element.yes.length > 0) {
                 iconsForDirection.push(...processObject(items, element.yes, [{ item: iconOne, dir: "one" }]));
-               } else {
+              } else {
                 iconsForDirection.push({ item: iconOne, dir: "one" });
               }
 
@@ -189,6 +218,27 @@ function astToDrakon(astJson) {
           endNodeId = key;
         }
       }
+
+      // Удаление икон с типом error и ссылок на них
+      const errorIconIds = [];
+      for (const key in drakon.items) {
+        const item = drakon.items[key];
+        if (item.type === "error") {
+          errorIconIds.push(key);
+          delete drakon.items[key];
+        }
+      }
+
+      for (const key in drakon.items) {
+        const item = drakon.items[key];
+        if (errorIconIds.includes(item.one)) {
+          delete item.one;
+        }
+        if (errorIconIds.includes(item.two)) {
+          delete item.two;
+        }
+      }
+
       if (!endNodeId) {
         endNodeId = String(nextNodeId++);
         drakon.items[endNodeId] = { type: "end" };
