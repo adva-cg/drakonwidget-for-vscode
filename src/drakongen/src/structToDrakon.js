@@ -93,7 +93,6 @@ function astToDrakon(astJson) {
             }
 
             if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
-              // ... (rest of the code that depends on this condition)
 
               iconsForDirection.push({ item: iconOne, dir: "one" });
 
@@ -125,30 +124,32 @@ function astToDrakon(astJson) {
                 iconsForDirection.push({ item: iconOne, dir: "one" });
               }
 
-              // Check directly if newIcon.content is an object with operator: "and"
-              if (typeof newIcon.content === 'object') {
-                let dirNewItem = null;
-                if (newIcon.content.operator === "and") {
-                  dirNewItem = 'one';
-                } else if (newIcon.content.operator === "or") {
-                  dirNewItem = 'two';
-                };
-                const newIcon2Id = String(nextNodeId++);
-                const newIcon2 = {
-                  ...newIcon,
-                  content: newIcon.content.right
-                };
-                newIcon[dirNewItem] = newIcon2Id;
-                items[newIcon2Id] = newIcon2;
-                newIcon.content = newIcon.content.left;
-                
-                if (newIcon2.two) {
-                } else {
-                  iconsForDirection.push({ item: newIcon2, dir: "two" });
-                }
-                if (newIcon2.one) {
-                } else {
-                  iconsForDirection.push({ item: newIcon2, dir: "one" });
+              function processQuestionContent(newIcon) {
+                // Check directly if newIcon.content is an object with operator: "and"
+                if (typeof newIcon.content === 'object') {
+                  let dirNewItem = null;
+                  if (newIcon.content.operator === "and") {
+                    dirNewItem = 'one';
+                  } else if (newIcon.content.operator === "or") {
+                    dirNewItem = 'two';
+                  };
+                  const newIcon2Id = String(nextNodeId++);
+                  const newIcon2 = {
+                    ...newIcon,
+                    content: newIcon.content.right,
+                    id: newIcon2Id
+                  };
+                  newIcon[dirNewItem] = newIcon2Id;
+                  items[newIcon2Id] = newIcon2;
+                  newIcon.content = newIcon.content.left;
+                  processQuestionContent(newIcon);
+                  processQuestionContent(newIcon2);
+                  if (!newIcon2.two) {
+                    iconsForDirection.push({ item: newIcon2, dir: "two" });
+                  }
+                  if (!newIcon2.one) {
+                    iconsForDirection.push({ item: newIcon2, dir: "one" });
+                  }
                 }
                 iconsForDirection = iconsForDirection.filter(itemDir => {
                   // Проверяем, определено ли свойство 'one' или 'two' у иконы
@@ -160,8 +161,10 @@ function astToDrakon(astJson) {
                     return true;
                   }
                 });
-  
+
               }
+
+              processQuestionContent(newIcon)
 
             };
 
