@@ -1,6 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 
+function isObject(value) {
+  return typeof value === 'object' && value !== null;
+}
+
+function isArray(value) {
+  return Array.isArray(value);
+}
+
 function astToDrakon(astJson) {
   try {
     const ast = JSON.parse(astJson);
@@ -31,176 +39,220 @@ function astToDrakon(astJson) {
       return iconsForDirection;
     }
 
+
+
     function processObjects(items, objectsForProcessing, iconsForLink) {
 
       let firstAddedIconId = null;
       let firstIconsForLink = iconsForLink;
-      if (!objectsForProcessing || objectsForProcessing.length === 0) {
-        return iconsForLink;
+
+      function processAddress(element) {
+        const targetBranch = ast.branches.find(b => b.name === element.content);
+        if (targetBranch) {
+          iconsForLink[0].item.oneBranchId = targetBranch.branchId;
+        }
       }
-      for (const element of objectsForProcessing) {
-        if (element.type === "address") {
-          const targetBranch = ast.branches.find(b => b.name === element.content);
-          if (targetBranch) {
-            iconsForLink[0].item.oneBranchId = targetBranch.branchId;
+
+      function addIcon(element) {
+        const iconId = String(nextNodeId++);
+        const icon = {
+          content: element.content,
+          type: element.type,
+          id: iconId
+        };
+        if (element.type === "loopend") {
+          icon.type = "arrow-loop";
+          icon.content = "";
+        }
+        items[iconId] = icon;
+        if (firstAddedIconId === null) {
+          firstAddedIconId = iconId;
+        }
+        return icon
+      }
+
+      function linkIcon(icon) {
+        
+        for (const itemDir of iconsForLink) {
+          itemDir.item[itemDir.dir] = icon.id;
+        }
+        let newLink = [];
+        icon.one = null;
+        newLink.push({item: icon, dir: 'one'});
+        if (icon.type = 'question') {
+          icon.two = null;
+          newLink.push({item: icon, dir: 'two'});
+        }
+
+        return newLink;
+
+      }
+
+      function prosessQuestion(newIcon, element) {
+
+        // икона question может быть
+        // case для select. В этом случае для первого кейса надо добавить сверху селект
+        // условием для проверки цикла. В этом случае надо путь с break направить вниз (брейк может быть на любом уровне вложенности), а без - вправо
+        // ну или просто условием. Здесь просто обрабатываем yes и no
+        // также условие может содержать внутри себя (в content) вложенное условие, которое тоже надо обработать (просто добавить нужные если и поменять связи)
+
+        function processQuestionContent(newIcon) {
+          // Check directly if newIcon.content is an object with operator: "and"
+          if (typeof newIcon.content === 'object') {
+            let dirNewItem = null;
+            if (newIcon.content.operator === "and") {
+              dirNewItem = 'one';
+            } else if (newIcon.content.operator === "or") {
+              dirNewItem = 'two';
+            } else if (newIcon.content.operator === "not") {
+              dirNewItem = 'one';
+            };
+
+            if (newIcon.content.operator === "not") {
+              newIcon.content = newIcon.content.operand;
+              newIcon.flag1 = 0;
+            } else {
+              const newIcon2Id = String(nextNodeId++);
+              const newIcon2 = {
+                ...newIcon,
+                content: newIcon.content.right,
+                id: newIcon2Id
+              };
+              newIcon[dirNewItem] = newIcon2Id;
+              items[newIcon2Id] = newIcon2;
+              newIcon.content = newIcon.content.left;
+              processQuestionContent(newIcon);
+              processQuestionContent(newIcon2);
+              if (!newIcon2.two) {
+                iconsForLink.push({ item: newIcon2, dir: "two" });
+              }
+              if (!newIcon2.one) {
+                iconsForLink.push({ item: newIcon2, dir: "one" });
+              }
+            }
           }
+          iconsForLink = iconsForLink.filter(itemDir => {
+            // Проверяем, определено ли свойство 'one' или 'two' у иконы
+            if (itemDir.item[itemDir.dir]) {
+              // Если определено, то удаляем элемент (возвращаем false)
+              return false;
+            } else {
+              // Если не определено, то оставляем элемент (возвращаем true)
+              return true;
+            }
+          });
+
+        }
+
+        var iconOne = newIcon;
+        var iconTwo = newIcon;
+
+        newIcon.flag1 = 1; // по умолчанию в one - yes
+
+        let firstIconIsBreak = false;
+        if (element.no && element.no.length > 0 && element.no[0].type === "break") {
+          firstIconIsBreak = true;
+          newIcon.flag1 = 0;
+        } else if (element.yes && element.yes.length > 0 && element.yes[0].type === "break") {
+          firstIconIsBreak = true;
+        }
+
+        if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
+
+          iconsForLink.push({ item: iconOne, dir: "one" });
+
+          let iconsLoop = [];
+          if (newIcon.flag1 === 1) {
+            iconsLoop = processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]);
+          } else {
+            iconsLoop = processObjects(items, element.yes, [{ item: iconTwo, dir: "two" }]);
+          };
+
+          for (const itemDir of iconsLoop) {
+            itemDir.item[itemDir.dir] = firstAddedIconId;
+          }
+          for (const itemDir of firstIconsForLink) {
+            itemDir.item[itemDir.dir] = nextNodeId - 1;
+          }
+
+        } else {
+
+          let selectIcon = null;
+
+          function findExistingIcon(items, type, content) {
+            for (const key in items) {
+              const item = items[key];
+              if (item.type === type && item.content === content) {
+                return true;
+              }
+            }
+            return false;
+          }
+
+          if (typeof newIcon.content === 'object' && newIcon.content.operator === 'equal') {
+
+            if (!findExistingIcon(items, 'select', newIcon.content.left)) {
+              let selectIconId = String(nextNodeId++);
+              selectIcon = { type: 'select', content: newIcon.content.left };
+              selectIcon.one = newIcon.id;
+              items[selectIconId] = selectIcon;
+
+              for (const itemDir of firstIconsForLink) {
+                itemDir.item[itemDir.dir] = selectIconId;
+              }
+
+            }
+
+            newIcon.type = 'case';
+            newIcon.content = newIcon.content.right;
+          }
+
+          if (element.no && element.no.length > 0) {
+            iconsForLink.push(...processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]));
+          } else {
+            iconsForLink.push({ item: iconTwo, dir: "two" });
+          }
+
+          if (element.yes && element.yes.length > 0) {
+            iconsForLink.push(...processObjects(items, element.yes, [{ item: iconOne, dir: "one" }]));
+          } else {
+            iconsForLink.push({ item: iconOne, dir: "one" });
+          }
+
+
+        };
+
+        processQuestionContent(newIcon)
+
+
+      }
+
+      if (!objectsForProcessing || objectsForProcessing.length === 0) {
+      } else if (isArray(objectsForProcessing)) {
+
+        for (const element of objectsForProcessing) {
+          iconsForLink = processObjects(items, element, iconsForLink)
+        }
+
+      } else if (isObject(objectsForProcessing)) {
+
+        let element = objectsForProcessing;
+        if (element.type === "address") {
+          processAddress(element);
         } else if (element.type === "loop") {
           iconsForLink = processObjects(items, element.body, iconsForLink)
         } else {
-          const newIconId = String(nextNodeId++);
-          const newIcon = {
-            content: element.content,
-            type: element.type
-          };
-          if (element.type === "loopend") {
-            newIcon.type = "arrow-loop";
-            newIcon.content = "";
-          }
-          items[newIconId] = newIcon;
-          if (firstAddedIconId === null) {
-            firstAddedIconId = newIconId;
-          }
 
-          for (const itemDir of iconsForLink) {
-            itemDir.item[itemDir.dir] = newIconId;
-          }
-
-          iconsForLink = [];
+          let newIcon = addIcon(element);
+          iconsForLink = linkIcon(newIcon);
 
           if (element.type === "question") {
-            var iconOne = newIcon;
-            var iconTwo = newIcon;
-
-            newIcon.flag1 = 1;
-
-            let firstIconIsBreak = false;
-            if (element.no && element.no.length > 0 && element.no[0].type === "break") {
-              firstIconIsBreak = true;
-              newIcon.flag1 = 0;
-            } else if (element.yes && element.yes.length > 0 && element.yes[0].type === "break") {
-              firstIconIsBreak = true;
-            }
-
-            if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
-
-              iconsForLink.push({ item: iconOne, dir: "one" });
-
-              let iconsLoop = [];
-              if (newIcon.flag1 === 1) {
-                iconsLoop = processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]);
-              } else {
-                iconsLoop = processObjects(items, element.yes, [{ item: iconTwo, dir: "two" }]);
-              };
-
-              for (const itemDir of iconsLoop) {
-                itemDir.item[itemDir.dir] = firstAddedIconId;
-              }
-              for (const itemDir of firstIconsForLink) {
-                itemDir.item[itemDir.dir] = nextNodeId - 1;
-              }
-
-            } else {
-
-              let selectIcon = null;
-
-              function findExistingIcon(items, type, content) {
-                for (const key in items) {
-                  const item = items[key];
-                  if (item.type === type && item.content === content) {
-                    return true;
-                  }
-                }
-                return false;
-              }
-
-              if (typeof newIcon.content === 'object' && newIcon.content.operator === 'equal') {
-
-                if (!findExistingIcon(items, 'select', newIcon.content.left)) {
-                  let selectIconId = String(nextNodeId++);
-                  selectIcon = { type: 'select', content: newIcon.content.left };
-                  selectIcon.one = newIconId;
-                  items[selectIconId] = selectIcon;
-
-                  for (const itemDir of firstIconsForLink) {
-                    itemDir.item[itemDir.dir] = selectIconId;
-                  }
-
-                }
-
-                newIcon.type = 'case';
-                newIcon.content = newIcon.content.right;
-              }
-
-              if (element.no && element.no.length > 0) {
-                iconsForLink.push(...processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]));
-              } else {
-                iconsForLink.push({ item: iconTwo, dir: "two" });
-              }
-
-              if (element.yes && element.yes.length > 0) {
-                iconsForLink.push(...processObjects(items, element.yes, [{ item: iconOne, dir: "one" }]));
-              } else {
-                iconsForLink.push({ item: iconOne, dir: "one" });
-              }
-
-
-            };
-            function processQuestionContent(newIcon) {
-              // Check directly if newIcon.content is an object with operator: "and"
-              if (typeof newIcon.content === 'object') {
-                let dirNewItem = null;
-                if (newIcon.content.operator === "and") {
-                  dirNewItem = 'one';
-                } else if (newIcon.content.operator === "or") {
-                  dirNewItem = 'two';
-                } else if (newIcon.content.operator === "not") {
-                  dirNewItem = 'one';
-                };
-
-                if (newIcon.content.operator === "not") {
-                  newIcon.content = newIcon.content.operand;
-                  newIcon.flag1 = 0;
-                } else {
-                  const newIcon2Id = String(nextNodeId++);
-                  const newIcon2 = {
-                    ...newIcon,
-                    content: newIcon.content.right,
-                    id: newIcon2Id
-                  };
-                  newIcon[dirNewItem] = newIcon2Id;
-                  items[newIcon2Id] = newIcon2;
-                  newIcon.content = newIcon.content.left;
-                  processQuestionContent(newIcon);
-                  processQuestionContent(newIcon2);
-                  if (!newIcon2.two) {
-                    iconsForLink.push({ item: newIcon2, dir: "two" });
-                  }
-                  if (!newIcon2.one) {
-                    iconsForLink.push({ item: newIcon2, dir: "one" });
-                  }
-                }
-              }
-              iconsForLink = iconsForLink.filter(itemDir => {
-                // Проверяем, определено ли свойство 'one' или 'two' у иконы
-                if (itemDir.item[itemDir.dir]) {
-                  // Если определено, то удаляем элемент (возвращаем false)
-                  return false;
-                } else {
-                  // Если не определено, то оставляем элемент (возвращаем true)
-                  return true;
-                }
-              });
-
-            }
-
-            processQuestionContent(newIcon)
-
-          } else {
-            const iconForFlow = newIcon;
-            iconsForLink.push({ item: iconForFlow, dir: "one" });
+            prosessQuestion(newIcon, element)
           }
         }
+
       }
+
       return iconsForLink;
     }
 
