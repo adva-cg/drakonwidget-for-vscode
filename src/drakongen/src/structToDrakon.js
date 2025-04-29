@@ -39,10 +39,7 @@ function astToDrakon(astJson) {
       return iconsForDirection;
     }
 
-
-
     function processObjects(items, objectsForProcessing, iconsForLink) {
-
       let firstAddedIconId = null;
       let firstIconsForLink = iconsForLink;
 
@@ -51,6 +48,14 @@ function astToDrakon(astJson) {
         if (targetBranch) {
           iconsForLink[0].item.oneBranchId = targetBranch.branchId;
         }
+      }
+
+      function processLopp(element) {
+
+        // определяем икону входа в цикл
+        
+        iconsForLink = processObjects(items, element.body, iconsForLink);
+        
       }
 
       function addIcon(element) {
@@ -68,60 +73,61 @@ function astToDrakon(astJson) {
         if (firstAddedIconId === null) {
           firstAddedIconId = iconId;
         }
-        return icon
+        return icon;
       }
 
       function linkIcon(icon) {
-        
         for (const itemDir of iconsForLink) {
           itemDir.item[itemDir.dir] = icon.id;
         }
         let newLink = [];
         icon.one = null;
-        newLink.push({item: icon, dir: 'one'});
-        if (icon.type = 'question') {
+        newLink.push({ item: icon, dir: 'one' });
+        if (icon.type === 'question') {
           icon.two = null;
-          newLink.push({item: icon, dir: 'two'});
+          newLink.push({ item: icon, dir: 'two' });
         }
 
         return newLink;
-
       }
 
-      function prosessQuestion(newIcon, element) {
-
+      function processQuestion(icon, element) {
         // икона question может быть
-        // case для select. В этом случае для первого кейса надо добавить сверху селект
+        // case для select. В этом случае для первого кейса надо добавить сверху селект, а саму икону преобразовать в case
         // условием для проверки цикла. В этом случае надо путь с break направить вниз (брейк может быть на любом уровне вложенности), а без - вправо
         // ну или просто условием. Здесь просто обрабатываем yes и no
         // также условие может содержать внутри себя (в content) вложенное условие, которое тоже надо обработать (просто добавить нужные если и поменять связи)
 
-        function processQuestionContent(newIcon) {
-          // Check directly if newIcon.content is an object with operator: "and"
-          if (typeof newIcon.content === 'object') {
-            let dirNewItem = null;
-            if (newIcon.content.operator === "and") {
-              dirNewItem = 'one';
-            } else if (newIcon.content.operator === "or") {
-              dirNewItem = 'two';
-            } else if (newIcon.content.operator === "not") {
-              dirNewItem = 'one';
-            };
+        // требуется
+        // 1) для кейса надо знать, что это первая икона
+        // 2) для цикла - надо знать начальную икону цикла, а при выходе - направление break
 
-            if (newIcon.content.operator === "not") {
-              newIcon.content = newIcon.content.operand;
-              newIcon.flag1 = 0;
+        function processQuestionContent(icon) {
+          // Check directly if icon.content is an object with operator: "and"
+          if (typeof icon.content === 'object') {
+            let dirNewItem = null;
+            if (icon.content.operator === "and") {
+              dirNewItem = 'one';
+            } else if (icon.content.operator === "or") {
+              dirNewItem = 'two';
+            } else if (icon.content.operator === "not") {
+              dirNewItem = 'one';
+            }
+
+            if (icon.content.operator === "not") {
+              icon.content = icon.content.operand;
+              icon.flag1 = 0;
             } else {
               const newIcon2Id = String(nextNodeId++);
               const newIcon2 = {
-                ...newIcon,
-                content: newIcon.content.right,
+                ...icon,
+                content: icon.content.right,
                 id: newIcon2Id
               };
-              newIcon[dirNewItem] = newIcon2Id;
+              icon[dirNewItem] = newIcon2Id;
               items[newIcon2Id] = newIcon2;
-              newIcon.content = newIcon.content.left;
-              processQuestionContent(newIcon);
+              icon.content = icon.content.left;
+              processQuestionContent(icon);
               processQuestionContent(newIcon2);
               if (!newIcon2.two) {
                 iconsForLink.push({ item: newIcon2, dir: "two" });
@@ -141,32 +147,30 @@ function astToDrakon(astJson) {
               return true;
             }
           });
-
         }
 
-        var iconOne = newIcon;
-        var iconTwo = newIcon;
+        var iconOne = icon;
+        var iconTwo = icon;
 
-        newIcon.flag1 = 1; // по умолчанию в one - yes
+        icon.flag1 = 1; // по умолчанию в one - yes
 
         let firstIconIsBreak = false;
         if (element.no && element.no.length > 0 && element.no[0].type === "break") {
           firstIconIsBreak = true;
-          newIcon.flag1 = 0;
+          icon.flag1 = 0;
         } else if (element.yes && element.yes.length > 0 && element.yes[0].type === "break") {
           firstIconIsBreak = true;
         }
 
         if (firstIconIsBreak) { // Если первая икона в no или yes - это break тогда
-
           iconsForLink.push({ item: iconOne, dir: "one" });
 
           let iconsLoop = [];
-          if (newIcon.flag1 === 1) {
+          if (icon.flag1 === 1) {
             iconsLoop = processObjects(items, element.no, [{ item: iconTwo, dir: "two" }]);
           } else {
             iconsLoop = processObjects(items, element.yes, [{ item: iconTwo, dir: "two" }]);
-          };
+          }
 
           for (const itemDir of iconsLoop) {
             itemDir.item[itemDir.dir] = firstAddedIconId;
@@ -174,9 +178,7 @@ function astToDrakon(astJson) {
           for (const itemDir of firstIconsForLink) {
             itemDir.item[itemDir.dir] = nextNodeId - 1;
           }
-
         } else {
-
           let selectIcon = null;
 
           function findExistingIcon(items, type, content) {
@@ -189,22 +191,20 @@ function astToDrakon(astJson) {
             return false;
           }
 
-          if (typeof newIcon.content === 'object' && newIcon.content.operator === 'equal') {
-
-            if (!findExistingIcon(items, 'select', newIcon.content.left)) {
+          if (typeof icon.content === 'object' && icon.content.operator === 'equal') {
+            if (!findExistingIcon(items, 'select', icon.content.left)) {
               let selectIconId = String(nextNodeId++);
-              selectIcon = { type: 'select', content: newIcon.content.left };
-              selectIcon.one = newIcon.id;
+              selectIcon = { type: 'select', content: icon.content.left };
+              selectIcon.one = icon.id;
               items[selectIconId] = selectIcon;
 
               for (const itemDir of firstIconsForLink) {
                 itemDir.item[itemDir.dir] = selectIconId;
               }
-
             }
 
-            newIcon.type = 'case';
-            newIcon.content = newIcon.content.right;
+            icon.type = 'case';
+            icon.content = icon.content.right;
           }
 
           if (element.no && element.no.length > 0) {
@@ -218,39 +218,30 @@ function astToDrakon(astJson) {
           } else {
             iconsForLink.push({ item: iconOne, dir: "one" });
           }
+        }
 
-
-        };
-
-        processQuestionContent(newIcon)
-
-
+        processQuestionContent(icon);
       }
 
       if (!objectsForProcessing || objectsForProcessing.length === 0) {
       } else if (isArray(objectsForProcessing)) {
-
         for (const element of objectsForProcessing) {
-          iconsForLink = processObjects(items, element, iconsForLink)
+          iconsForLink = processObjects(items, element, iconsForLink);
         }
-
       } else if (isObject(objectsForProcessing)) {
-
         let element = objectsForProcessing;
         if (element.type === "address") {
           processAddress(element);
         } else if (element.type === "loop") {
-          iconsForLink = processObjects(items, element.body, iconsForLink)
+          processLopp(element);
         } else {
-
           let newIcon = addIcon(element);
           iconsForLink = linkIcon(newIcon);
 
           if (element.type === "question") {
-            prosessQuestion(newIcon, element)
+            processQuestion(newIcon, element);
           }
         }
-
       }
 
       return iconsForLink;

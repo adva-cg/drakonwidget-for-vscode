@@ -1,0 +1,25 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "4"
+    },
+    "3": {
+      "type": "action",
+      "content": "iconsForLink = processObjects(items, element.body, iconsForLink);",
+      "one": "1"
+    },
+    "4": {
+      "type": "action",
+      "content": "",
+      "one": "3"
+    }
+  },
+  "style": "{\"maxWidth\":400}",
+  "params": "element"
+}
