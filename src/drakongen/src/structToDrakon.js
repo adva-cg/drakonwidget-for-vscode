@@ -10,6 +10,7 @@ function astToDrakon(astJson) {
     };
     const branchIds = {};
     let nextNodeId = 1;
+    let selectIcon = null;
 
     // Стек для отслеживания родительских узлов и направлений
     const parentStack = [];
@@ -59,7 +60,13 @@ function astToDrakon(astJson) {
       } else if (isArray(objectsForProcessing)) {
         for (let i = 0; i < objectsForProcessing.length; i++) {
           const element = objectsForProcessing[i];
+          if (lastIcon) {
+            parentStack.push({ item: lastIcon, dir: 'one' });
+          }
           const icon = processObjects(items, element);
+          if (lastIcon) {
+            parentStack.pop();
+          }
           if (!firstIcon) {
             firstIcon = icon;
             const parent = parentStack[parentStack.length - 1];
@@ -68,14 +75,14 @@ function astToDrakon(astJson) {
             }
           }
           if (icon && lastIcon && !lastIcon.one) {
-              lastIcon.one = icon.id;
+            lastIcon.one = icon.id;
           }
-          if (icon && (icon.type === 'question' || icon.type === 'loop')) {
+          if (icon && icon.end) {
             lastIcon = icon.end;
           } else {
             lastIcon = icon;
           }
-      }
+        }
       } else if (isObject(objectsForProcessing)) {
         let element = objectsForProcessing;
         if (element.type === "loop") {
@@ -123,6 +130,8 @@ function astToDrakon(astJson) {
       const endQuestionIcon = addIcon(drakon.items, { type: "endQuestion" });
       icon.end = endQuestionIcon; // Store endQuestionIcon in the question icon
 
+      let selIcon = processCase(icon);
+
       let lastIconNo = null;
       if (element.no && element.no.length > 0) {
         parentStack.push({ item: icon, dir: "two" });
@@ -149,7 +158,37 @@ function astToDrakon(astJson) {
 
       processQuestionContent(icon);
 
-      return icon; // Return the original question icon
+      if (selIcon) {
+        return selIcon;
+      } else {
+        return icon;
+      }
+
+    }
+
+    function processCase(icon) {
+
+      let isSelect = false;
+
+      if (typeof icon.content === 'object') {
+        if (icon.content.operator === 'equal') {
+          if (!selectIcon || selectIcon.content !== icon.content.left) {
+            selectIcon = addIcon(drakon.items, { type: 'select', content: icon.content.left });
+            selectIcon.one = icon.id;
+            if (parentStack.length > 0) {
+              parentStack[parentStack.length - 1].one = selectIcon.id;
+            }
+            isSelect = true;
+          }
+          icon.type = 'case';
+          icon.content = icon.content.right;
+        }
+      }
+      if (isSelect) {
+        return selectIcon;
+      } else {
+        return null;
+      }
     }
 
     function processQuestionContent(icon) {
@@ -182,10 +221,10 @@ function astToDrakon(astJson) {
     }
 
     function processLopp(icon, element) {
-       const endLoopIcon = addIcon(drakon.items, { type: "endLoop" });
-       if (icon) {
+      const endLoopIcon = addIcon(drakon.items, { type: "endLoop" });
+      if (icon) {
         icon.end = endLoopIcon;
-       }
+      }
 
 
       let lastIconBody = null;
@@ -257,8 +296,8 @@ function astToDrakon(astJson) {
         while (item.one && endQuestionIconIds.includes(item.one)) {
           item.one = drakon.items[item.one].one;
         }
-        while (item.one && endQuestionIconIds.includes(item.one)) {
-          item.two = drakon.items[item.one].one;
+        while (item.two && endQuestionIconIds.includes(item.two)) {
+          item.two = drakon.items[item.two].one;
         }
         while (item.one && endLoopIconIds.includes(item.one)) {
           item.one = drakon.items[item.one].one;
