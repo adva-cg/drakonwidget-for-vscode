@@ -276,6 +276,9 @@ function astToDrakon(astJson) {
 
     function exit() {
       let endNodeId = null;
+
+      const deleteIds = [];
+
       for (const key in drakon.items) {
         const item = drakon.items[key];
         if (item.oneBranchId) {
@@ -288,6 +291,9 @@ function astToDrakon(astJson) {
         if (item.type === 'arrow-loop') {
           let loop = drakon.items[item.one];
           item.one = loop.one;
+          if (drakon.items[item.one].type === 'arrow-loop') {
+            deleteIds.push(item.id);
+          }
           loop.one = item.id;
         }
       }
@@ -314,7 +320,6 @@ function astToDrakon(astJson) {
 
       // const endQuestionIconIds = [];
       // const endLoopIconIds = [];
-      const deleteIds = [];
       for (const key in drakon.items) {
         const item = drakon.items[key];
         if (item.type === "endQuestion"
