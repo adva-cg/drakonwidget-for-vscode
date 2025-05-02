@@ -110,8 +110,22 @@ function astToDrakon(astJson) {
         id: iconId
       };
       if (element.type === "loopend") {
-        icon.type = "arrow-loop";
-        icon.content = "";
+        if (loopStack.length > 0 && loopStack[loopStack.length - 1].content) {
+          // icon.type = "arrow-loop";
+          // icon.content = "";
+        } else {
+          icon.type = "arrow-loop";
+          icon.content = "";
+         }
+      }
+      if (element.type === "loop") {
+        if (element.content) {
+            icon.type = "loopbegin";
+          // icon.content = "";
+        } else {
+          // icon.type = "arrow-loop";
+          // icon.content = "";
+         }
       }
       items[iconId] = icon;
       if (element.type === "question") {
@@ -150,11 +164,20 @@ function astToDrakon(astJson) {
       processQuestionContent(icon);
 
       function handleBody(items, lastIcon, icon, endQuestionIcon, direction) {
+        let loopend = null;
 
         if (lastIcon) {
-          if (endsWithArrowLoop(items, lastIcon.id)) {
+          loopend = endsWithLoopend(items, lastIcon.id);
+          if (loopend === "arrow-loop") {
             if (loopStack.length > 0) {
               lastIcon.one = loopStack[loopStack.length - 1].id;  // Ссылка на начало цикла
+            } else {
+              lastIcon.one = icon.id;
+            }
+          } else if (loopend === "loopend") {
+            if (loopStack.length > 0) {
+              //lastIcon.one = loopStack[loopStack.length - 1].id;  // Ссылка на начало цикла
+              lastIcon.one = endQuestionIcon.id;
             } else {
               lastIcon.one = icon.id;
             }
@@ -173,18 +196,28 @@ function astToDrakon(astJson) {
       }
     }
 
-    function endsWithArrowLoop(items, nodeId) {
+    function endsWithLoopend(items, nodeId) {
       let current = items[nodeId];
       while (current && current.one) {
         if (current.type === "arrow-loop") {
-          return true;
+          return "arrow-loop";
+        } else if (current.type === "break") {
+          return "break";
+        } else if (current.type === "loopend") {
+          return "loopend";
         }
         current = items[current.one];
       }
-      if (current && current.type === "arrow-loop") {
-        return true;
+      if (current) {
+        if (current.type === "arrow-loop") {
+          return "arrow-loop";
+        } else if (current.type === "break") {
+          return "break";
+        } else if (current.type === "loopend") {
+          return "loopend";
+        }
       }
-      return false;
+      return null;
     }
 
     function processCase(icon) {
@@ -242,14 +275,6 @@ function astToDrakon(astJson) {
         } else {
           const newIcon2 = addIcon(drakon.items, { type: icon.type, content: icon.content.right });
 
-          // if (icon.type = 'case') {
-          //   if (icon.content.operator === 'equal') {
-          //     icon.content = icon.content.right;
-          //   }
-          //   if (newIcon2.content.operator === 'equal') {
-          //     newIcon2.content = newIcon2.content.right;
-          //   }
-          // };
           newIcon2.one = icon.one;
           newIcon2.two = icon.two;
           icon[dirNewItem] = newIcon2.id;
@@ -265,6 +290,10 @@ function astToDrakon(astJson) {
       if (icon) {
         icon.end = endLoopIcon;
       }
+      // if (icon.content !== "") {
+      //   loopend = addIcon(drakon.items, {type: "loopend"});
+      //   loopend.one = endLoopIcon.id;
+      // }
 
       let lastIconBody = null;
       if (icon) {
@@ -275,7 +304,11 @@ function astToDrakon(astJson) {
         parentStack.pop();
         if (lastIconBody) {
           if (!lastIconBody.one) {
+            // if (loopend) {
+            //   lastIconBody.one = loopend.id;
+            // } else {
             lastIconBody.one = endLoopIcon.id;
+            // }
           };
         } else {
           icon.one = endLoopIcon.id;
@@ -316,8 +349,8 @@ function astToDrakon(astJson) {
       for (const key in drakon.items) {
         const item = drakon.items[key];
         if (item.type === "endQuestion"
-          || item.type === "endLoop" || item.type === "break" || item.type === "loop"
-          || item.type === "error") {
+          || item.type === "endLoop" || item.type === "break"
+          || item.type === "error" || item.type === "loop" ) {
           deleteIds.push(key);
         }
       }
