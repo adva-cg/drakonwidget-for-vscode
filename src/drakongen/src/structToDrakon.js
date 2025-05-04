@@ -121,10 +121,6 @@ function astToDrakon(astJson) {
       if (element.type === "loop") {
         if (element.content) {
             icon.type = "loopbegin";
-          // icon.content = "";
-        } else {
-          // icon.type = "arrow-loop";
-          // icon.content = "";
          }
       }
       items[iconId] = icon;
@@ -176,7 +172,6 @@ function astToDrakon(astJson) {
             }
           } else if (loopend === "loopend") {
             if (loopStack.length > 0) {
-              //lastIcon.one = loopStack[loopStack.length - 1].id;  // Ссылка на начало цикла
               lastIcon.one = endQuestionIcon.id;
             } else {
               lastIcon.one = icon.id;
@@ -290,10 +285,6 @@ function astToDrakon(astJson) {
       if (icon) {
         icon.end = endLoopIcon;
       }
-      // if (icon.content !== "") {
-      //   loopend = addIcon(drakon.items, {type: "loopend"});
-      //   loopend.one = endLoopIcon.id;
-      // }
 
       let lastIconBody = null;
       if (icon) {
@@ -304,11 +295,7 @@ function astToDrakon(astJson) {
         parentStack.pop();
         if (lastIconBody) {
           if (!lastIconBody.one) {
-            // if (loopend) {
-            //   lastIconBody.one = loopend.id;
-            // } else {
             lastIconBody.one = endLoopIcon.id;
-            // }
           };
         } else {
           icon.one = endLoopIcon.id;
