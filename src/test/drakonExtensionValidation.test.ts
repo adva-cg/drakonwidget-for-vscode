@@ -224,15 +224,6 @@ describe('Drakon Extension Path Validation', () => {
     // Create a test case for each .drakon file
     drakonFiles.forEach((drakonFile => {
 
-        // it(`${drakonFile} should be planar`, () => {
-        //     const content = fs.readFileSync(path.join(drakonFilesDir, drakonFile), 'utf-8');
-        //     const data = JSON.parse(content);
-        //     //const nodes = Object.values(data.items) as DrakonNode[];
-        //     const graph = buildGraph(data.items);
-
-        //     assert(isPlanar(graph), `Граф в ${drakonFile} содержит K₅ или K₃₃ и непланарен!`);
-        // });
-
         it(`should have valid paths to end in ${drakonFile}`, async () => {
 
 
@@ -427,34 +418,6 @@ describe('Drakon Extension Path Validation', () => {
                         const path1Icons = paths[i].slice(1); // Exclude the branch node itself
                         const path2Icons = paths[j].slice(1);
                         const path1OnlyIcons = path1Icons.filter(icon => !path2Icons.includes(icon));
-                        // const path2OnlyIcons = path2Icons.filter(icon => !path1Icons.includes(icon));
-                        // const allPathIcons = [...new Set([...path1Icons, ...path2Icons])];
-
-                        // function getPrecedingIcons(subset: string[], superset: string[], diagramData: any): string[] {
-                        //     if (!subset || subset.length === 0 || !superset || superset.length === 0) {
-                        //         return [];
-                        //     }
-
-                        //     const firstIconId = subset[0];
-                        //     const precedingIcons: string[] = [];
-
-                        //     // Ищем в superset иконки, предшествующие firstIconId
-                        //     for (let i = 0; i < superset.length; i++) {
-                        //         const currentIconId = superset[i];
-                        //         if (currentIconId === firstIconId) {
-                        //             break; // Дошли д о первой иконки, дальше не нужно
-                        //         }
-
-                        //         const currentIcon = diagramData.items[currentIconId];
-                        //         if (currentIcon.one === firstIconId || currentIcon.two === firstIconId) {
-                        //             precedingIcons.push(currentIconId);
-                        //         }
-                        //     }
-
-                        //     return precedingIcons;
-                        // }
-
-                        // let iconsBeforepath1OnlyIcons = getPrecedingIcons(path2OnlyIcons, path2Icons, diagramData);
 
                         for (const icon of path1OnlyIcons) {
                             // Check if the icon from path1 (not in path2) is referenced by an invalid incoming icon
