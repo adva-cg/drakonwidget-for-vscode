@@ -5,6 +5,215 @@ const fs = require('fs');
 // Define the directory containing .drakon files
 const drakonFilesDir = path.resolve(__dirname, '../../src/drakongen/examples/outdr');
 
+interface DrakonNode {
+    type: 'action' | 'question' | 'branch' | 'insert' | 'loopbegin' | 'loopend' | 'arrow-loop'| 'end';
+    one?: string;  // Ссылка на следующий узел (id)
+    two?: string;  // Ветвь условия (если есть)
+    content?: string;
+}
+
+interface GraphStructure {
+    [nodeId: string]: string[];
+}
+
+function buildBranchGraph(items: Record<string, DrakonNode>): {
+    branches: Map<string, Map<string, string[]>>;
+    mainGraph: Map<string, string[]>;
+} {
+    const mainGraph = new Map<string, string[]>();
+    const branches = new Map<string, Map<string, string[]>>();
+    const branchRoots = new Set<string>();
+
+    // 1. Строим основной граф и находим branch-узлы
+    for (const [nodeId, node] of Object.entries(items)) {
+        const edges: string[] = [];
+        if (node.one) edges.push(node.one);
+        if (node.two) edges.push(node.two);
+        mainGraph.set(nodeId, edges);
+
+        if (node.type === 'branch') {
+            branchRoots.add(nodeId);
+        }
+    }
+
+    // 2. Для каждого branch-узла строим отдельный подграф
+    branchRoots.forEach(branchId => {
+        const branchGraph = new Map<string, string[]>();
+        const visited = new Set<string>();
+        const stack: string[] = [branchId];
+        
+        while (stack.length > 0) {
+            const currentId = stack.pop()!;
+            if (visited.has(currentId)) continue;
+            
+            visited.add(currentId);
+            const edges = mainGraph.get(currentId) || [];
+            branchGraph.set(currentId, [...edges]);
+            
+            // Добавляем связанные узлы в стек
+            edges.forEach(neighbor => {
+                if (!visited.has(neighbor)) {
+                    stack.push(neighbor);
+                }
+            });
+        }
+        
+        branches.set(branchId, branchGraph);
+    });
+
+    return {
+        branches,   // Map: branchId -> подграф (Map узлов ветки)
+        mainGraph   // Полный граф
+    };
+}
+
+function buildGraph(items: Record<string, DrakonNode>): Map<string, string[]> {
+    const graph = new Map<string, string[]>();
+
+    // Проходим по всем узлам в items
+    for (const [nodeId, node] of Object.entries(items)) {
+        const edges: string[] = [];
+        if (node.one) edges.push(node.one);
+        if (node.two) edges.push(node.two);
+        graph.set(nodeId, edges);  // Используем ключ объекта как id узла
+    }
+
+    return graph;
+}
+
+function isPlanar(graph: Map<string, string[]>): boolean {
+    const vertices = Array.from(graph.keys());
+    
+    // Быстрая проверка по формуле Эйлера для планарных графов
+    const E = Array.from(graph.values()).reduce((sum, edges) => sum + edges.length, 0) / 2;
+    const V = vertices.length;
+    if (E > 3 * V - 6) return false;
+
+    // Проверка на K5 и K33
+    function isK5(subgraph: string[]): boolean {
+        if (subgraph.length !== 5) return false;
+        for (let i = 0; i < 5; i++) {
+            for (let j = i + 1; j < 5; j++) {
+                if (!graph.get(subgraph[i])?.includes(subgraph[j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    function isK33(groupA: string[], groupB: string[]): boolean {
+        if (groupA.length !== 3 || groupB.length !== 3) return false;
+        for (const a of groupA) {
+            for (const b of groupB) {
+                if (!graph.get(a)?.includes(b)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Генератор комбинаций
+    function* combinations(arr: string[], k: number): Generator<string[]> {
+        if (k === 0) yield [];
+        else {
+            for (let i = 0; i <= arr.length - k; i++) {
+                for (const c of combinations(arr.slice(i + 1), k - 1)) {
+                    yield [arr[i], ...c];
+                }
+            }
+        }
+    }
+
+    // Проверка K5
+    for (const candidate of combinations(vertices, 5)) {
+        if (isK5(candidate)) {
+            console.log("Найден K₅:", candidate);
+            return false;
+        }
+    }
+
+    // Проверка K33
+    for (const groupA of combinations(vertices, 3)) {
+        const remaining = vertices.filter(v => !groupA.includes(v));
+        for (const groupB of combinations(remaining, 3)) {
+            if (isK33(groupA, groupB)) {
+                console.log("Найден K₃₃:", groupA, "↔", groupB);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+function simplifyGraph(graph: Map<string, string[]>): Map<string, string[]> {
+    const invertedGraph = new Map<string, string[]>();
+    const simplified = new Map<string, string[]>();
+
+    // 1. Строим обратный граф (какие узлы ссылаются на текущий)
+    graph.forEach((edges, nodeId) => {
+        edges.forEach(target => {
+            if (!invertedGraph.has(target)) invertedGraph.set(target, []);
+            invertedGraph.get(target)!.push(nodeId);
+        });
+    });
+
+    // 2. Копируем исходный граф
+    graph.forEach((edges, nodeId) => {
+        simplified.set(nodeId, [...edges]);
+    });
+
+    let changed: boolean;
+    do {
+        changed = false;
+        const nodesToRemove = new Set<string>();
+
+        // 3. Находим узлы для удаления:
+        simplified.forEach((edges, nodeId) => {
+            const inDegree = invertedGraph.get(nodeId)?.length || 0;
+            const outDegree = edges.length;
+
+            // Удаляем узлы-листья (без выходов и не на них ссылаются)
+            if (outDegree === 0 && inDegree === 0) {
+                nodesToRemove.add(nodeId);
+                return;
+            }
+
+            // Удаляем узлы с одним входом и одним выходом (не ветвления)
+            if (outDegree === 1 && inDegree === 1) {
+                const [onlyChild] = edges;
+                const [onlyParent] = invertedGraph.get(nodeId)!;
+
+                // Перекидываем ссылку от родителя к ребёнку
+                const parentEdges = simplified.get(onlyParent)!;
+                const index = parentEdges.indexOf(nodeId);
+                if (index !== -1) {
+                    parentEdges[index] = onlyChild;
+                    nodesToRemove.add(nodeId);
+                    changed = true;
+                }
+            }
+        });
+
+        // 4. Удаляем помеченные узлы
+        nodesToRemove.forEach(nodeId => {
+            simplified.delete(nodeId);
+            invertedGraph.delete(nodeId);
+        });
+
+    } while (changed); // Повторяем, пока граф изменяется
+
+    return simplified;
+}
+
+function isPlanarOptimized(graph: Map<string, string[]>): boolean {
+    const simplified = simplifyGraph(graph);
+    console.log(`Упрощенный граф: ${Array.from(simplified.keys()).join(', ')}`);
+    return isPlanar(simplified);  // Используем оригинальную проверку
+}
+
 describe('Drakon Extension Path Validation', () => {
     // Add a variable to control verbose output
     const verboseOutput = false; // Set to true to enable verbose output
@@ -14,7 +223,19 @@ describe('Drakon Extension Path Validation', () => {
 
     // Create a test case for each .drakon file
     drakonFiles.forEach((drakonFile => {
+
+        // it(`${drakonFile} should be planar`, () => {
+        //     const content = fs.readFileSync(path.join(drakonFilesDir, drakonFile), 'utf-8');
+        //     const data = JSON.parse(content);
+        //     //const nodes = Object.values(data.items) as DrakonNode[];
+        //     const graph = buildGraph(data.items);
+
+        //     assert(isPlanar(graph), `Граф в ${drakonFile} содержит K₅ или K₃₃ и непланарен!`);
+        // });
+
         it(`should have valid paths to end in ${drakonFile}`, async () => {
+
+
             const drakonFilePath = path.join(drakonFilesDir, drakonFile);
             console.log(`Testing file: ${drakonFilePath}`);
 
@@ -190,7 +411,7 @@ describe('Drakon Extension Path Validation', () => {
                             .forEach(iconId => {
                                 const icon = diagramData.items[iconId];
                                 console.log(`    ${iconId}(${icon.type}${icon.content ? ': ' + icon.content : ''})`);
-                        });
+                            });
                     }
                 };
 
@@ -209,6 +430,32 @@ describe('Drakon Extension Path Validation', () => {
                         // const path2OnlyIcons = path2Icons.filter(icon => !path1Icons.includes(icon));
                         // const allPathIcons = [...new Set([...path1Icons, ...path2Icons])];
 
+                        // function getPrecedingIcons(subset: string[], superset: string[], diagramData: any): string[] {
+                        //     if (!subset || subset.length === 0 || !superset || superset.length === 0) {
+                        //         return [];
+                        //     }
+
+                        //     const firstIconId = subset[0];
+                        //     const precedingIcons: string[] = [];
+
+                        //     // Ищем в superset иконки, предшествующие firstIconId
+                        //     for (let i = 0; i < superset.length; i++) {
+                        //         const currentIconId = superset[i];
+                        //         if (currentIconId === firstIconId) {
+                        //             break; // Дошли д о первой иконки, дальше не нужно
+                        //         }
+
+                        //         const currentIcon = diagramData.items[currentIconId];
+                        //         if (currentIcon.one === firstIconId || currentIcon.two === firstIconId) {
+                        //             precedingIcons.push(currentIconId);
+                        //         }
+                        //     }
+
+                        //     return precedingIcons;
+                        // }
+
+                        // let iconsBeforepath1OnlyIcons = getPrecedingIcons(path2OnlyIcons, path2Icons, diagramData);
+
                         for (const icon of path1OnlyIcons) {
                             // Check if the icon from path1 (not in path2) is referenced by an invalid incoming icon
                             const invalidReferences = incomingIcons.filter(incIcon => {
@@ -216,33 +463,42 @@ describe('Drakon Extension Path Validation', () => {
                                 return (incNode.one === icon || incNode.two === icon || diagramData.items[icon].two === incIcon) && !path1Icons.includes(incIcon) && !validatedIcons.includes(incIcon);
                             });
                             if (invalidReferences.length > 0) {
-                                console.log(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('> ')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
-                                assert.fail(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('> ')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
+                                console.log(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('>')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
+                                assert.fail(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('>')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
                             } else {
                                 validatedIcons.push(icon);
                             }
                         }
-                        // for (const icon of path2OnlyIcons) {
-                        //     // Check if the icon from path2 (not in path1) is referenced by an invalid incoming icon
-                        //     const invalidReferences = incomingIcons.filter(incIcon => {
-                        //         const incNode = diagramData.items[incIcon];
-                        //         return (incNode.one === icon || incNode.two === icon) && !allPathIcons.includes(incIcon) && !validatedIcons.includes(incIcon);
-                        //     });
-                        //     if (invalidReferences.length > 0) {
-                        //         console.log(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('>')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
-                        //         assert.fail(`Branch ${branchId}: Icon ${icon}, path ${paths[i].map(id => `${id}`).join('>')}, not in path ${paths[j].map(id => `${id}`).join('>')}) is referenced by invalid incoming icons: ${invalidReferences.map(id => `${id}`).join(', ')}`);
-                        //         // } else {
-                        //         //     validatedIcons.push(icon);
-                        //     }
-                        // }
-                        // // }
                     }
                 }
                 // --- END: Path Validation ---
 
             };
             // --- END: Intersection Check ---
+
+
         });
+
+        it(`${drakonFile} should be planar`, () => {
+            const content = fs.readFileSync(path.join(drakonFilesDir, drakonFile), 'utf-8');
+            const data = JSON.parse(content);
+            const { branches } = buildBranchGraph(data.items);
+        
+            // Проверяем планарность для каждой ветки
+            branches.forEach((branchGraph, branchId) => {
+                // Преобразуем Map в массив узлов для проверки
+                const branchNodes = Array.from(branchGraph.keys());
+                if (!isPlanar(branchGraph)) {
+                    assert.fail(`Ветка ${branchId} в ${drakonFile} содержит K₅ или K₃₃ и непланарна!`);
+                }
+            });
+        
+            // // Также можно проверить весь граф целиком
+            // if (!isPlanarOptimized(mainGraph)) {
+            //     assert.fail(`Основной граф в ${drakonFile} непланарен!`);
+            // }
+        });
+
 
     }));
 });
