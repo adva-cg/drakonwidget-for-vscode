@@ -429,6 +429,9 @@ function astToDrakon(astJson) {
         if (item.id) {
           delete item.id
         }
+        if (item.prev) {
+          delete item.prev
+        }
         if (item.type === "question") {
           if (!item.one) {
             item.one = endNodeId;
