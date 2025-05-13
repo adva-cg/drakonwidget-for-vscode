@@ -38,16 +38,15 @@
             "args": [
                 "-r",
                 "ts-node/register",
-                "src/test/**/*.test.ts"
+                "src/test/**/*.test.ts",
+				"--jobs",
+				"1"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "runtimeArgs": [
                 "--nolazy"
-            ],
-            "runtimeEnv": {
-                "TS_NODE_PROJECT": "tsconfig.test.json"
-            }
+            ]
         }
 	]
 }
