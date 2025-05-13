@@ -116,12 +116,12 @@ function astToDrakon(astJson) {
         } else {
           icon.type = "arrow-loop";
           icon.content = "";
-         }
+        }
       }
       if (element.type === "loop") {
         if (element.content) {
-            icon.type = "loopbegin";
-         }
+          icon.type = "loopbegin";
+        }
       }
       items[iconId] = icon;
       if (element.type === "question") {
@@ -156,13 +156,17 @@ function astToDrakon(astJson) {
       }
 
       let isForeach = false;
-      if (lastIconYes && lastIconYes.type === 'break' || lastIconNo && lastIconNo.type === 'break') {
-        if (loopStack.length > 0 && loopStack[loopStack.length - 1].content) {
-          isForeach = true;
+      let lasIconBreak = null;
+      if (loopStack.length > 0 && loopStack[loopStack.length - 1].content) {
+        isForeach = true;
+        if (lastIconYes && lastIconYes.type === 'break') {
+          lasIconBreak = lastIconYes;
+        } else if (lastIconNo && lastIconNo.type === 'break') {
+          lasIconBreak = lastIconNo;
         }
       }
-      handleBody(drakon.items, lastIconNo, icon, endQuestionIcon, "two", isForeach);
-      handleBody(drakon.items, lastIconYes, icon, endQuestionIcon, "one", isForeach);
+      handleBody(drakon.items, lastIconNo, icon, endQuestionIcon, "two", isForeach, lasIconBreak);
+      handleBody(drakon.items, lastIconYes, icon, endQuestionIcon, "one", isForeach, lasIconBreak);
 
       processQuestionContent(icon);
 
@@ -177,26 +181,32 @@ function astToDrakon(astJson) {
             } else {
               lastIcon.one = icon.id;
             }
-          } else if (loopend === "break") {
-            if (loopStack.length > 0) {
-              if (isForeach) {
+          } else if (lasIconBreak) {
+            if (isForeach) {
+              if (direction === 'one') {
+                lasIconBreak.one = null;
                 if (loopStack[loopStack.length - 1].end.one) {
-                  lastIcon.one = loopStack[loopStack.length - 1].end.one;
-                  loopStack[loopStack.length - 1].end.one = lastIcon.id;
+                  lasIconBreak.one = loopStack[loopStack.length - 1].end.one;
+                  loopStack[loopStack.length - 1].end.one = lasIconBreak.id;
                 } else {
-                  loopStack[loopStack.length - 1].end.one = lastIcon.id;
-                  loopStack[loopStack.length - 1].end = lastIcon;
+                  loopStack[loopStack.length - 1].end.one = lasIconBreak.id;
+                  loopStack[loopStack.length - 1].end = lasIconBreak;
                 };
-                if (direction = 'one') {
-                  // сменим направление
+
+                if (lastIcon === lasIconBreak) {
+
                   icon.flag1 = 0;
                   let dir = icon.two;
                   icon.two = icon.one;
                   icon.one = dir;
-                };
+                } else {
+                  lastIcon.one = endQuestionIcon.id;
+                }
+
               } else {
                 lastIcon.one = endQuestionIcon.id;
-              }
+
+              };
             } else {
               lastIcon.one = endQuestionIcon.id;
             }
@@ -305,7 +315,7 @@ function astToDrakon(astJson) {
     }
 
     function processLopp(icon, element) {
-      const endLoopIcon = addIcon(drakon.items, { type: "endLoop" });
+      let endLoopIcon = addIcon(drakon.items, { type: "endLoop" });
       if (icon.content) {
         endLoopIcon.type = 'loopend';
       };
@@ -362,9 +372,9 @@ function astToDrakon(astJson) {
 
       for (const key in drakon.items) {
         const item = drakon.items[key];
-        if (item.type === "endQuestion" || item.type === "del" 
+        if (item.type === "endQuestion" || item.type === "del"
           || item.type === "endLoop" || item.type === "break"
-          || item.type === "error" || item.type === "loop" ) {
+          || item.type === "error" || item.type === "loop") {
           deleteIds.push(key);
         }
       }
