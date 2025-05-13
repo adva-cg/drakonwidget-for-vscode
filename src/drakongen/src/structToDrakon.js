@@ -8,7 +8,7 @@ function astToDrakon(astJson) {
       type: "drakon",
       items: {},
     };
-    const branchIds = {};
+    const branchIds = new Map;
     let nextNodeId = 1;
     let selectIcon = null;
 
@@ -34,7 +34,9 @@ function astToDrakon(astJson) {
             id: branchNodeId
           };
           drakon.items[branchNodeId] = iconBranch;
-          branchIds[branch.branchId] = branchNodeId;
+          if (branch.name) {
+            branchIds.set(branch.name, branchNodeId);
+          };
           if (ast.branches.length !== 1) {
             iconBranch.content = branch.name;
           }
@@ -199,6 +201,7 @@ function astToDrakon(astJson) {
             } else {
               lastIcon.one = icon.id;
             }
+
           } else if (lastIconBreak) {
             if (isForeach) {
               if (direction === 'one') {
@@ -381,9 +384,9 @@ function astToDrakon(astJson) {
 
       for (const key in drakon.items) {
         const item = drakon.items[key];
-        if (item.oneBranchId) {
-          item.one = branchIds[item.oneBranchId];
-          delete item.oneBranchId;
+        if (item.type === 'address' && item.content) {
+          item.one = branchIds.get(item.content);
+         // delete item.oneBranchId;
         }
         if (item.type === "end") {
           endNodeId = key;
@@ -400,7 +403,7 @@ function astToDrakon(astJson) {
 
       for (const key in drakon.items) {
         const item = drakon.items[key];
-        if (item.type === "endQuestion" || item.type === "del"
+        if (item.type === "endQuestion" || item.type === "del"  || item.type === "address"
           || item.type === "endLoop" || item.type === "break"
           || item.type === "error" || item.type === "loop") {
           deleteIds.push(key);
