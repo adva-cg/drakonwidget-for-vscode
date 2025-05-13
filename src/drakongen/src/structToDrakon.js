@@ -42,6 +42,7 @@ function astToDrakon(astJson) {
           const firstIcon = processObjects(drakon.items, branch.body, true);
           if (firstIcon) {
             iconBranch.one = firstIcon.id;
+            firstIcon.prev = iconBranch.id;
           }
           parentStack.pop();
         }
@@ -77,6 +78,9 @@ function astToDrakon(astJson) {
           }
           if (icon && lastIcon && !lastIcon.one) {
             lastIcon.one = icon.id;
+            if (!icon.prev) {
+              icon.prev = lastIcon.id;
+            }
           }
           if (icon && icon.end) {
             lastIcon = icon.end;
@@ -156,17 +160,31 @@ function astToDrakon(astJson) {
       }
 
       let isForeach = false;
-      let lasIconBreak = null;
+      let lastIconBreak = null;
+      let lastIconLoopend = null;
       if (loopStack.length > 0 && loopStack[loopStack.length - 1].content) {
         isForeach = true;
         if (lastIconYes && lastIconYes.type === 'break') {
-          lasIconBreak = lastIconYes;
+          lastIconBreak = lastIconYes;
         } else if (lastIconNo && lastIconNo.type === 'break') {
-          lasIconBreak = lastIconNo;
+          lastIconBreak = lastIconNo;
+        } else if (lastIconYes && lastIconYes.type === 'del') {
+          lastIconLoopend = lastIconYes;
+        } else if (lastIconNo && lastIconNo.type === 'del') {
+          lastIconLoopend = lastIconNo;
         }
       }
-      handleBody(drakon.items, lastIconNo, icon, endQuestionIcon, "two", isForeach, lasIconBreak);
-      handleBody(drakon.items, lastIconYes, icon, endQuestionIcon, "one", isForeach, lasIconBreak);
+      handleBody(drakon.items, lastIconNo, icon, endQuestionIcon, "two", isForeach, lastIconBreak);
+      handleBody(drakon.items, lastIconYes, icon, endQuestionIcon, "one", isForeach, lastIconBreak);
+
+      if (isForeach && !lastIconBreak && lastIconLoopend) {
+        if (lastIconLoopend = lastIconNo) {
+          icon.flag1 = 0;
+          let dir = icon.two;
+          icon.two = icon.one;
+          icon.one = dir;
+        }
+      }
 
       processQuestionContent(icon);
 
@@ -181,19 +199,24 @@ function astToDrakon(astJson) {
             } else {
               lastIcon.one = icon.id;
             }
-          } else if (lasIconBreak) {
+          } else if (lastIconBreak) {
             if (isForeach) {
               if (direction === 'one') {
-                lasIconBreak.one = null;
+                lastIconBreak.one = null;
                 if (loopStack[loopStack.length - 1].end.one) {
-                  lasIconBreak.one = loopStack[loopStack.length - 1].end.one;
-                  loopStack[loopStack.length - 1].end.one = lasIconBreak.id;
+                  lastIconBreak.one = loopStack[loopStack.length - 1].end.one;
+                  items[loopStack[loopStack.length - 1].end.one].prev = lastIconBreak.id;
+                  loopStack[loopStack.length - 1].end.one = lastIconBreak.id;
+                  lastIconBreak.prev = loopStack[loopStack.length - 1].end.id;
                 } else {
-                  loopStack[loopStack.length - 1].end.one = lasIconBreak.id;
-                  loopStack[loopStack.length - 1].end = lasIconBreak;
+                  loopStack[loopStack.length - 1].end.one = lastIconBreak.id;
+                  if (!lastIconBreak.prev) {
+                    lastIconBreak.prev = loopStack[loopStack.length - 1].end.id;
+                  };
+                  loopStack[loopStack.length - 1].end = lastIconBreak;
                 };
 
-                if (lastIcon === lasIconBreak) {
+                if (lastIcon === lastIconBreak) {
 
                   icon.flag1 = 0;
                   let dir = icon.two;
@@ -210,6 +233,7 @@ function astToDrakon(astJson) {
             } else {
               lastIcon.one = endQuestionIcon.id;
             }
+        
           } else {
             lastIcon.one = endQuestionIcon.id;
           }
@@ -232,6 +256,8 @@ function astToDrakon(astJson) {
           return "arrow-loop";
         } else if (current.type === "break") {
           return "break";
+        } else if (current.type === "del") {
+          return "del";
         } else if (current.type === "loopend") {
           return "loopend";
         }
@@ -242,6 +268,8 @@ function astToDrakon(astJson) {
           return "arrow-loop";
         } else if (current.type === "break") {
           return "break";
+        } else if (current.type === "del") {
+          return "del";
         } else if (current.type === "loopend") {
           return "loopend";
         }
