@@ -11,6 +11,7 @@ function astToDrakon(astJson) {
     const branchIds = new Map;
     let nextNodeId = 1;
     let selectIcon = null;
+    //let iconEnd = null;
 
     // Стек для отслеживания родительских узлов и направлений
     const parentStack = [];
@@ -114,6 +115,9 @@ function astToDrakon(astJson) {
         content: element.content,
         type: element.type,
         id: iconId
+      };
+      if (element.secondary) {
+          icon.secondary = element.secondary;
       };
       if (element.type === "loopend") {
         if (loopStack.length > 0 && loopStack[loopStack.length - 1].content) {
