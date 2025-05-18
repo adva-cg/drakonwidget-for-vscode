@@ -48,6 +48,7 @@ const os = __importStar(require("os"));
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const drakongen = require('../src/drakongen/src/index.js');
+//import {  astToDrakon } from '../src/drakongen/src/structToDrakon.js';
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
 class DrakonEditorProvider {
@@ -354,6 +355,38 @@ function generateOutput(generationType) {
         }
     });
 }
+function generateDrakon() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showErrorMessage('No active text editor!');
+                return;
+            }
+            const document = editor.document;
+            const text = document.getText();
+            let result;
+            try {
+                result = drakongen.astToDrakon(text);
+            }
+            catch (e) {
+                vscode.window.showErrorMessage(`Error converting to DRAKON: ${e.message}`);
+                return;
+            }
+            if (!result || !result.content) {
+                vscode.window.showErrorMessage('Failed to generate DRAKON diagram.');
+                return;
+            }
+            const newUri = vscode.Uri.file(path.join(path.dirname(document.uri.fsPath), `${result.fileName}.drakon`));
+            yield vscode.workspace.fs.writeFile(newUri, Buffer.from(result.content));
+            yield vscode.commands.executeCommand('vscode.openWith', newUri, DRAKON_EDITOR_VIEW_TYPE);
+            vscode.window.showInformationMessage(`DRAKON diagram generated successfully: ${result.fileName}.drakon`);
+        }
+        catch (error) {
+            vscode.window.showErrorMessage(`Error during DRAKON generation: ${error.message}`);
+        }
+    });
+}
 function activate(context) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);
@@ -389,6 +422,10 @@ function activate(context) {
     // Генерация AST
     context.subscriptions.push(vscode.commands.registerCommand('drakon.generateAST', () => __awaiter(this, void 0, void 0, function* () {
         yield generateOutput('ast');
+    })));
+    // Генерация AST
+    context.subscriptions.push(vscode.commands.registerCommand('drakon.generateDrakon', () => __awaiter(this, void 0, void 0, function* () {
+        yield generateDrakon();
     })));
     // Команда открытия файла
     context.subscriptions.push(vscode.commands.registerCommand('drakon.openFile', () => __awaiter(this, void 0, void 0, function* () {

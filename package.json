@@ -30,6 +30,11 @@
         "category": "ДРАКОН"
       },
       {
+        "command": "drakon.generateDrakon",
+        "title": "Генерировать Дракон-схему из AST",
+        "category": "ДРАКОН"
+      },
+      {
         "command": "drakon.newDiagram",
         "title": "Новая схема",
         "category": "ДРАКОН"

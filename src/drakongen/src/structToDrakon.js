@@ -518,6 +518,7 @@ function generateDrakonFiles(inputDir, outputDir) {
   });
 }
 
-const inputDirectory = '../examples';
-const outputDirectory = '../examples/outdr';
-generateDrakonFiles(inputDirectory, outputDirectory);
+// const inputDirectory = '../examples';
+// const outputDirectory = '../examples/outdr';
+// generateDrakonFiles(inputDirectory, outputDirectory);
+module.exports = { generateDrakonFiles, astToDrakon }

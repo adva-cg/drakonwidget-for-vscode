@@ -1,8 +1,8 @@
 import * as os from 'os';
 import * as vscode from 'vscode';
 import * as path from 'path';
-
 const drakongen = require('../src/drakongen/src/index.js');
+//import {  astToDrakon } from '../src/drakongen/src/structToDrakon.js';
 
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
@@ -367,6 +367,41 @@ async function generateOutput(generationType: 'pseudo' | 'ast') {
     }
 }
 
+async function generateDrakon() {
+    try {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showErrorMessage('No active text editor!');
+            return;
+        }
+
+        const document = editor.document;
+        const text = document.getText();
+
+        let result;
+        try {
+            result = drakongen.astToDrakon(text);
+        } catch (e: any) {
+            vscode.window.showErrorMessage(`Error converting to DRAKON: ${e.message}`);
+            return;
+        }
+
+        if (!result || !result.content) {
+            vscode.window.showErrorMessage('Failed to generate DRAKON diagram.');
+            return;
+        }
+
+        const newUri = vscode.Uri.file(path.join(path.dirname(document.uri.fsPath), `${result.fileName}.drakon`));
+        await vscode.workspace.fs.writeFile(newUri, Buffer.from(result.content));
+
+        await vscode.commands.executeCommand('vscode.openWith', newUri, DRAKON_EDITOR_VIEW_TYPE);
+
+        vscode.window.showInformationMessage(`DRAKON diagram generated successfully: ${result.fileName}.drakon`);
+    } catch (error: any) {
+        vscode.window.showErrorMessage(`Error during DRAKON generation: ${error.message}`);
+    }
+}
+
 export function activate(context: vscode.ExtensionContext) {
     // Регистрация провайдера
     const provider = new DrakonEditorProvider(context);
@@ -424,6 +459,13 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.generateAST', async () => {
             await generateOutput('ast');
+        })
+    );
+
+    // Генерация AST
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.generateDrakon', async () => {
+            await generateDrakon();
         })
     );
 
