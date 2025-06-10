@@ -992,6 +992,7 @@
         var rect = editorArea.getBoundingClientRect()
         editorArea.innerHTML = ""
         var config = buildConfig()
+        config.maxHeight = 1200;
         canvas = drakon.render(
             rect.width,
             rect.height,
