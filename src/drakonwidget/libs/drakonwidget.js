@@ -5472,8 +5472,7 @@ function createDrakonWidget() {
                         content: node.content || '',
                         secondary: node.secondary || '',
                         link: node.link || '',
-                        style: node.style || '',
-                        textCode: node.textCode || ''
+                        style: node.style || ''
                     };
                     setNotNull(node, prim, 'x');
                     setNotNull(node, prim, 'y');
@@ -8880,7 +8879,6 @@ function createDrakonWidget() {
                         content: node.content,
                         secondary: node.secondary,
                         link: node.link,
-                        textCode: node.textCode,
                         style: node.style,
                         flag1: node.flag1,
                         margin: node.margin || 0,
@@ -12293,21 +12291,6 @@ function createDrakonWidget() {
             updateAndKeepSelection(self, [change]);
             return;
         }
-        function DrakonCanvas_setTextCode(self, itemId, textCode) {
-            var change;
-            tracing.trace('DrakonCanvas.setTextCode', [
-                itemId,
-                textCode
-            ]);
-            checkNotReadonly(self);
-            change = {
-                id: itemId,
-                fields: { textCode: textCode },
-                op: 'update'
-            };
-            updateAndKeepSelection(self, [change]);
-            return;
-        }
         function getPrimById(widget, id) {
             var node, visuals, vitem, free;
             var __state = '2';
@@ -12788,38 +12771,6 @@ function createDrakonWidget() {
                             __state = '1';
                         } else {
                             console.error('startEditLink is missing in config');
-                            __state = '1';
-                        }
-                    } else {
-                        __state = '1';
-                    }
-                    break;
-                default:
-                    return;
-                }
-            }
-        }
-        function startEditCode(widget, prim) {
-            var callback, delayed, ro, _var2;
-            var __state = '2';
-            while (true) {
-                switch (__state) {
-                case '1':
-                    return;
-                case '2':
-                    _var2 = canEditNodeText(widget, prim);
-                    if (_var2) {
-                        callback = widget.config.startEditCode;
-                        if (callback) {
-                            ro = isReadonly(widget);
-                            delayed = function () {
-                                callback(prim, ro);
-                            };
-                            tracing.trace('DrakonCanvas.startEditCode, will edit', prim);
-                            setTimeout(delayed, 1);
-                            __state = '1';
-                        } else {
-                            console.error('startEditCode is missing in config');
                             __state = '1';
                         }
                     } else {
@@ -14669,7 +14620,6 @@ function createDrakonWidget() {
         }
         function buildMenuByTypeMind(widget, prim, node) {
             var menu, _var2, _var3, _var4, _var5, _var6, _var7, _var8, _var9, _var10, _var11, _var12, _var13, _var14, _var15, _var16, _var17, _var18, _var19, _var20, _var21, _var22, _var23, _var24, _var25, _var26, _var27, _var28;
-            var _var77;
             var __state = '27';
             while (true) {
                 switch (__state) {
@@ -14851,11 +14801,6 @@ function createDrakonWidget() {
                     _var7 = tr(widget, 'Edit content');
                     pushMenuItem('edit_content', menu, _var7, undefined, function () {
                         startEditContent(widget, prim);
-                    });
-                    menu.push({ type: 'separator' });
-                    _var77 = tr(widget, 'Edit code');
-                    pushMenuItem('edit_code', menu, _var77, undefined, function () {
-                        startEditCode(widget, prim);
                     });
                     if (prim.type === 'graf-image') {
                         _var27 = isReadonly(widget);
@@ -17028,7 +16973,6 @@ function createDrakonWidget() {
         }
         function buildMenuByType(widget, prim, node) {
             var menu, func, _var2, _var3, _var4, _var5, _var6, _var7, _var8, _var9, _var10, _var11, _var12, _var13, _var14, _var15, _var16, _var17, _var18, _var19, _var20, _var21, _var22, _var23, _var24, _var25, _var26, _var27, _var28, _var29, _var30, _var31, _var32, _var33, _var34, _var35, _var36, _var37, _var38;
-            var _var39;
             var __state = '27';
             while (true) {
                 switch (__state) {
@@ -17055,12 +16999,6 @@ function createDrakonWidget() {
                     } else {
                         _var8 = canEditNodeText(widget, prim);
                         if (_var8) {
-                            // Add this code here:
-                            _var39 = tr(widget, 'Edit code'); // Get translated string
-                            pushMenuItem('edit_code', menu, _var39, undefined, function () {
-                                startEditCode(widget, prim); // Access through config
-                            });
-
                             _var17 = canEditSecondary(prim);
                             if (_var17) {
                                 _var18 = tr(widget, 'Edit upper text');
@@ -17288,6 +17226,14 @@ function createDrakonWidget() {
                     return;
                 }
             }
+        }
+        function updateExpandedBox(widget, visuals) {
+            var zoom, wheight, wwidth;
+            zoom = widget.zoomFactor;
+            wheight = widget.height / zoom;
+            wwidth = widget.width / zoom;
+            visuals.box = addFreedomToBox(visuals.smallBox, wwidth, wheight);
+            return;
         }
         function getNodeForItem(visuals, itemId) {
             var nodeId;
@@ -17680,47 +17626,6 @@ function createDrakonWidget() {
             context.scrollTop = top + ratio * barFreeSpace;
             context.barToBox = (context.boxHeight - context.widgetSizeD) / barFreeSpace;
             return;
-        }
-        function addFreedomToBox(box, widgetWidth, widgetHeight) {
-            var result, hor, ver;
-            var __state = '2';
-            while (true) {
-                switch (__state) {
-                case '2':
-                    result = {};
-                    hor = Math.floor(widgetWidth / 2);
-                    ver = Math.floor(widgetHeight / 2);
-                    if (box.width > hor) {
-                        result.left = box.left - hor;
-                        result.right = box.right + hor;
-                        result.width = box.width + hor * 2;
-                        __state = '9';
-                    } else {
-                        result.left = box.left;
-                        result.right = box.right;
-                        result.width = box.width;
-                        __state = '9';
-                    }
-                    break;
-                case '6':
-                    return result;
-                case '9':
-                    if (box.height > ver) {
-                        result.top = box.top - ver;
-                        result.bottom = box.bottom + ver;
-                        result.height = box.height + ver * 2;
-                        __state = '6';
-                    } else {
-                        result.top = box.top;
-                        result.bottom = box.bottom;
-                        result.height = box.height;
-                        __state = '6';
-                    }
-                    break;
-                default:
-                    return;
-                }
-            }
         }
         function copyTheme(userTheme, config) {
             var theme;
@@ -18933,7 +18838,7 @@ function createDrakonWidget() {
             return _var2;
         }
         function setSameWidth(visuals, skewer) {
-            var width, leftWidth, margin, dur, config, _var2, _var3, node, _var4, _var5, _var6;
+            var config, width, leftWidth, margin, dur, _var2, _var3, node, _var4, _var5, _var6;
             var __state = '2';
             while (true) {
                 switch (__state) {
@@ -20537,6 +20442,30 @@ function createDrakonWidget() {
                 }
             }
         }
+        function createEventBehavior(widget) {
+            var __state = '2';
+            while (true) {
+                switch (__state) {
+                case '2':
+                    stopMachine(widget, 'mouseEvents');
+                    if (widget.config.canSelect) {
+                        widget.mouseEvents = SelectBehavior_create(widget);
+                        __state = '7';
+                    } else {
+                        widget.mouseEvents = NoSelectBehavior_create(widget);
+                        __state = '7';
+                    }
+                    break;
+                case '7':
+                    widget.touchEvents = TouchBehavior_create(widget);
+                    widget.touchEvents.run();
+                    widget.mouseEvents.run();
+                    return;
+                default:
+                    return;
+                }
+            }
+        }
         function addEdgeSubRecord(records, edge) {
             var targetId, record;
             targetId = edge.finalTarget.itemId;
@@ -21582,7 +21511,6 @@ function createDrakonWidget() {
                         content = visuals.config.end;
                         __state = '6';
                     } else {
-                        // content = item.textCode || item.content || ''; для отображения кода
                         content = item.content || '';
                         __state = '6';
                     }
@@ -21610,7 +21538,6 @@ function createDrakonWidget() {
                     setNotNull(item, node, 'two');
                     setNotNull(item, node, 'side');
                     setNotNull(item, node, 'link');
-                    setNotNull(item, node, 'textCode');
                     setNotNull(item, node, 'margin');
                     setNotNull(item, node, 'secondary');
                     setNotNull(item, node, 'parent');
@@ -22190,6 +22117,11 @@ function createDrakonWidget() {
             };
             return node.type in can;
         }
+        function stripEdits(edits) {
+            var _var2;
+            _var2 = edits.map(stripEdit);
+            return _var2;
+        }
         function markArrow(visuals, loop) {
             var arrow, top, upEdge, bottom, rightEdge, leftBottom, downEdge, start, _var2, _var3;
             var __state = '2';
@@ -22245,14 +22177,6 @@ function createDrakonWidget() {
                     return;
                 }
             }
-        }
-        function updateExpandedBox(widget, visuals) {
-            var wheight, wwidth, zoom;
-            zoom = widget.zoomFactor;
-            wheight = widget.height / zoom;
-            wwidth = widget.width / zoom;
-            visuals.box = addFreedomToBox(visuals.smallBox, wwidth, wheight);
-            return;
         }
         function bakeSubtreeCoords(node, parentX, parentY) {
             var subtreeX, subtreeY, _var2, _var3, child;
@@ -24044,6 +23968,50 @@ function createDrakonWidget() {
                 }
             }
         }
+        function addFreedomToBox(box, widgetWidth, widgetHeight) {
+            var result, hor, ver;
+            var __state = '2';
+            while (true) {
+                switch (__state) {
+                case '2':
+                    result = {};
+                    hor = Math.floor(widgetWidth / 2);
+                    ver = Math.floor(widgetHeight / 2);
+                    __state = '15';
+                    break;
+                case '14':
+                    return result;
+                case '15':
+                    if (box.width > hor) {
+                        result.left = box.left - hor;
+                        result.right = box.right + hor;
+                        result.width = box.width + hor * 2;
+                        __state = '23';
+                    } else {
+                        result.left = box.left;
+                        result.right = box.right;
+                        result.width = box.width;
+                        __state = '23';
+                    }
+                    break;
+                case '23':
+                    if (box.height > ver) {
+                        result.top = box.top - ver;
+                        result.bottom = box.bottom + ver;
+                        result.height = box.height + ver * 2;
+                        __state = '14';
+                    } else {
+                        result.top = box.top;
+                        result.bottom = box.bottom;
+                        result.height = box.height;
+                        __state = '14';
+                    }
+                    break;
+                default:
+                    return;
+                }
+            }
+        }
         function buildSelectCeilEdgeMenu(widget, edge) {
             var menu, clipboard, caseNode, _var2, _var3, _var4;
             var __state = '2';
@@ -25157,30 +25125,6 @@ function createDrakonWidget() {
                         __state = '4';
                     }
                     break;
-                default:
-                    return;
-                }
-            }
-        }
-        function createEventBehavior(widget) {
-            var __state = '2';
-            while (true) {
-                switch (__state) {
-                case '2':
-                    stopMachine(widget, 'mouseEvents');
-                    if (widget.config.canSelect) {
-                        widget.mouseEvents = SelectBehavior_create(widget);
-                        __state = '9';
-                    } else {
-                        widget.mouseEvents = NoSelectBehavior_create(widget);
-                        __state = '9';
-                    }
-                    break;
-                case '9':
-                    widget.touchEvents = TouchBehavior_create(widget);
-                    widget.touchEvents.run();
-                    widget.mouseEvents.run();
-                    return;
                 default:
                     return;
                 }
@@ -32786,35 +32730,6 @@ function createDrakonWidget() {
                 return _var2;
             }
         }
-        function stripEdit(edit) {
-            var __state = '2';
-            while (true) {
-                switch (__state) {
-                case '2':
-                    if (edit.fields) {
-                        if (edit.fields.type === 'image') {
-                            return {
-                                fields: {
-                                    type: 'image',
-                                    content: '...'
-                                },
-                                id: edit.id,
-                                op: edit.op
-                            };
-                        } else {
-                            __state = '8';
-                        }
-                    } else {
-                        __state = '8';
-                    }
-                    break;
-                case '8':
-                    return edit;
-                default:
-                    return;
-                }
-            }
-        }
         function moveBranchIdsLeft(visuals, branchId) {
             var branch, newId, edits, _var2, _var3, itemId;
             var __state = '2';
@@ -33334,11 +33249,6 @@ function createDrakonWidget() {
                 }
             }
         }
-        function stripEdits(edits) {
-            var _var2;
-            _var2 = edits.map(stripEdit);
-            return _var2;
-        }
         function popFromSkewer(widget, node, edits) {
             var dstId, edgeUp;
             dstId = node.one;
@@ -33371,6 +33281,35 @@ function createDrakonWidget() {
                         return undefined;
                     }
                     break;
+                default:
+                    return;
+                }
+            }
+        }
+        function stripEdit(edit) {
+            var __state = '2';
+            while (true) {
+                switch (__state) {
+                case '2':
+                    if (edit.fields) {
+                        if (edit.fields.type === 'image') {
+                            return {
+                                fields: {
+                                    type: 'image',
+                                    content: '...'
+                                },
+                                id: edit.id,
+                                op: edit.op
+                            };
+                        } else {
+                            __state = '8';
+                        }
+                    } else {
+                        __state = '8';
+                    }
+                    break;
+                case '8':
+                    return edit;
                 default:
                     return;
                 }
@@ -35204,9 +35143,6 @@ function createDrakonWidget() {
             self.setContent = function (itemId, content) {
                 return DrakonCanvas_setContent(self, itemId, content);
             };
-            self.setTextCode = function (itemId, textCode) {
-                return DrakonCanvas_setTextCode(self, itemId, textCode);
-            };
             self.exportToContext = function (box, zoom100, ctx) {
                 return DrakonCanvas_exportToContext(self, box, zoom100, ctx);
             };
@@ -36582,7 +36518,7 @@ function createDrakonWidget() {
             configurable: true
         });
         return unit;
-    }    
+    }
 
    var tracing = {
         trace: function (name, value) { console.log(name, value) },

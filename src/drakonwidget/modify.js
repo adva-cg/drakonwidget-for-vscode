@@ -84,7 +84,7 @@ function createFoldersAndMoveFiles(node, baseDir, fileMap) {
   }
   const nodeName = nodeFile.name;
   let folderPath = baseDir;
-  if (nodeFile.type === 'folder' && nodeFile.id !== '1') {
+  if ((nodeFile.type === 'folder' || nodeFile.type === 'module') && nodeFile.id !== '1') {
     folderPath = path.join(baseDir, nodeName);
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath, { recursive: true });
@@ -92,7 +92,7 @@ function createFoldersAndMoveFiles(node, baseDir, fileMap) {
     }
   } else if (nodeFile.parent_id) {
     const parent = fileMap[nodeFile.parent_id];
-    if (parent && parent.type === 'folder' && parent.id !== '1') {
+    if (parent && (parent.type === 'folder' || parent.type === 'module') && parent.id !== '1') {
         folderPath = path.join(baseDir, parent.name);
     }
   }
@@ -157,7 +157,7 @@ function renameJsonFile(file, data) {
             let newFilename = data.name;
             let newExtension = '.json';
 
-            if (data.items && data.type !== 'folder') {
+            if (data.items && data.type !== 'folder' && data.type !== 'module') {
                 newExtension = '.drakon';
             }
             newFilename += newExtension;
