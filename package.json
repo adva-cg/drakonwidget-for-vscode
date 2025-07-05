@@ -11,7 +11,7 @@
   "categories": [
     "Other"
   ],
-  "main": "./out/extension.js",
+  "main": "./src/extension.js",
   "contributes": {
     "configuration": {
       "title": "Drakonwidget",
@@ -90,22 +90,14 @@
   "scripts": {
     "drakongen:build": "cd src/drakongen && npm install",
     "vscode:prepublish": "npm run drakongen:build && npm run compile",
-    "compile": "tsc -p ./",
-    "build": "npm run compile",
-    "watch": "tsc -watch -p ./",
-    "test": "cross-env TS_NODE_PROJECT=tsconfig.test.json mocha -r ts-node/register src/test/**/*.test.ts"
+    "build": "echo 'No build step needed for JS'",
+    "test": "mocha src/test/**/*.test.js"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^20.17.31",
-    "@types/vscode": "^1.99.0",
     "chai": "^5.2.0",
     "cross-env": "^7.0.3",
     "eslint": "^9.21.0",
-    "mocha": "^11.1.0",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.8.2"
+    "mocha": "^11.1.0"
   },
   "author": "Vitaly Adadurov",
   "license": "UNLICENSED",

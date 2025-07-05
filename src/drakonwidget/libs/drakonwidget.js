@@ -36542,8 +36542,13 @@ function createDrakonWidget() {
 
 createDrakonWidget();
 
-module.exports = {
-    createDrakonWidget: createDrakonWidget,
-    utils: drakonCanvas.utils,
-    edit_tools: drakonCanvas.edit_tools
-};
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        createDrakonWidget: createDrakonWidget,
+        utils: drakonCanvas.utils,
+        edit_tools: drakonCanvas.edit_tools
+    };
+} else {
+    window.createDrakonWidget = createDrakonWidget;
+    // или window.drakonWidget = { ... }
+}

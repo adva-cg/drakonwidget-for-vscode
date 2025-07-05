@@ -5,7 +5,6 @@
 			"name": "Run Extension",
 			"type": "extensionHost",
 			"request": "launch",
-			"preLaunchTask": "tsc-build", // Должен совпадать с label в tasks.json
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--disable-extensions",
@@ -16,16 +15,11 @@
 			"name": "Run Extension (with Debugging)",
 			"type": "extensionHost",
 			"request": "launch",
-			"preLaunchTask": "tsc-build", // Должен совпадать с label в tasks.json
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--disable-extensions",
 				"--enable-extension=drakonwidget-for-vscode"
-			],
-			"outFiles": [
-				"${workspaceFolder}/out/**/*.js"
-			],
-			"sourceMaps": true
+			]
 		},
 		{
             "type": "node",
