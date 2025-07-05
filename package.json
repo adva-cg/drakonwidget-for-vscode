@@ -89,7 +89,7 @@
   },
   "scripts": {
     "drakongen:build": "cd src/drakongen && npm install",
-    "vscode:prepublish": "npm run drakongen:build && npm run compile",
+    "vscode:prepublish": "npm run drakongen:build && npm run build",
     "build": "echo 'No build step needed for JS'",
     "test": "mocha src/test/**/*.test.js"
   },
