@@ -77,13 +77,21 @@
         "selector": [
           {
             "filenamePattern": "*.drakon"
+          },
+          {
+            "filenamePattern": "*.graf"
+          },
+          {
+            "filenamePattern": "*.free"
           }
         ]
       }
     ],
     "mimetypes": {
       "text/x-drakon": [
-        ".drakon"
+        ".drakon",
+        ".graf",
+        ".free"
       ]
     }
   },

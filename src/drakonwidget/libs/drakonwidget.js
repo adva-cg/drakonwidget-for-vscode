@@ -36550,5 +36550,4 @@ if (typeof module !== 'undefined' && module.exports) {
     };
 } else {
     window.createDrakonWidget = createDrakonWidget;
-    // или window.drakonWidget = { ... }
 }

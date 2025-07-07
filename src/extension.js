@@ -263,8 +263,7 @@ function getWorkspaceFolder() {
 }
 
 async function handleDiagramUpdate(document, diagram, webviewPanel) {
-    var currentName, edit, errorMessage, newUri, renameError;
-    edit = null
+    var currentName, errorMessage, newUri, renameError;
     log(
         "handleDiagramUpdate called",
         {
@@ -425,7 +424,11 @@ async function openFile() {
     uris = await vscode.window.showOpenDialog(
         {
             filters: {
-                'Drakon Diagrams': ['drakon']
+                'Diagrams': [
+                    'drakon',
+                    'free',
+                    'graf'
+                ]
             }
         }
     );
@@ -746,7 +749,11 @@ async function showSaveDialog(defaultName) {
                 )
             ),
             filters: {
-                'Drakon Diagrams': ['drakon']
+                'Diagrams': [
+                    'drakon',
+                    'graf',
+                    'free'
+                ]
             },
             saveLabel: 'Save Diagram'
         }
