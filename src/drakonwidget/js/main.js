@@ -684,7 +684,7 @@ function initShortcuts() {
     )
 }
 
-function initToolbar() {
+function initToolbar(typeDiagram) {
     var below, toolbar;
     toolbar = get("left-toolbar")
     addIconButton(
@@ -714,158 +714,160 @@ function initToolbar() {
         "Redo. Key: Ctrl+Y"
     )
     addVSpace(toolbar)
-    addInsertButton(
-        toolbar,
-        "action.png",
-        "action",
-        "Action. Key: A",
-        "A"
-    )
-    addInsertButton(
-        toolbar,
-        "question.png",
-        "question",
-        "Question. Key: Q",
-        "Q"
-    )
-    addInsertButton(
-        toolbar,
-        "select.png",
-        "select",
-        "Choice. Key: S",
-        "S"
-    )
-    addInsertButton(
-        toolbar,
-        "case.png",
-        "case",
-        "Case. Key: C",
-        "C"
-    )
-    addInsertButton(
-        toolbar,
-        "foreach.png",
-        "foreach",
-        "FOR loop. Key: L",
-        "L"
-    )
-    addVSpace(toolbar)
-    addIconButton(
-        toolbar,
-        "silhouette.png",
-        toggleSilhouette,
-        "Toggle silhouette/primitive"
-    )
-    addInsertButton(
-        toolbar,
-        "branch.png",
-        "branch",
-        "Silhouette branch. Key: B",
-        "B"
-    )
-    addVSpace(toolbar)
-    addInsertButton(
-        toolbar,
-        "insertion.png",
-        "insertion",
-        "Insertion"
-    )
-    addInsertButton(
-        toolbar,
-        "comment.png",
-        "comment",
-        "Comment"
-    )
-    addInsertButton(
-        toolbar,
-        "sinput.png",
-        "simpleinput",
-        "Simple input"
-    )
-    addInsertButton(
-        toolbar,
-        "soutput.png",
-        "simpleoutput",
-        "Simple output"
-    )
-    addInsertButton(
-        toolbar,
-        "parblock.png",
-        "parblock",
-        "Concurrent processes"
-    )
-    addInsertButton(
-        toolbar,
-        "par.png",
-        "par",
-        "Add path"
-    )
-    addInsertButton(
-        toolbar,
-        "timer.png",
-        "timer",
-        "Timer"
-    )
-    addInsertButton(
-        toolbar,
-        "pause.png",
-        "pause",
-        "Pause"
-    )
-    addInsertButton(
-        toolbar,
-        "duration.png",
-        "duration",
-        "Duration"
-    )
-    addInsertButton(
-        toolbar,
-        "shelf.png",
-        "shelf",
-        "Shelf"
-    )
-    addInsertButton(
-        toolbar,
-        "process.png",
-        "process",
-        "Process"
-    )
-    addInsertButton(
-        toolbar,
-        "input.png",
-        "input",
-        "Input"
-    )
-    addInsertButton(
-        toolbar,
-        "output.png",
-        "output",
-        "Output"
-    )
-    addInsertButton(
-        toolbar,
-        "ctrl-start.png",
-        "ctrlstart",
-        "Start of control period"
-    )
-    addInsertButton(
-        toolbar,
-        "ctrl-end.png",
-        "ctrlend",
-        "End of control period"
-    )
-    addIconButton(
-        toolbar,
-        "group-duration.png",
-        insertGroupDurationLeft,
-        "Group duration (left)"
-    )
-    addIconButton(
-        toolbar,
-        "group-duration-r.png",
-        insertGroupDurationRight,
-        "Group duration (right)"
-    )
+    if (typeDiagram === 'drakon') {
+        addInsertButton(
+            toolbar,
+            "action.png",
+            "action",
+            "Action. Key: A",
+            "A"
+        )
+        addInsertButton(
+            toolbar,
+            "question.png",
+            "question",
+            "Question. Key: Q",
+            "Q"
+        )
+        addInsertButton(
+            toolbar,
+            "select.png",
+            "select",
+            "Choice. Key: S",
+            "S"
+        )
+        addInsertButton(
+            toolbar,
+            "case.png",
+            "case",
+            "Case. Key: C",
+            "C"
+        )
+        addInsertButton(
+            toolbar,
+            "foreach.png",
+            "foreach",
+            "FOR loop. Key: L",
+            "L"
+        )
+        addVSpace(toolbar)
+        addIconButton(
+            toolbar,
+            "silhouette.png",
+            toggleSilhouette,
+            "Toggle silhouette/primitive"
+        )
+        addInsertButton(
+            toolbar,
+            "branch.png",
+            "branch",
+            "Silhouette branch. Key: B",
+            "B"
+        )
+        addVSpace(toolbar)
+        addInsertButton(
+            toolbar,
+            "insertion.png",
+            "insertion",
+            "Insertion"
+        )
+        addInsertButton(
+            toolbar,
+            "comment.png",
+            "comment",
+            "Comment"
+        )
+        addInsertButton(
+            toolbar,
+            "sinput.png",
+            "simpleinput",
+            "Simple input"
+        )
+        addInsertButton(
+            toolbar,
+            "soutput.png",
+            "simpleoutput",
+            "Simple output"
+        )
+        addInsertButton(
+            toolbar,
+            "parblock.png",
+            "parblock",
+            "Concurrent processes"
+        )
+        addInsertButton(
+            toolbar,
+            "par.png",
+            "par",
+            "Add path"
+        )
+        addInsertButton(
+            toolbar,
+            "timer.png",
+            "timer",
+            "Timer"
+        )
+        addInsertButton(
+            toolbar,
+            "pause.png",
+            "pause",
+            "Pause"
+        )
+        addInsertButton(
+            toolbar,
+            "duration.png",
+            "duration",
+            "Duration"
+        )
+        addInsertButton(
+            toolbar,
+            "shelf.png",
+            "shelf",
+            "Shelf"
+        )
+        addInsertButton(
+            toolbar,
+            "process.png",
+            "process",
+            "Process"
+        )
+        addInsertButton(
+            toolbar,
+            "input.png",
+            "input",
+            "Input"
+        )
+        addInsertButton(
+            toolbar,
+            "output.png",
+            "output",
+            "Output"
+        )
+        addInsertButton(
+            toolbar,
+            "ctrl-start.png",
+            "ctrlstart",
+            "Start of control period"
+        )
+        addInsertButton(
+            toolbar,
+            "ctrl-end.png",
+            "ctrlend",
+            "End of control period"
+        )
+        addIconButton(
+            toolbar,
+            "group-duration.png",
+            insertGroupDurationLeft,
+            "Group duration (left)"
+        )
+        addIconButton(
+            toolbar,
+            "group-duration-r.png",
+            insertGroupDurationRight,
+            "Group duration (right)"
+        )
+    }
     below = div()
     below.style.height = "50px"
     add(toolbar, below)
@@ -909,7 +911,6 @@ function main() {
             currentVersion
         )
     }
-    initToolbar()
     loadThemes()
     closeButton = get("close-button")
     closeButton.addEventListener(
@@ -1025,6 +1026,7 @@ function openDiagram(currentDiagram) {
     } else {
         diagram.access = "read"
     }
+    initToolbar(diagram.type)
     m.drakon.setDiagram(
         currentDiagram,
         diagram,
