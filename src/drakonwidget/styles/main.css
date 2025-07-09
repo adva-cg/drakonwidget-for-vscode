@@ -24,7 +24,7 @@ select {
     position: absolute;
     left: 0px;
     top: 0px;
-    width: 50px;
+    width: 90px;
     height: 100%;
     background: var(--drakon-secondary);
     padding: 2px;
@@ -35,9 +35,9 @@ select {
 #editor-area {
     display: inline-block;
     position: absolute;
-    left: 50px;
+    left: 90px;
     top: 0px;
-    width: calc(100% - 50px);
+    width: calc(100% - 90px);
     height: 100%;
     background: var(--drakon-secondary);
 }
