@@ -105,6 +105,14 @@ function addOption(select, value, text) {
     add(select, option)
 }
 
+function addRowToToolbar(container) {
+    var row;
+    row = document.createElement('div');
+    row.className = 'toolbar-row';
+    container.appendChild(row);
+    return row
+}
+
 function addText(element, text) {
     var newNode;
     newNode = document.createTextNode(text);
@@ -113,6 +121,28 @@ function addText(element, text) {
 
 function addToBuffer(buffer, ch) {
     buffer.text += ch
+}
+
+function addToolbarRow(container, icon1, command1, tip1, icon2, command2, tip2) {
+    var btn1, btn2, row;
+    row = addRowToToolbar(container)
+    if (icon1) {
+        btn1 = m.widgets.createIconButton(
+            `${extensionBaseUri}/images/${icon1}`,
+            command1,
+            tip1
+        );
+        row.appendChild(btn1)
+    }
+    if (icon2) {
+        btn2 = m.widgets.createIconButton(
+            `${extensionBaseUri}/images/${icon2}`,
+            command2,
+            tip2
+        );
+        row.appendChild(btn2)
+    }
+    return row
 }
 
 function addVSpace(toolbar) {
@@ -283,6 +313,21 @@ function createEmptyDiagram(name) {
     )
     isolatedStorage.setItem(id, diagramStr)
     return id
+}
+
+function createInsertAction(type, shortcut) {
+    var action;
+    action = function () {
+        insertIcon(type)
+    }
+    if (shortcut) {
+        Mousetrap.bind(
+            shortcut.toLowerCase(),
+            action,
+            "keydown"
+        )
+    }
+    return action
 }
 
 function customBuildDom(core) {
@@ -626,6 +671,41 @@ function getThemes() {
     }
 }
 
+function hideToolbar() {
+    var editor;
+    get('left-toolbar').style.display = 'none';
+    get('show-toolbar-button').style.display
+    = 'block'
+    editor = get('editor-area');
+    editor.style.left = '0px';
+    editor.style.width = '100%'
+    if (m.drakon) {
+        onResize()
+    }
+}
+
+function initButtonShow() {
+    var showToolbarButton;
+    showToolbarButton = m.widgets.createIconButton(
+        `${extensionBaseUri}/images/right-angle2.png`,
+        showToolbar,
+        'Показать панель'
+    );
+    showToolbarButton.id = 'show-toolbar-button';
+    // Give it an ID to be found later
+    
+    showToolbarButton.style.position = 'absolute';
+    showToolbarButton.style.left = '5px';
+    showToolbarButton.style.top = '5px';
+    showToolbarButton.style.display = 'none';
+    // Initially hidden
+    
+    showToolbarButton.style.zIndex = '1000';
+    document.body.appendChild(
+        showToolbarButton
+    )
+}
+
 function initDrakonWidget() {
     m.drakon = createDrakonWidget()
 }
@@ -687,185 +767,145 @@ function initShortcuts() {
 function initToolbar(typeDiagram) {
     var below, toolbar;
     toolbar = get("left-toolbar")
-    addIconButton(
+    toolbar.innerHTML = ''
+    addToolbarRow(
         toolbar,
-        "menu.png",
+        'left-angle2.png',
+        hideToolbar,
+        'Скрыть панель',
+        'menu.png',
         showMenu,
-        "Menu"
+        'Меню'
     )
-    addVSpace(toolbar)
-    addIconButton(
+    addToolbarRow(
         toolbar,
-        "zoom.png",
+        'zoom.png',
         showZoom,
-        "Zoom"
+        'Масштаб',
+        null,
+        null,
+        null
     )
-    addVSpace(toolbar)
-    addIconButton(
+    addToolbarRow(
         toolbar,
-        "undo.png",
+        'undo.png',
         undo,
-        "Undo. Key: Ctrl+Z"
-    )
-    addIconButton(
-        toolbar,
-        "redo.png",
+        'Отменить. Ctrl+Z',
+        'redo.png',
         redo,
-        "Redo. Key: Ctrl+Y"
+        'Повторить. Ctrl+Y'
     )
     addVSpace(toolbar)
     if (typeDiagram === 'drakon') {
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "action.png",
-            "action",
-            "Action. Key: A",
-            "A"
+            'action.png',
+            createInsertAction("action", "A"),
+            'Действие. Key: A',
+            'question.png',
+            createInsertAction("question", "Q"),
+            'Вопрос. Key: Q'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "question.png",
-            "question",
-            "Question. Key: Q",
-            "Q"
+            'select.png',
+            createInsertAction("select", "S"),
+            'Выбор. Key: S',
+            'case.png',
+            createInsertAction("case", "C"),
+            'Вариант. Key: C'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "select.png",
-            "select",
-            "Choice. Key: S",
-            "S"
-        )
-        addInsertButton(
-            toolbar,
-            "case.png",
-            "case",
-            "Case. Key: C",
-            "C"
-        )
-        addInsertButton(
-            toolbar,
-            "foreach.png",
-            "foreach",
-            "FOR loop. Key: L",
-            "L"
+            'foreach.png',
+            createInsertAction("foreach", "L"),
+            'Цикл ПО. Key: L',
+            'shelf.png',
+            createInsertAction("shelf"),
+            'Полка'
         )
         addVSpace(toolbar)
-        addIconButton(
+        addToolbarRow(
             toolbar,
-            "silhouette.png",
+            'silhouette.png',
             toggleSilhouette,
-            "Toggle silhouette/primitive"
-        )
-        addInsertButton(
-            toolbar,
-            "branch.png",
-            "branch",
-            "Silhouette branch. Key: B",
-            "B"
+            'Переключить силуэт/примитив',
+            'branch.png',
+            createInsertAction("branch", "B"),
+            'Ветвь силуэта. Key: B'
         )
         addVSpace(toolbar)
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "insertion.png",
-            "insertion",
-            "Insertion"
+            'insertion.png',
+            createInsertAction("insertion"),
+            'Вставка',
+            'comment.png',
+            createInsertAction("comment"),
+            'Комментарий'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "comment.png",
-            "comment",
-            "Comment"
+            'sinput.png',
+            createInsertAction("simpleinput"),
+            'Простой ввод',
+            'soutput.png',
+            createInsertAction("simpleoutput"),
+            'Простой вывод'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "sinput.png",
-            "simpleinput",
-            "Simple input"
+            'output.png',
+            createInsertAction("output"),
+            'Вывод',
+            'input.png',
+            createInsertAction("input"),
+            'Ввод'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "soutput.png",
-            "simpleoutput",
-            "Simple output"
+            'parblock.png',
+            createInsertAction("parblock"),
+            'Параллельные процессы',
+            'par.png',
+            createInsertAction("par"),
+            'Добавить путь'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "parblock.png",
-            "parblock",
-            "Concurrent processes"
+            'timer.png',
+            createInsertAction("timer"),
+            'Таймер',
+            'pause.png',
+            createInsertAction("pause"),
+            'Пауза'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "par.png",
-            "par",
-            "Add path"
+            'duration.png',
+            createInsertAction("duration"),
+            'Длительность',
+            'process.png',
+            createInsertAction("process"),
+            'Процесс'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "timer.png",
-            "timer",
-            "Timer"
+            'ctrl-start.png',
+            createInsertAction("ctrlstart"),
+            'Начало контроля',
+            'ctrl-end.png',
+            createInsertAction("ctrlend"),
+            'Конец контроля'
         )
-        addInsertButton(
+        addToolbarRow(
             toolbar,
-            "pause.png",
-            "pause",
-            "Pause"
-        )
-        addInsertButton(
-            toolbar,
-            "duration.png",
-            "duration",
-            "Duration"
-        )
-        addInsertButton(
-            toolbar,
-            "shelf.png",
-            "shelf",
-            "Shelf"
-        )
-        addInsertButton(
-            toolbar,
-            "process.png",
-            "process",
-            "Process"
-        )
-        addInsertButton(
-            toolbar,
-            "input.png",
-            "input",
-            "Input"
-        )
-        addInsertButton(
-            toolbar,
-            "output.png",
-            "output",
-            "Output"
-        )
-        addInsertButton(
-            toolbar,
-            "ctrl-start.png",
-            "ctrlstart",
-            "Start of control period"
-        )
-        addInsertButton(
-            toolbar,
-            "ctrl-end.png",
-            "ctrlend",
-            "End of control period"
-        )
-        addIconButton(
-            toolbar,
-            "group-duration.png",
+            'group-duration.png',
             insertGroupDurationLeft,
-            "Group duration (left)"
-        )
-        addIconButton(
-            toolbar,
-            "group-duration-r.png",
+            'Групповая длительность (слева)',
+            'group-duration-r.png',
             insertGroupDurationRight,
-            "Group duration (right)"
+            'Групповая длительность (справа)'
         )
     }
     below = div()
@@ -899,6 +939,7 @@ function main() {
     m.widgets = createSimpleWidgets()
     m.widgets.init(tr)
     initDrakonWidget()
+    initButtonShow()
     currentVersion = m.drakon.getVersion()
     actualVersion = localStorage.getItem(
         "drakon-widget-version"
@@ -1470,6 +1511,19 @@ function showMenu() {
     fillModes(modes)
     fillThemes(themes)
     menu.style.display = "inline-block"
+}
+
+function showToolbar() {
+    var editor;
+    get('left-toolbar').style.display = 'block';
+    get('show-toolbar-button').style.display
+    = 'none'
+    editor = get('editor-area');
+    editor.style.left = '90px';
+    editor.style.width = 'calc(100% - 90px)'
+    if (m.drakon) {
+        onResize()
+    }
 }
 
 function showZoom(ign, evt) {
