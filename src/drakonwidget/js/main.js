@@ -436,6 +436,33 @@ function editContent() {
     m.drakon.editContent()
 }
 
+async function editDescription(ign, evt) {
+    var currentDescription, currentDiagramId, diagram, diagramStr, newContent;
+    currentDiagramId = isolatedStorage.getItem(
+        "current-diagram"
+    )
+    if (currentDiagramId) {
+        diagramStr = isolatedStorage.getItem(
+            currentDiagramId
+        );
+        diagram = JSON.parse(diagramStr);
+        currentDescription = diagram.description
+        || "";
+        newContent = await m.widgets.largeBox(
+            evt.clientX,
+            evt.clientY,
+            tr("Description"),
+            currentDescription
+        );
+        if ((newContent) && (!(newContent === currentDescription))) {
+            m.drakon.setDiagramProperty(
+                "description",
+                newContent
+            )
+        }
+    }
+}
+
 function eventListener(event) {
     var _sw_9, currentDiagram, diagram, diagramStr;
     if (event.data) {
@@ -765,7 +792,7 @@ function initShortcuts() {
 }
 
 function initToolbar(typeDiagram) {
-    var below, toolbar;
+    var _sw_39, below, toolbar;
     toolbar = get("left-toolbar")
     toolbar.innerHTML = ''
     addToolbarRow(
@@ -782,9 +809,9 @@ function initToolbar(typeDiagram) {
         'zoom.png',
         showZoom,
         'Масштаб',
-        null,
-        null,
-        null
+        'description.png',
+        editDescription,
+        'Описание'
     )
     addToolbarRow(
         toolbar,
@@ -796,7 +823,8 @@ function initToolbar(typeDiagram) {
         'Повторить. Ctrl+Y'
     )
     addVSpace(toolbar)
-    if (typeDiagram === 'drakon') {
+    _sw_39 = typeDiagram;
+    if (_sw_39 === 'drakon') {
         addToolbarRow(
             toolbar,
             'action.png',
@@ -907,6 +935,14 @@ function initToolbar(typeDiagram) {
             insertGroupDurationRight,
             'Групповая длительность (справа)'
         )
+    } else {
+        if (_sw_39 === 'free') {
+        } else {
+            if (_sw_39 === 'graf') {
+            } else {
+                throw new Error("Unexpected Choice value: " + _sw_39);
+            }
+        }
     }
     below = div()
     below.style.height = "50px"
