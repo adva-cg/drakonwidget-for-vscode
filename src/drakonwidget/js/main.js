@@ -752,6 +752,9 @@ function initDrakonWidget() {
     m.drakon = createDrakonWidget()
 }
 
+function initIconPicture() {
+}
+
 function initShortcuts() {
     Mousetrap.bind(
         ['ctrl+c', 'command+c'],
@@ -840,166 +843,185 @@ function initToolbar(typeDiagram) {
     addVSpace(toolbar)
     _sw_39 = typeDiagram;
     if (_sw_39 === 'drakon') {
-        addToolbarRow(
-            toolbar,
-            'action.png',
-            createInsertAction("action", "A"),
-            'Действие. Key: A',
-            'question.png',
-            createInsertAction("question", "Q"),
-            'Вопрос. Key: Q'
-        )
-        addToolbarRow(
-            toolbar,
-            'select.png',
-            createInsertAction("select", "S"),
-            'Выбор. Key: S',
-            'case.png',
-            createInsertAction("case", "C"),
-            'Вариант. Key: C'
-        )
-        addToolbarRow(
-            toolbar,
-            'foreach.png',
-            createInsertAction("foreach", "L"),
-            'Цикл ПО. Key: L',
-            'shelf.png',
-            createInsertAction("shelf"),
-            'Полка'
-        )
-        addVSpace(toolbar)
-        addToolbarRow(
-            toolbar,
-            'silhouette.png',
-            toggleSilhouette,
-            'Переключить силуэт/примитив',
-            'branch.png',
-            createInsertAction("branch", "B"),
-            'Ветвь силуэта. Key: B'
-        )
-        addVSpace(toolbar)
-        addToolbarRow(
-            toolbar,
-            'insertion.png',
-            createInsertAction("insertion"),
-            'Вставка',
-            'comment.png',
-            createInsertAction("comment"),
-            'Комментарий'
-        )
-        addToolbarRow(
-            toolbar,
-            'sinput.png',
-            createInsertAction("simpleinput"),
-            'Простой ввод',
-            'soutput.png',
-            createInsertAction("simpleoutput"),
-            'Простой вывод'
-        )
-        addToolbarRow(
-            toolbar,
-            'output.png',
-            createInsertAction("output"),
-            'Вывод',
-            'input.png',
-            createInsertAction("input"),
-            'Ввод'
-        )
-        addToolbarRow(
-            toolbar,
-            'parblock.png',
-            createInsertAction("parblock"),
-            'Параллельные процессы',
-            'par.png',
-            createInsertAction("par"),
-            'Добавить путь'
-        )
-        addToolbarRow(
-            toolbar,
-            'timer.png',
-            createInsertAction("timer"),
-            'Таймер',
-            'pause.png',
-            createInsertAction("pause"),
-            'Пауза'
-        )
-        addToolbarRow(
-            toolbar,
-            'duration.png',
-            createInsertAction("duration"),
-            'Длительность',
-            'process.png',
-            createInsertAction("process"),
-            'Процесс'
-        )
-        addToolbarRow(
-            toolbar,
-            'ctrl-start.png',
-            createInsertAction("ctrlstart"),
-            'Начало контроля',
-            'ctrl-end.png',
-            createInsertAction("ctrlend"),
-            'Конец контроля'
-        )
-        addToolbarRow(
-            toolbar,
-            'group-duration.png',
-            createFreeAction(
-                'group-duration-left'
-            ),
-            'Групповая длительность (слева)',
-            'group-duration-r.png',
-            createFreeAction(
-                'group-duration-right'
-            ),
-            'Групповая длительность (справа)'
-        )
+        initToolbarDrakon(toolbar)
     } else {
         if (_sw_39 === 'free') {
+            initToolbarFree(toolbar)
         } else {
             if (_sw_39 === 'graf') {
             } else {
                 throw new Error("Unexpected Choice value: " + _sw_39);
             }
-            addToolbarRow(
-                toolbar,
-                'rectangle.png',
-                createInsertAction('idea', 'A'),
-                'Идея',
-                'rounded.png',
-                createInsertAction('ridea', 'R'),
-                'Идея - скругленно'
-            );
-            addToolbarRow(
-                toolbar,
-                'comment.png',
-                createInsertAction('conclusion', 'C'),
-                'Заключение',
-                'callout.png',
-                createFreeAction('callout'),
-                'Выноска'
-            );
+            initToolbarGraf(toolbar)
         }
     }
+    initIconPicture()
     below = div()
     below.style.height = "50px"
     add(toolbar, below)
 }
 
-function insertCallout() {
-    m.drakon.insertFree("callout")
+function initToolbarDrakon(toolbar) {
+    addToolbarRow(
+        toolbar,
+        'action.png',
+        createInsertAction("action", "A"),
+        'Действие. Key: A',
+        'question.png',
+        createInsertAction("question", "Q"),
+        'Вопрос. Key: Q'
+    )
+    addToolbarRow(
+        toolbar,
+        'select.png',
+        createInsertAction("select", "S"),
+        'Выбор. Key: S',
+        'case.png',
+        createInsertAction("case", "C"),
+        'Вариант. Key: C'
+    )
+    addToolbarRow(
+        toolbar,
+        'foreach.png',
+        createInsertAction("foreach", "L"),
+        'Цикл ПО. Key: L',
+        'shelf.png',
+        createInsertAction("shelf"),
+        'Полка'
+    )
+    addVSpace(toolbar)
+    addToolbarRow(
+        toolbar,
+        'silhouette.png',
+        toggleSilhouette,
+        'Переключить силуэт/примитив',
+        'branch.png',
+        createInsertAction("branch", "B"),
+        'Ветвь силуэта. Key: B'
+    )
+    addVSpace(toolbar)
+    addToolbarRow(
+        toolbar,
+        'insertion.png',
+        createInsertAction("insertion"),
+        'Вставка',
+        'comment.png',
+        createInsertAction("comment"),
+        'Комментарий'
+    )
+    addToolbarRow(
+        toolbar,
+        'sinput.png',
+        createInsertAction("simpleinput"),
+        'Простой ввод',
+        'soutput.png',
+        createInsertAction("simpleoutput"),
+        'Простой вывод'
+    )
+    addToolbarRow(
+        toolbar,
+        'output.png',
+        createInsertAction("output"),
+        'Вывод',
+        'input.png',
+        createInsertAction("input"),
+        'Ввод'
+    )
+    addToolbarRow(
+        toolbar,
+        'parblock.png',
+        createInsertAction("parblock"),
+        'Параллельные процессы',
+        'par.png',
+        createInsertAction("par"),
+        'Добавить путь'
+    )
+    addToolbarRow(
+        toolbar,
+        'timer.png',
+        createInsertAction("timer"),
+        'Таймер',
+        'pause.png',
+        createInsertAction("pause"),
+        'Пауза'
+    )
+    addToolbarRow(
+        toolbar,
+        'duration.png',
+        createInsertAction("duration"),
+        'Длительность',
+        'process.png',
+        createInsertAction("process"),
+        'Процесс'
+    )
+    addToolbarRow(
+        toolbar,
+        'ctrl-start.png',
+        createInsertAction("ctrlstart"),
+        'Начало контроля',
+        'ctrl-end.png',
+        createInsertAction("ctrlend"),
+        'Конец контроля'
+    )
+    addToolbarRow(
+        toolbar,
+        'group-duration.png',
+        createFreeAction(
+            'group-duration-left'
+        ),
+        'Групповая длительность (слева)',
+        'group-duration-r.png',
+        createFreeAction(
+            'group-duration-right'
+        ),
+        'Групповая длительность (справа)'
+    )
+}
+
+function initToolbarFree(toolbar) {
+}
+
+function initToolbarGraf(toolbar) {
+    addToolbarRow(
+        toolbar,
+        'rectangle.png',
+        createInsertAction('idea', 'A'),
+        'Идея',
+        'rounded.png',
+        createInsertAction('ridea', 'R'),
+        'Идея - скругленно'
+    )
+    addToolbarRow(
+        toolbar,
+        'comment.png',
+        createInsertAction('conclusion', 'C'),
+        'Заключение',
+        'callout.png',
+        createFreeAction('callout'),
+        'Выноска'
+    )
+    addToolbarRow(
+        toolbar,
+        'line.png',
+        createFreeAction('line', 'L'),
+        'Линия',
+        'arrow.png',
+        createFreeAction('arrow', 'W'),
+        'Стрелка'
+    )
+    addToolbarRow(
+        toolbar,
+        'frame.png',
+        createFreeAction('frame'),
+        'Рамка',
+        'polyline.png',
+        createFreeAction('polyline'),
+        'Ломаная'
+    )
 }
 
 function insertFree(type) {
     m.drakon.insertFree(type)
-}
-
-function insertGroupDurationLeft() {
-    m.drakon.insertFree("group-duration-left")
-}
-
-function insertGroupDurationRight() {
-    m.drakon.insertFree("group-duration-right")
 }
 
 function insertIcon(type) {
