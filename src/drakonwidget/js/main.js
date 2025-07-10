@@ -979,6 +979,51 @@ function initToolbarDrakon(toolbar) {
 }
 
 function initToolbarFree(toolbar) {
+    addToolbarRow(
+        toolbar,
+        'rectangle.png',
+        createFreeAction('rectangle', 'A'),
+        'Прямоугольник',
+        'text.png',
+        createFreeAction('text', 'T'),
+        'Текст'
+    )
+    addToolbarRow(
+        toolbar,
+        'line.png',
+        createFreeAction('line', 'L'),
+        'Линия',
+        'arrow.png',
+        createFreeAction('arrow', 'W'),
+        'Стрелка'
+    )
+    addToolbarRow(
+        toolbar,
+        'poly.png',
+        createFreeAction('polygon'),
+        'Полигон',
+        'polyline.png',
+        createFreeAction('polyline'),
+        'Ломаная'
+    )
+    addToolbarRow(
+        toolbar,
+        'f_begin.png',
+        createFreeAction('f_begin'),
+        'Мыльница (овал)',
+        'rounded.png',
+        createFreeAction('rounded'),
+        'Закругленный прямоугольник'
+    )
+    addToolbarRow(
+        toolbar,
+        'ptr-left.png',
+        createFreeAction('f_ptr_left'),
+        'Левый указатель',
+        'ptr-right.png',
+        createFreeAction('f_ptr_right'),
+        'Правый указатель'
+    )
 }
 
 function initToolbarGraf(toolbar) {
