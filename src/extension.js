@@ -275,7 +275,7 @@ async function handleDiagramUpdate(document, diagram, webviewPanel) {
         errorMessage = '';
         currentName = path.basename(
             document.fileName,
-            '.drakon'
+            '.' + diagram.type
         );
         if (currentName !== diagram.name) {
             newUri = vscode.Uri.file(
@@ -283,7 +283,8 @@ async function handleDiagramUpdate(document, diagram, webviewPanel) {
                     path.dirname(
                         document.fileName
                     ),
-                    diagram.name + '.drakon'
+                    diagram.name + '.' + diagram
+                    .type
                 )
             );
             renameError = null;

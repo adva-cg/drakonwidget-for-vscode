@@ -315,6 +315,21 @@ function createEmptyDiagram(name) {
     return id
 }
 
+function createFreeAction(type, shortcut) {
+    var action;
+    action = function () {
+        insertFree(type)
+    }
+    if (shortcut) {
+        Mousetrap.bind(
+            shortcut.toLowerCase(),
+            action,
+            "keydown"
+        )
+    }
+    return action
+}
+
 function createInsertAction(type, shortcut) {
     var action;
     action = function () {
@@ -929,10 +944,14 @@ function initToolbar(typeDiagram) {
         addToolbarRow(
             toolbar,
             'group-duration.png',
-            insertGroupDurationLeft,
+            createFreeAction(
+                'group-duration-left'
+            ),
             'Групповая длительность (слева)',
             'group-duration-r.png',
-            insertGroupDurationRight,
+            createFreeAction(
+                'group-duration-right'
+            ),
             'Групповая длительность (справа)'
         )
     } else {
@@ -942,11 +961,37 @@ function initToolbar(typeDiagram) {
             } else {
                 throw new Error("Unexpected Choice value: " + _sw_39);
             }
+            addToolbarRow(
+                toolbar,
+                'rectangle.png',
+                createInsertAction('idea', 'A'),
+                'Идея',
+                'rounded.png',
+                createInsertAction('ridea', 'R'),
+                'Идея - скругленно'
+            );
+            addToolbarRow(
+                toolbar,
+                'comment.png',
+                createInsertAction('conclusion', 'C'),
+                'Заключение',
+                'callout.png',
+                createFreeAction('callout'),
+                'Выноска'
+            );
         }
     }
     below = div()
     below.style.height = "50px"
     add(toolbar, below)
+}
+
+function insertCallout() {
+    m.drakon.insertFree("callout")
+}
+
+function insertFree(type) {
+    m.drakon.insertFree(type)
 }
 
 function insertGroupDurationLeft() {
@@ -1800,8 +1845,8 @@ function updateFilename(name) {
     diagram = JSON.parse(diagramStr)
     if (diagram.name !== name) {
         diagram.id = diagram.id.replace(
-            diagram.name + ".drakon",
-            name + ".drakon"
+            diagram.name + "." + diagram.type,
+            name + "." + diagram.type
         )
         diagram.name = name
         isolatedStorage.setItem(
