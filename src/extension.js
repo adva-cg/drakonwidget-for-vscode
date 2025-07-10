@@ -398,25 +398,31 @@ function log(message, ...args) {
 }
 
 async function newDiagram() {
-    var defaultName, emptyDiagram, uri;
-    defaultName = 'НоваяСхема_' + getCurrentDateTimeString();
-    uri = await exports.provider.showSaveDialog(
-        defaultName
+    var defaultName, emptyDiagram, type, uri;
+    type = await vscode.window.showQuickPick(
+        ['drakon', 'graf', 'free'],
+        {
+            placeHolder: 'Выберите тип диаграммы'
+        }
     )
-    if (uri) {
-        emptyDiagram = {
-            type: "drakon",
-            items: {}
-        };
-        await exports.provider.saveToNewFile(
-            uri,
-            emptyDiagram
-        );
-        await vscode.commands.executeCommand(
-            'vscode.openWith',
-            uri,
-            DRAKON_EDITOR_VIEW_TYPE
+    if (type) {
+        defaultName = 'НоваяСхема_' + getCurrentDateTimeString();
+        uri = await exports.provider.showSaveDialog(
+            defaultName,
+            type
         )
+        if (uri) {
+            emptyDiagram = {type: type, items: {}};
+            await exports.provider.saveToNewFile(
+                uri,
+                emptyDiagram
+            );
+            await vscode.commands.executeCommand(
+                'vscode.openWith',
+                uri,
+                DRAKON_EDITOR_VIEW_TYPE
+            )
+        }
     }
 }
 
@@ -732,7 +738,7 @@ async function setLanguage() {
     }
 }
 
-async function showSaveDialog(defaultName) {
+async function showSaveDialog(defaultName, type) {
     var result, sanitizedName;
     log(
         "showSaveDialog called",
@@ -746,16 +752,10 @@ async function showSaveDialog(defaultName) {
             defaultUri: vscode.Uri.file(
                 path.join(
                     getWorkspaceFolder(),
-                    sanitizedName + '.drakon'
+                    sanitizedName + '.' + type
                 )
             ),
-            filters: {
-                'Diagrams': [
-                    'drakon',
-                    'graf',
-                    'free'
-                ]
-            },
+            filters: {'Diagrams': [type]},
             saveLabel: 'Save Diagram'
         }
     )
