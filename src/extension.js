@@ -690,9 +690,6 @@ async function resolveCustomTextEditor(document, webviewPanel) {
     webviewPanel.onDidDispose(
         function () {
             log("webviewPanel disposed");
-            webviewPanel.webview.postMessage(
-                {command: 'deleteState'}
-            );
             DEP.activeWebviews.delete (
                 webviewPanel
             );

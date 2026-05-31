@@ -1851,8 +1851,8 @@ function toggleShowIds() {
     // Обновляем конфиг и перерисовываем
     if (m.drakon && m.drakon.config) {
         m.drakon.config.showIds = (showIds === "true");
+        m.drakon.redraw();
     }
-    m.drakon.redraw();
 }
 
 function toggleSilhouette() {
