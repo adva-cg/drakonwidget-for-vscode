@@ -120,6 +120,16 @@ async function generateOutput(generationType) {
     }
 }
 
+function toggleShowIds() {
+    var message;
+    message = {
+        command: 'toggleShowIds'
+    };
+    DEP.activeWebviews.forEach(function (webview) {
+        webview.webview.postMessage(message);
+    });
+}
+
 async function generateOutputTry(generationType) {
     var command, config, diagramName, doc, drakonContent, fileContent, fileUri, lang, languageSetting, output;
     if (!DEP.activeFilename) {
@@ -459,6 +469,12 @@ function registerCommands(context) {
         vscode.commands.registerCommand(
             'drakon.setLanguage',
             setLanguage
+        )
+    )
+    context.subscriptions.push(
+        vscode.commands.registerCommand(
+            'drakon.toggleShowIds',
+            toggleShowIds
         )
     )
     context.subscriptions.push(

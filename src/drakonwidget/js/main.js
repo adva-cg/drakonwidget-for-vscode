@@ -209,6 +209,7 @@ function buildConfig() {
     config.canvasIcons = false
     config.centerContent = false
     config.textFormat = "plain"
+    config.showIds = localStorage.getItem("showIds") === "true"
     return config
 }
 
@@ -482,7 +483,9 @@ function eventListener(event) {
     var _sw_9, currentDiagram, diagram, diagramStr;
     if (event.data) {
         _sw_9 = event.data.command;
-        if (_sw_9 === 'loadDiagram') {
+        if (_sw_9 === 'toggleShowIds') {
+            toggleShowIds();
+        } else if (_sw_9 === 'loadDiagram') {
             diagram = event.data.diagram
             isolatedStorage.setItem(
                 diagram.id,
@@ -1835,6 +1838,21 @@ async function startEditStyle(ids, oldStyle, x, y) {
         }
         m.drakon.setStyle(ids, style)
     }
+}
+
+function toggleShowIds() {
+    var showIds;
+    showIds = localStorage.getItem("showIds");
+    if (showIds === null) {
+        showIds = "false";
+    }
+    showIds = showIds === "true" ? "false" : "true";
+    localStorage.setItem("showIds", showIds);
+    // Обновляем конфиг и перерисовываем
+    if (m.drakon && m.drakon.config) {
+        m.drakon.config.showIds = (showIds === "true");
+    }
+    m.drakon.redraw();
 }
 
 function toggleSilhouette() {

@@ -1,0 +1,65 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "3"
+    },
+    "3": {
+      "type": "question",
+      "content": "Относительный путь (\"./foo\")",
+      "one": "5",
+      "two": "9",
+      "flag1": 1
+    },
+    "5": {
+      "type": "action",
+      "content": "ищем в указанной папке: `./foo.ts`, `./foo.tsx`, `./foo.d.ts`",
+      "one": "7"
+    },
+    "7": {
+      "type": "question",
+      "content": "`allowJs` (package.json)",
+      "one": "8",
+      "two": "1",
+      "flag1": 1
+    },
+    "8": {
+      "type": "action",
+      "content": "ищем `./foo.js`, `./foo.jsx`",
+      "one": "1"
+    },
+    "9": {
+      "type": "question",
+      "content": "\"голый\" импорт (\"foo\")",
+      "one": "10",
+      "two": "1",
+      "flag1": 1
+    },
+    "10": {
+      "type": "action",
+      "content": "Ищем в `node_modules`",
+      "one": "11"
+    },
+    "11": {
+      "type": "action",
+      "content": "Проверяем `node_modules/foo/package.json` (поле `\"types\"`, `\"main\"`)",
+      "one": "12"
+    },
+    "12": {
+      "type": "action",
+      "content": "Ищем `node_modules/foo/index.ts` (или `.d.ts`, `.js`)",
+      "one": "13"
+    },
+    "13": {
+      "type": "action",
+      "content": "Проверяем `@types/foo` (если `typeRoots` не переопределён)",
+      "one": "1"
+    }
+  },
+  "style": "{\"maxWidth\":370}"
+}

@@ -15136,6 +15136,9 @@ function createDrakonWidget() {
                     render = visuals.config.iconRender[node.type];
                     if (render) {
                         render(visuals, node, ctx);
+                        if (visuals.config.showIds && node.id && node.type !== 'junction' && node.type !== 'arrow-loop') {
+                            drawIconId(visuals, node, ctx);
+                        }
                         __state = '1';
                     } else {
                         console.error('iconRender callback not found for element of type: ' + node.type);
@@ -15145,6 +15148,24 @@ function createDrakonWidget() {
                 default:
                     return;
                 }
+            }
+        }
+        function drawIconId(visuals, node, ctx) {
+            var x, y, fontSize, padding;
+            fontSize = 10;
+            padding = 3;
+            ctx.font = fontSize + "px monospace";
+            ctx.fillStyle = "gray";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "bottom";
+            
+            var left = (typeof node.left === "number") ? node.left : (typeof node.x === "number" && typeof node.w === "number" ? node.x - node.w : null);
+            var top = (typeof node.top === "number") ? node.top : (typeof node.y === "number" && typeof node.h === "number" ? node.y - node.h : null);
+            
+            if (left !== null && top !== null && !isNaN(left) && !isNaN(top)) {
+                x = left;
+                y = top - padding;
+                ctx.fillText(String(node.id), x, y);
             }
         }
         function drawEdge(widget, edge, ctx) {
