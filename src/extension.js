@@ -6,6 +6,7 @@ const drakongen = require(
 );
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
+const pendingNavigation = {};
 // --- Статические переменные ---
 
 const DEP = {}
@@ -644,6 +645,15 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 diagram: diagram
             }
         );
+        webviewPanel.documentUri = document.uri.toString();
+        const pendingItemId = pendingNavigation[document.uri.toString()];
+        if (pendingItemId) {
+            webviewPanel.webview.postMessage({
+                command: 'showItem',
+                itemId: pendingItemId
+            });
+            delete pendingNavigation[document.uri.toString()];
+        }
         log("Diagram loaded", diagram);
     } catch (error) {
         log("Error loading diagram", error);
@@ -658,6 +668,77 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 message
             );
             switch (message.command) {
+                case 'globalSearchText':
+                    if (message.query === undefined) { return; }
+                    log("Global search query received:", message.query);
+                    (async () => {
+                        const query = message.query.trim().toLowerCase();
+                        if (!query) {
+                            webviewPanel.webview.postMessage({
+                                command: 'globalSearchResults',
+                                results: []
+                            });
+                            return;
+                        }
+                        const uris = await vscode.workspace.findFiles('**/*.{drakon,graf,free}');
+                        const matched = [];
+                        for (const uri of uris) {
+                            try {
+                                const fileContent = await vscode.workspace.fs.readFile(uri);
+                                const text = new TextDecoder().decode(fileContent);
+                                const diagram = JSON.parse(text);
+                                const items = diagram.items || {};
+                                for (const [id, item] of Object.entries(items)) {
+                                    if (item && item.content) {
+                                        const contentStr = item.content.toString();
+                                        if (contentStr.toLowerCase().indexOf(query) !== -1) {
+                                            matched.push({
+                                                uri: uri.toString(),
+                                                relativePath: vscode.workspace.asRelativePath(uri),
+                                                fileName: path.basename(uri.fsPath),
+                                                id: id,
+                                                type: item.type,
+                                                content: contentStr
+                                            });
+                                        }
+                                    }
+                                }
+                            } catch (e) {
+                                log("Error parsing file during global search: " + uri.toString(), e.message);
+                            }
+                        }
+                        webviewPanel.webview.postMessage({
+                            command: 'globalSearchResults',
+                            results: matched
+                        });
+                    })();
+                    return;
+                case 'openAndShowItem':
+                    if (message.uri && message.itemId) {
+                        log("Open and show item:", message.itemId, "in file:", message.uri);
+                        const targetUri = vscode.Uri.parse(message.uri);
+                        let panelFound = null;
+                        for (const p of DEP.activeWebviews) {
+                            if (p.documentUri === targetUri.toString()) {
+                                panelFound = p;
+                                break;
+                            }
+                        }
+                        if (panelFound) {
+                            panelFound.webview.postMessage({
+                                command: 'showItem',
+                                itemId: message.itemId
+                            });
+                        } else {
+                            pendingNavigation[targetUri.toString()] = message.itemId;
+                        }
+                        await vscode.commands.executeCommand(
+                            'vscode.openWith',
+                            targetUri,
+                            DRAKON_EDITOR_VIEW_TYPE
+                        );
+                    }
+                    return;
                 case 'log':
                     log("[WebView] " + message.message);
                     return;

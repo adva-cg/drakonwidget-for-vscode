@@ -528,6 +528,14 @@ function eventListener(event) {
         _sw_9 = event.data.command;
         if (_sw_9 === 'toggleShowIds') {
             toggleShowIds();
+        } else if (_sw_9 === 'showItem') {
+            if (event.data.itemId && m.drakon) {
+                m.drakon.showItem(event.data.itemId);
+            }
+        } else if (_sw_9 === 'globalSearchResults') {
+            if (window.activeGlobalSearchResultsHandler) {
+                window.activeGlobalSearchResultsHandler(event.data.results || []);
+            }
         } else if (_sw_9 === 'loadDiagram') {
             diagram = event.data.diagram
             isolatedStorage.setItem(
@@ -1054,6 +1062,24 @@ function initToolbar(typeDiagram) {
         'redo.png',
         redo,
         'Повторить. Ctrl+Y'
+    )
+    addToolbarRow(
+        toolbar,
+        'code.png',
+        toggleShowIds,
+        'Показать/скрыть ID',
+        'search-s.png',
+        showFindByIdDialog,
+        'Перейти к иконе по ID'
+    )
+    addToolbarRow(
+        toolbar,
+        'text.png',
+        showSearchTextDialog,
+        'Поиск текста в иконах',
+        'workspace-s2.png',
+        showGlobalSearchDialog,
+        'Глобальный поиск текста в проекте'
     )
     addVSpace(toolbar)
     _sw_39 = typeDiagram;
@@ -2762,6 +2788,568 @@ function showThemeColorEditor() {
     modal.appendChild(footer);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+}
+
+function showFindByIdDialog() {
+    closeMenu();
+    
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.65); display: flex; align-items: center;
+        justify-content: center; z-index: 10005;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    `;
+    
+    const modal = document.createElement("div");
+    modal.style.cssText = `
+        background: #252526; color: #cccccc; border: 1px solid #454545;
+        border-radius: 8px; padding: 20px; width: 340px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 14px;
+    `;
+    
+    const title = document.createElement("h3");
+    title.innerText = "Перейти к иконе по ID";
+    title.style.cssText = "margin: 0; font-size: 15px; font-weight: 600; color: #ffffff;";
+    modal.appendChild(title);
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Введите ID иконы (например: 3)";
+    input.style.cssText = `
+        background: #3c3c3c; color: #ffffff; border: 1px solid #6b6b6b;
+        border-radius: 4px; padding: 8px 12px; font-size: 14px; outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    `;
+    input.onfocus = () => {
+        input.style.borderColor = "#0e639c";
+        input.style.boxShadow = "0 0 5px rgba(14, 99, 156, 0.5)";
+    };
+    input.onblur = () => {
+        input.style.borderColor = "#6b6b6b";
+        input.style.boxShadow = "none";
+    };
+    modal.appendChild(input);
+    
+    const errorDiv = document.createElement("div");
+    errorDiv.style.cssText = "color: #f28b82; font-size: 12px; display: none;";
+    modal.appendChild(errorDiv);
+    
+    const buttons = document.createElement("div");
+    buttons.style.cssText = "display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px;";
+    
+    const cancelBtn = document.createElement("button");
+    cancelBtn.innerText = "Отмена";
+    cancelBtn.style.cssText = `
+        background: #3c3c3c; color: #ffffff; border: none; border-radius: 4px;
+        padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    cancelBtn.onmouseenter = () => cancelBtn.style.background = "#4f4f4f";
+    cancelBtn.onmouseleave = () => cancelBtn.style.background = "#3c3c3c";
+    cancelBtn.onclick = () => document.body.removeChild(overlay);
+    buttons.appendChild(cancelBtn);
+    
+    const findBtn = document.createElement("button");
+    findBtn.innerText = "Перейти";
+    findBtn.style.cssText = `
+        background: #0e639c; color: #ffffff; border: none; border-radius: 4px;
+        padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    findBtn.onmouseenter = () => findBtn.style.background = "#1177bb";
+    findBtn.onmouseleave = () => findBtn.style.background = "#0e639c";
+    
+    function doFind() {
+        const id = input.value.trim();
+        if (!id) {
+            errorDiv.innerText = "Пожалуйста, введите ID.";
+            errorDiv.style.display = "block";
+            return;
+        }
+        
+        const currentDiagramId = isolatedStorage.getItem("current-diagram");
+        if (!currentDiagramId) {
+            errorDiv.innerText = "Ошибка: Диаграмма не открыта.";
+            errorDiv.style.display = "block";
+            return;
+        }
+        
+        const diagramStr = isolatedStorage.getItem(currentDiagramId);
+        const diagram = JSON.parse(diagramStr);
+        const items = diagram.items || {};
+        
+        if (items[id]) {
+            try {
+                m.drakon.showItem(id);
+                document.body.removeChild(overlay);
+            } catch (err) {
+                errorDiv.innerText = "Ошибка навигации: " + err.message;
+                errorDiv.style.display = "block";
+            }
+        } else {
+            errorDiv.innerText = `Икона с ID "${id}" не найдена в этой схеме.`;
+            errorDiv.style.display = "block";
+        }
+    }
+    
+    findBtn.onclick = doFind;
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            doFind();
+        }
+    });
+    
+    buttons.appendChild(findBtn);
+    modal.appendChild(buttons);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    
+    input.focus();
+}
+
+function showSearchTextDialog() {
+    closeMenu();
+    
+    // Inject styles for list and tags if not already present
+    let styleTag = document.getElementById("drakon-search-styles");
+    if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.id = "drakon-search-styles";
+        styleTag.innerHTML = `
+            .drakon-search-overlay {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.65); display: flex; align-items: center;
+                justify-content: center; z-index: 10005;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            .drakon-search-modal {
+                background: #252526; color: #cccccc; border: 1px solid #454545;
+                border-radius: 8px; padding: 20px; width: 440px; max-height: 80vh;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 14px;
+            }
+            .drakon-search-input {
+                background: #3c3c3c; color: #ffffff; border: 1px solid #6b6b6b;
+                border-radius: 4px; padding: 8px 12px; font-size: 14px; outline: none;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                width: 100%; box-sizing: border-box;
+            }
+            .drakon-search-input:focus {
+                border-color: #0e639c;
+                box-shadow: 0 0 5px rgba(14, 99, 156, 0.5);
+            }
+            .drakon-results-container {
+                overflow-y: auto; flex: 1; max-height: 300px;
+                border: 1px solid #3c3c3c; border-radius: 4px; background: #1e1e1e;
+            }
+            .drakon-result-item {
+                padding: 10px 14px; border-bottom: 1px solid #2d2d2d; cursor: pointer;
+                transition: background 0.15s ease, border-left-color 0.15s ease;
+                display: flex; flex-direction: column; gap: 6px; border-left: 3px solid transparent;
+            }
+            .drakon-result-item:hover {
+                background: #2a2d2e; border-left-color: #0e639c;
+            }
+            .drakon-result-item:last-child {
+                border-bottom: none;
+            }
+            .drakon-result-header {
+                display: flex; align-items: center; justify-content: space-between;
+            }
+            .drakon-type-tag {
+                font-size: 10px; font-weight: 600; text-transform: uppercase;
+                padding: 2px 6px; border-radius: 3px; display: inline-block;
+            }
+            .drakon-type-tag.action { background: #004b7c; color: #5cb8ff; border: 1px solid #005a95; }
+            .drakon-type-tag.question { background: #6b1414; color: #ff8b8b; border: 1px solid #7d1a1a; }
+            .drakon-type-tag.loop { background: #6d4000; color: #ffd180; border: 1px solid #824d00; }
+            .drakon-type-tag.branch { background: #195219; color: #8bff8b; border: 1px solid #206720; }
+            .drakon-type-tag.comment { background: #4a4a4a; color: #e0e0e0; border: 1px solid #575757; }
+            .drakon-type-tag.other { background: #333333; color: #aaaaaa; border: 1px solid #444444; }
+            .drakon-result-id {
+                font-size: 11px; color: #858585; font-family: monospace;
+            }
+            .drakon-result-content {
+                font-size: 13px; color: #e1e1e1; white-space: pre-wrap; word-break: break-word;
+            }
+            .drakon-no-results {
+                padding: 20px; text-align: center; color: #858585; font-size: 13px;
+            }
+        `;
+        document.head.appendChild(styleTag);
+    }
+    
+    const overlay = document.createElement("div");
+    overlay.className = "drakon-search-overlay";
+    
+    const modal = document.createElement("div");
+    modal.className = "drakon-search-modal";
+    
+    const title = document.createElement("h3");
+    title.innerText = "Поиск текста в иконах";
+    title.style.cssText = "margin: 0; font-size: 15px; font-weight: 600; color: #ffffff;";
+    modal.appendChild(title);
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "drakon-search-input";
+    input.placeholder = "Введите текст для поиска...";
+    modal.appendChild(input);
+    
+    const resultsList = document.createElement("div");
+    resultsList.className = "drakon-results-container";
+    modal.appendChild(resultsList);
+    
+    const buttons = document.createElement("div");
+    buttons.style.cssText = "display: flex; justify-content: flex-end; margin-top: 6px;";
+    
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "Закрыть";
+    closeBtn.style.cssText = `
+        background: #3c3c3c; color: #ffffff; border: none; border-radius: 4px;
+        padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    closeBtn.onmouseenter = () => closeBtn.style.background = "#4f4f4f";
+    closeBtn.onmouseleave = () => closeBtn.style.background = "#3c3c3c";
+    closeBtn.onclick = () => document.body.removeChild(overlay);
+    buttons.appendChild(closeBtn);
+    modal.appendChild(buttons);
+    
+    // Fetch and search items
+    const currentDiagramId = isolatedStorage.getItem("current-diagram");
+    let items = {};
+    if (currentDiagramId) {
+        const diagramStr = isolatedStorage.getItem(currentDiagramId);
+        if (diagramStr) {
+            const diagram = JSON.parse(diagramStr);
+            items = diagram.items || {};
+        }
+    }
+    
+    function getTypeLabel(type) {
+        switch (type) {
+            case "action": return { text: "Действие", css: "action" };
+            case "question": return { text: "Вопрос", css: "question" };
+            case "loopbegin": return { text: "Начало цикла", css: "loop" };
+            case "loopend": return { text: "Конец цикла", css: "loop" };
+            case "branch": return { text: "Ветвь", css: "branch" };
+            case "comment": return { text: "Комментарий", css: "comment" };
+            case "insertion": return { text: "Вставка", css: "action" };
+            case "select": return { text: "Выбор", css: "loop" };
+            case "case": return { text: "Вариант", css: "other" };
+            case "input": return { text: "Ввод", css: "action" };
+            case "output": return { text: "Вывод", css: "action" };
+            case "simpleinput": return { text: "Ввод", css: "action" };
+            case "simpleoutput": return { text: "Вывод", css: "action" };
+            default: return { text: type || "Элемент", css: "other" };
+        }
+    }
+    
+    function renderResults(query) {
+        resultsList.innerHTML = "";
+        query = query.toLowerCase().trim();
+        
+        const matched = [];
+        for (const [id, item] of Object.entries(items)) {
+            if (item && item.content) {
+                const text = item.content.toString();
+                if (!query || text.toLowerCase().indexOf(query) !== -1) {
+                    matched.push({ id, item, text });
+                }
+            }
+        }
+        
+        if (matched.length === 0) {
+            const noResults = document.createElement("div");
+            noResults.className = "drakon-no-results";
+            noResults.innerText = query ? "Совпадений не найдено." : "Введите текст, чтобы начать поиск.";
+            resultsList.appendChild(noResults);
+            return;
+        }
+        
+        matched.forEach(({ id, item, text }) => {
+            const itemUI = document.createElement("div");
+            itemUI.className = "drakon-result-item";
+            
+            const header = document.createElement("div");
+            header.className = "drakon-result-header";
+            
+            const badgeInfo = getTypeLabel(item.type);
+            const tag = document.createElement("span");
+            tag.className = `drakon-type-tag ${badgeInfo.css}`;
+            tag.innerText = badgeInfo.text;
+            header.appendChild(tag);
+            
+            const idSpan = document.createElement("span");
+            idSpan.className = "drakon-result-id";
+            idSpan.innerText = `ID: ${id}`;
+            header.appendChild(idSpan);
+            
+            itemUI.appendChild(header);
+            
+            const content = document.createElement("div");
+            content.className = "drakon-result-content";
+            content.innerText = text;
+            itemUI.appendChild(content);
+            
+            itemUI.onclick = () => {
+                m.drakon.showItem(id);
+                document.body.removeChild(overlay);
+            };
+            
+            resultsList.appendChild(itemUI);
+        });
+    }
+    
+    // Live search as they type
+    input.addEventListener("input", (e) => {
+        renderResults(e.target.value);
+    });
+    
+    // Initial display
+    renderResults("");
+    
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    input.focus();
+}
+
+function showGlobalSearchDialog() {
+    closeMenu();
+    
+    // Inject styles for global search list and tags if not already present
+    let styleTag = document.getElementById("drakon-global-search-styles");
+    if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.id = "drakon-global-search-styles";
+        styleTag.innerHTML = `
+            .drakon-gsearch-overlay {
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0, 0, 0, 0.65); display: flex; align-items: center;
+                justify-content: center; z-index: 10005;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            .drakon-gsearch-modal {
+                background: #252526; color: #cccccc; border: 1px solid #454545;
+                border-radius: 8px; padding: 20px; width: 500px; max-height: 80vh;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 14px;
+            }
+            .drakon-gsearch-input {
+                background: #3c3c3c; color: #ffffff; border: 1px solid #6b6b6b;
+                border-radius: 4px; padding: 8px 12px; font-size: 14px; outline: none;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                width: 100%; box-sizing: border-box;
+            }
+            .drakon-gsearch-input:focus {
+                border-color: #0e639c;
+                box-shadow: 0 0 5px rgba(14, 99, 156, 0.5);
+            }
+            .drakon-gresults-container {
+                overflow-y: auto; flex: 1; max-height: 350px;
+                border: 1px solid #3c3c3c; border-radius: 4px; background: #1e1e1e;
+            }
+            .drakon-gresult-item {
+                padding: 12px 14px; border-bottom: 1px solid #2d2d2d; cursor: pointer;
+                transition: background 0.15s ease, border-left-color 0.15s ease;
+                display: flex; flex-direction: column; gap: 6px; border-left: 3px solid transparent;
+            }
+            .drakon-gresult-item:hover {
+                background: #2a2d2e; border-left-color: #0e639c;
+            }
+            .drakon-gresult-item:last-child {
+                border-bottom: none;
+            }
+            .drakon-gresult-header {
+                display: flex; align-items: center; justify-content: space-between;
+            }
+            .drakon-gresult-file {
+                font-size: 12px; font-weight: 600; color: #3794ff;
+            }
+            .drakon-gresult-meta {
+                display: flex; align-items: center; gap: 8px;
+            }
+            .drakon-gtype-tag {
+                font-size: 9px; font-weight: 600; text-transform: uppercase;
+                padding: 1px 4px; border-radius: 2px; display: inline-block;
+            }
+            .drakon-gtype-tag.action { background: #004b7c; color: #5cb8ff; border: 1px solid #005a95; }
+            .drakon-gtype-tag.question { background: #6b1414; color: #ff8b8b; border: 1px solid #7d1a1a; }
+            .drakon-gtype-tag.loop { background: #6d4000; color: #ffd180; border: 1px solid #824d00; }
+            .drakon-gtype-tag.branch { background: #195219; color: #8bff8b; border: 1px solid #206720; }
+            .drakon-gtype-tag.comment { background: #4a4a4a; color: #e0e0e0; border: 1px solid #575757; }
+            .drakon-gtype-tag.other { background: #333333; color: #aaaaaa; border: 1px solid #444444; }
+            .drakon-gresult-id {
+                font-size: 10px; color: #858585; font-family: monospace;
+            }
+            .drakon-gresult-content {
+                font-size: 13px; color: #e1e1e1; white-space: pre-wrap; word-break: break-word;
+            }
+            .drakon-gresult-path {
+                font-size: 10px; color: #6e6e6e; margin-top: 2px;
+            }
+            .drakon-gno-results {
+                padding: 20px; text-align: center; color: #858585; font-size: 13px;
+            }
+        `;
+        document.head.appendChild(styleTag);
+    }
+    
+    const overlay = document.createElement("div");
+    overlay.className = "drakon-gsearch-overlay";
+    
+    const modal = document.createElement("div");
+    modal.className = "drakon-gsearch-modal";
+    
+    const title = document.createElement("h3");
+    title.innerText = "Глобальный поиск по проекту";
+    title.style.cssText = "margin: 0; font-size: 15px; font-weight: 600; color: #ffffff;";
+    modal.appendChild(title);
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "drakon-gsearch-input";
+    input.placeholder = "Введите text для поиска по всем схемам...";
+    modal.appendChild(input);
+    
+    const resultsList = document.createElement("div");
+    resultsList.className = "drakon-gresults-container";
+    modal.appendChild(resultsList);
+    
+    const buttons = document.createElement("div");
+    buttons.style.cssText = "display: flex; justify-content: flex-end; margin-top: 6px;";
+    
+    const closeBtn = document.createElement("button");
+    closeBtn.innerText = "Закрыть";
+    closeBtn.style.cssText = `
+        background: #3c3c3c; color: #ffffff; border: none; border-radius: 4px;
+        padding: 6px 14px; cursor: pointer; font-size: 13px; font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    closeBtn.onmouseenter = () => closeBtn.style.background = "#4f4f4f";
+    closeBtn.onmouseleave = () => closeBtn.style.background = "#3c3c3c";
+    closeBtn.onclick = () => {
+        window.activeGlobalSearchResultsHandler = null;
+        document.body.removeChild(overlay);
+    };
+    buttons.appendChild(closeBtn);
+    modal.appendChild(buttons);
+    
+    function getTypeLabel(type) {
+        switch (type) {
+            case "action": return { text: "Действие", css: "action" };
+            case "question": return { text: "Вопрос", css: "question" };
+            case "loopbegin": return { text: "Начало цикла", css: "loop" };
+            case "loopend": return { text: "Конец цикла", css: "loop" };
+            case "branch": return { text: "Ветвь", css: "branch" };
+            case "comment": return { text: "Комментарий", css: "comment" };
+            case "insertion": return { text: "Вставка", css: "action" };
+            case "select": return { text: "Выбор", css: "loop" };
+            case "case": return { text: "Вариант", css: "other" };
+            case "input": return { text: "Ввод", css: "action" };
+            case "output": return { text: "Вывод", css: "action" };
+            case "simpleinput": return { text: "Ввод", css: "action" };
+            case "simpleoutput": return { text: "Вывод", css: "action" };
+            default: return { text: type || "Элемент", css: "other" };
+        }
+    }
+    
+    window.activeGlobalSearchResultsHandler = function (results) {
+        resultsList.innerHTML = "";
+        
+        if (results.length === 0) {
+            const noResults = document.createElement("div");
+            noResults.className = "drakon-gno-results";
+            noResults.innerText = input.value.trim() ? "Совпадений не найдено." : "Введите текст, чтобы начать глобальный поиск.";
+            resultsList.appendChild(noResults);
+            return;
+        }
+        
+        results.forEach((res) => {
+            const itemUI = document.createElement("div");
+            itemUI.className = "drakon-gresult-item";
+            
+            const header = document.createElement("div");
+            header.className = "drakon-gresult-header";
+            
+            const fileSpan = document.createElement("span");
+            fileSpan.className = "drakon-gresult-file";
+            fileSpan.innerText = res.fileName;
+            header.appendChild(fileSpan);
+            
+            const meta = document.createElement("div");
+            meta.className = "drakon-gresult-meta";
+            
+            const badgeInfo = getTypeLabel(res.type);
+            const tag = document.createElement("span");
+            tag.className = `drakon-gtype-tag ${badgeInfo.css}`;
+            tag.innerText = badgeInfo.text;
+            meta.appendChild(tag);
+            
+            const idSpan = document.createElement("span");
+            idSpan.className = "drakon-gresult-id";
+            idSpan.innerText = `ID: ${res.id}`;
+            meta.appendChild(idSpan);
+            
+            header.appendChild(meta);
+            itemUI.appendChild(header);
+            
+            const content = document.createElement("div");
+            content.className = "drakon-gresult-content";
+            content.innerText = res.content;
+            itemUI.appendChild(content);
+            
+            const pathUI = document.createElement("div");
+            pathUI.className = "drakon-gresult-path";
+            pathUI.innerText = res.relativePath;
+            itemUI.appendChild(pathUI);
+            
+            itemUI.onclick = () => {
+                if (window.vscode) {
+                    window.vscode.postMessage({
+                        command: 'openAndShowItem',
+                        uri: res.uri,
+                        itemId: res.id
+                    });
+                }
+                window.activeGlobalSearchResultsHandler = null;
+                document.body.removeChild(overlay);
+            };
+            
+            resultsList.appendChild(itemUI);
+        });
+    };
+    
+    // Live search as they type
+    input.addEventListener("input", (e) => {
+        const query = e.target.value.trim();
+        if (!query) {
+            resultsList.innerHTML = "";
+            const noResults = document.createElement("div");
+            noResults.className = "drakon-gno-results";
+            noResults.innerText = "Введите текст, чтобы начать глобальный поиск.";
+            resultsList.appendChild(noResults);
+            return;
+        }
+        
+        if (window.vscode) {
+            window.vscode.postMessage({
+                command: 'globalSearchText',
+                query: query
+            });
+        }
+    });
+    
+    // Initial display
+    resultsList.innerHTML = "";
+    const noResults = document.createElement("div");
+    noResults.className = "drakon-gno-results";
+    noResults.innerText = "Введите текст, чтобы начать глобальный поиск.";
+    resultsList.appendChild(noResults);
+    
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    input.focus();
 }
 
 main()
