@@ -1,10 +1,10 @@
 # DrakonWidget
 
-Current version: 1.4.7
+Current version: 1.5.6
 
 DrakonWidget is a JavaScript widget for viewing and editing drakon flowcharts.
 
-[DrakonHub for Desktop](https://github.com/stepan-mitkin/drakonhub_desktop) is based on DrakonWidget.
+[DrakonHub for desktop, mobile, and browser](https://drakonhub.com) is based on DrakonWidget.
 
 ## Online demo:
 
@@ -17,6 +17,9 @@ DrakonWidget is a plain JavaScript file with no dependencies. You can use Drakon
 
 [drakonwidget.js](https://stepan-mitkin.github.io/drakonwidget/libs/drakonwidget.js)
 
+## DrakonWidget is written in Drakon-JavaScript
+
+DrakonWidget is developed using the Drakon visual language in [drakon.tech.desktop](https://github.com/stepan-mitkin/drakon.tech.desktop). See the source modules in the __dtsrc__ folder.
 
 ## How to use DrakonWidget
 
@@ -82,7 +85,8 @@ var diagram = getDiagramFromServer(diagramId)
 drakon.setDiagram(
     diagramId,
     diagram,
-    sender
+    sender,
+    false
 )
 ```
 
@@ -96,12 +100,6 @@ drakon.redraw()
 ## Support
 
 Write to drakon.editor@gmail.com if you need help integrating DrakonWidget.
-
-
-## Source code
-
-https://app.drakon.tech/ide/doc/drakon_widget_10/1
-
 
 ## Configuration reference
 
@@ -844,14 +842,15 @@ The array contains all fonts that are used in the diagram.
 Loads a diagram into the widget.
 
 ```
-function setDiagram(diagramId, diagram, editSender)
+function setDiagram(diagramId, diagram, editSender, canReuseUndo)
 ```
 
 |Name|Data type|Description|
 |---|---|---|
-|diagramId|text|The id of the diagram|
+|diagramId|text|The id of the diagram. The widget remembers each diagram's scrolling position and undo buffer by __diagramId__.|
 |diagram|object|The diagram. See the Diagram data model. Takes ownership of the diagram object.|
 |editSender|object|The widget will send edits performed on the diagram to the __editSender__ object. See the EditSender reference.|
+|canReuseUndo|boolean|If falsey, the widget will create a new undo buffer.|
 
 Return value
 
@@ -1284,7 +1283,6 @@ var diagram = {
 ```
 
 The first icon on the diagram is the __branch__ icon with the lowest __branchId__.
-
 
 ### Diagram object
 

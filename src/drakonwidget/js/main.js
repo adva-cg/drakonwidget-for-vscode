@@ -536,7 +536,8 @@ function eventListener(event) {
                                     m.drakon.setDiagram(
                                         currentDiagram,
                                         diagram,
-                                        createEditSender()
+                                        createEditSender(),
+                                        true
                                     )
                                     console.log(
                                         'revertFilename. Diagram: ',
@@ -1222,7 +1223,8 @@ function openDiagram(currentDiagram) {
     m.drakon.setDiagram(
         currentDiagram,
         diagram,
-        sender
+        sender,
+        true
     )
     isolatedStorage.setItem(
         "current-diagram",
@@ -1942,7 +1944,8 @@ function updateFilename(name) {
             m.drakon.setDiagram(
                 currentDiagram,
                 diagram,
-                createEditSender()
+                createEditSender(),
+                true
             )
             console.log(
                 'updateFileName. Diagram: ',
