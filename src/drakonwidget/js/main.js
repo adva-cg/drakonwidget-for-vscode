@@ -4,6 +4,28 @@
 
 (function() {
 
+    // Send console logs to the extension
+    const oldLog = console.log;
+    console.log = function(...args) {
+        oldLog.apply(console, args);
+        if (window.vscode) {
+            window.vscode.postMessage({
+                command: 'log',
+                message: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')
+            });
+        }
+    };
+    const oldError = console.error;
+    console.error = function(...args) {
+        oldError.apply(console, args);
+        if (window.vscode) {
+            window.vscode.postMessage({
+                command: 'log',
+                message: '[ERROR] ' + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')
+            });
+        }
+    };
+
 var m
 m = {}
 m.iconSize = 20
@@ -545,25 +567,171 @@ function eventListener(event) {
                                     )
                                 }
                             } else {
-                                if (_sw_9 === 'applyTheme') {
+                                if (_sw_9 === 'requestThemeList') {
+                                    console.log("WebView received requestThemeList");
+                                    const list = getThemes() || [];
+                                    const names = [];
+                                    for (const themeId of list) {
+                                        const themeStr = localStorage.getItem(themeId);
+                                        if (themeStr) {
+                                            const themeObj = JSON.parse(themeStr);
+                                            names.push(themeObj.name || themeObj.id);
+                                        } else {
+                                            console.log("Warning: themeId " + themeId + " found in list but missing from localStorage");
+                                        }
+                                    }
+                                    console.log("WebView sending themeList: " + JSON.stringify(names));
+                                    vscode.postMessage({
+                                        command: 'themeList',
+                                        themes: names
+                                    });
+                                } else if (_sw_9 === 'requestThemeData') {
+                                    const name = event.data.theme;
+                                    console.log("WebView received requestThemeData for name: " + name);
+                                    const list = getThemes() || [];
+                                    let themeData = {};
+                                    for (const themeId of list) {
+                                        const themeStr = localStorage.getItem(themeId);
+                                        if (themeStr) {
+                                            const themeObj = JSON.parse(themeStr);
+                                            if (themeObj.name === name || themeObj.id === name) {
+                                                themeData = themeObj.theme || {};
+                                                console.log("Found matching theme: " + themeId);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    console.log("WebView sending themeData for " + name + ": " + JSON.stringify(themeData));
+                                    vscode.postMessage({
+                                        command: 'themeData',
+                                        theme: name,
+                                        data: themeData
+                                    });
+                                } else if (_sw_9 === 'loadCustomThemes') {
+                                    console.log("WebView received loadCustomThemes, payload:", event.data.themes);
+                                    if (event.data.themes) {
+                                        // Ensure default themes are initialized first
+                                        loadThemes();
+                                        
+                                        // Read existing theme IDs from localStorage
+                                        const currentIds = getThemes() || [];
+                                        console.log("Current theme IDs before merge:", JSON.stringify(currentIds));
+                                        
+                                        for (const [name, data] of Object.entries(event.data.themes)) {
+                                            let themeObj = data;
+                                            let themeId = name;
+                                            if (!themeObj || typeof themeObj !== 'object') {
+                                                continue;
+                                            }
+                                            if (!themeObj.id) {
+                                                themeObj = {
+                                                    name: name,
+                                                    id: name,
+                                                    theme: data
+                                                };
+                                            } else {
+                                                themeId = themeObj.id;
+                                            }
+                                            
+                                            console.log("Saving custom theme: " + themeId + " -> " + JSON.stringify(themeObj));
+                                            localStorage.setItem(themeId, JSON.stringify(themeObj));
+                                            
+                                            if (currentIds.indexOf(themeId) === -1) {
+                                                currentIds.push(themeId);
+                                            }
+                                        }
+                                        
+                                        console.log("Saving updated theme list after merge:", JSON.stringify(currentIds));
+                                        localStorage.setItem('themes', JSON.stringify(currentIds));
+                                    }
+                                } else if (_sw_9 === 'openThemeColorEditor') {
+                                    console.log("WebView received openThemeColorEditor");
+                                    showThemeColorEditor();
                                 } else {
-                                    throw new Error("Unexpected Choice value: " + _sw_9);
-                                }
-                                document.body.classList.remove(
-                                    'vscode-light',
-                                    'vscode-dark',
-                                    'drakon-light',
-                                    'drakon-dark'
-                                )
-                                document.body.classList.add(
-                                    event.data.themeClass
-                                )
-                                if ((window.DrakonWidget) && (window.DrakonWidget.setTheme)) {
-                                    window.DrakonWidget.setTheme(
-                                        event.data.themeClass.includes(
-                                            'dark'
-                                        ) ? 'dark': 'light'
-                                    )
+                                    if (_sw_9 === 'applyTheme') {
+                                        console.log("WebView received applyTheme. data:", event.data);
+                                        if (event.data.themeData) {
+                                            let themeObj = event.data.themeData;
+                                            
+                                            // Find if there is an existing theme in localStorage with this name or ID
+                                            const list = getThemes() || [];
+                                            let existingThemeId = null;
+                                            for (const tid of list) {
+                                                const tstr = localStorage.getItem(tid);
+                                                if (tstr) {
+                                                    const tobj = JSON.parse(tstr);
+                                                    if (tobj.name === event.data.themeName || tobj.id === event.data.themeName) {
+                                                        existingThemeId = tobj.id;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            
+                                            let themeId = existingThemeId || event.data.themeName || themeObj.id || "theme-custom";
+                                            if (!themeObj.id) {
+                                                themeObj = {
+                                                    name: event.data.themeName || "Custom",
+                                                    id: themeId,
+                                                    theme: event.data.themeData
+                                                };
+                                            }
+                                            console.log("applyTheme (themeData) applying custom theme: " + themeId);
+                                            localStorage.setItem(themeId, JSON.stringify(themeObj));
+                                            localStorage.setItem("current-theme", themeId);
+                                            
+                                            // Add to themes list if not already there so it persists across reloads
+                                            const currentIds = getThemes() || [];
+                                            if (currentIds.indexOf(themeId) === -1) {
+                                                currentIds.push(themeId);
+                                                localStorage.setItem('themes', JSON.stringify(currentIds));
+                                                console.log("Added theme " + themeId + " to themes list");
+                                            }
+                                            
+                                            const combo = document.getElementById("themes-combobox");
+                                            if (combo) {
+                                                let optionExists = false;
+                                                for (let i = 0; i < combo.options.length; i++) {
+                                                    if (combo.options[i].value === themeId) {
+                                                        optionExists = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!optionExists) {
+                                                    const opt = document.createElement("option");
+                                                    opt.value = themeId;
+                                                    opt.text = themeObj.name || themeId;
+                                                    combo.appendChild(opt);
+                                                    console.log("Added option to themes-combobox: " + themeId);
+                                                }
+                                                combo.value = themeId;
+                                            }
+                                            reloadCurrent();
+                                        } else if (event.data.themeClass) {
+                                            console.log("applyTheme (themeClass) applying vs theme class: " + event.data.themeClass);
+                                            document.body.classList.remove(
+                                                'vscode-light',
+                                                'vscode-dark',
+                                                'drakon-light',
+                                                'drakon-dark'
+                                            );
+                                            document.body.classList.add(event.data.themeClass);
+                                            let themeKey = "theme-class";
+                                            if (event.data.themeClass.includes('dark')) {
+                                                themeKey = "theme-greys";
+                                            } else if (event.data.themeClass === 'drakon-light') {
+                                                themeKey = "theme-bq";
+                                            }
+                                            console.log("Setting current-theme to: " + themeKey);
+                                            localStorage.setItem("current-theme", themeKey);
+                                            const combo = document.getElementById("themes-combobox");
+                                            if (combo) {
+                                                combo.value = themeKey;
+                                            }
+                                            reloadCurrent();
+                                        }
+                                    } else {
+                                        throw new Error("Unexpected Choice value: " + _sw_9);
+                                    }
                                 }
                             }
                         }
@@ -710,10 +878,19 @@ function getThemeValue(core, name) {
 function getThemes() {
     var str;
     str = localStorage.getItem("themes")
+    console.log("getThemes() raw string from localStorage: " + str);
     if (str) {
-        return JSON.parse(str)
+        try {
+            const parsed = JSON.parse(str);
+            console.log("getThemes() parsed list: " + JSON.stringify(parsed));
+            return parsed;
+        } catch (e) {
+            console.error("getThemes() parse error: " + e.message);
+            return undefined;
+        }
     } else {
-        return undefined
+        console.log("getThemes() - 'themes' key not found in localStorage");
+        return undefined;
     }
 }
 
@@ -1078,10 +1255,23 @@ function insertIcon(type) {
 }
 
 function loadThemes() {
-    var list;
+    var list, missing, i;
+    console.log("loadThemes() started");
     list = getThemes()
+    missing = false;
     if (list) {
+        for (i = 0; i < list.length; i++) {
+            if (!localStorage.getItem(list[i])) {
+                console.log("loadThemes() theme missing from storage: " + list[i]);
+                missing = true;
+                break;
+            }
+        }
+    }
+    if (list && list.length > 0 && !missing) {
+        console.log("loadThemes() all themes are already present");
     } else {
+        console.log("loadThemes() list is empty/missing themes, calling saveThemesInStorage()");
         saveThemesInStorage()
     }
 }
@@ -1106,13 +1296,19 @@ function main() {
     }
     loadThemes()
     closeButton = get("close-button")
-    closeButton.addEventListener(
-        "click",
-        closeMenu
-    )
+    if (closeButton) {
+        closeButton.addEventListener(
+            "click",
+            closeMenu
+        )
+    }
     registerClick(
         "set-theme-json-button",
         setThemeJson
+    )
+    registerClick(
+        "edit-theme-colors-button",
+        showThemeColorEditor
     )
     registerChange(
         "themes-combobox",
@@ -1405,17 +1601,25 @@ function redo() {
 
 function registerChange(id, action) {
     var element;
-    element = get(id)
-    element.addEventListener(
-        "change",
-        action
-    )
+    element = document.getElementById(id)
+    if (element) {
+        element.addEventListener(
+            "change",
+            action
+        )
+    } else {
+        console.warn("registerChange: element not found: " + id);
+    }
 }
 
 function registerClick(id, action) {
     var element;
-    element = get(id)
-    element.addEventListener("click", action)
+    element = document.getElementById(id)
+    if (element) {
+        element.addEventListener("click", action)
+    } else {
+        console.warn("registerClick: element not found: " + id);
+    }
 }
 
 function registerEventVscode() {
@@ -1430,7 +1634,9 @@ function reloadCurrent() {
     current = isolatedStorage.getItem(
         "current-diagram"
     )
-    openDiagram(current)
+    if (current) {
+        openDiagram(current)
+    }
 }
 
 function renderEditorWidget() {
@@ -1493,6 +1699,7 @@ function saveStateDrakon() {
 }
 
 function saveThemesInStorage() {
+    console.log("saveThemesInStorage() called. Writing default themes.");
     var _7_col, _7_it, _7_length, ids, theme, themes;
     themes = createThemes()
     ids = themes.map(
@@ -1504,6 +1711,7 @@ function saveThemesInStorage() {
         "themes",
         JSON.stringify(ids)
     )
+    console.log("saveThemesInStorage() wrote default theme IDs: " + JSON.stringify(ids));
     _7_it = 0;
     _7_col = themes;
     _7_length = _7_col.length;
@@ -1523,6 +1731,7 @@ function saveThemesInStorage() {
         "current-theme",
         "theme-class"
     )
+    console.log("saveThemesInStorage() finished");
 }
 
 function sendUpdateToVSCode(diagram) {
@@ -1953,6 +2162,251 @@ function updateFilename(name) {
             )
         }
     }
+}
+
+function showThemeColorEditor() {
+    console.log("showThemeColorEditor() started");
+    
+    const currentThemeId = localStorage.getItem("current-theme") || "theme-class";
+    const themeStr = localStorage.getItem(currentThemeId);
+    if (!themeStr) {
+        console.error("No theme found for ID: " + currentThemeId);
+        return;
+    }
+    const themeObj = JSON.parse(themeStr);
+    const themeColors = themeObj.theme || {};
+    const backupColors = JSON.parse(JSON.stringify(themeColors));
+    
+    closeMenu();
+    
+    const overlay = document.createElement("div");
+    overlay.id = "theme-editor-overlay";
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    `;
+    
+    const modal = document.createElement("div");
+    modal.style.cssText = `
+        background: #252526;
+        color: #cccccc;
+        border: 1px solid #454545;
+        border-radius: 8px;
+        padding: 24px;
+        width: 380px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    `;
+    
+    const title = document.createElement("h3");
+    title.innerText = `Редактор цвета: ${themeObj.name || themeObj.id}`;
+    title.style.cssText = "margin: 0 0 20px 0; font-size: 16px; font-weight: 600; color: #ffffff; border-bottom: 1px solid #3c3c3c; padding-bottom: 12px;";
+    modal.appendChild(title);
+    
+    function createColorRow(label, property, initialValue) {
+        const row = document.createElement("div");
+        row.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;";
+        
+        const textLabel = document.createElement("span");
+        textLabel.innerText = label;
+        textLabel.style.cssText = "font-size: 13px; color: #bbbbbb;";
+        row.appendChild(textLabel);
+        
+        const swatch = document.createElement("div");
+        swatch.style.cssText = `
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid #555555;
+            background: ${initialValue || "#ffffff"};
+            cursor: pointer;
+            position: relative;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+            transition: transform 0.15s ease;
+        `;
+        swatch.onmouseenter = () => swatch.style.transform = "scale(1.1)";
+        swatch.onmouseleave = () => swatch.style.transform = "scale(1)";
+        
+        const colorInput = document.createElement("input");
+        colorInput.type = "color";
+        colorInput.value = (initialValue && initialValue.startsWith("#")) ? initialValue.slice(0, 7) : "#ffffff";
+        colorInput.style.cssText = "position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;";
+        
+        colorInput.addEventListener("input", (e) => {
+            const newColor = e.target.value;
+            swatch.style.background = newColor;
+            
+            themeColors[property] = newColor;
+            localStorage.setItem(currentThemeId, JSON.stringify(themeObj));
+            reloadCurrent();
+        });
+        
+        swatch.appendChild(colorInput);
+        row.appendChild(swatch);
+        return row;
+    }
+    
+    modal.appendChild(createColorRow("Цвет фона (Canvas Background)", "background", themeColors.background));
+    modal.appendChild(createColorRow("Фон блоков (Block Background)", "iconBack", themeColors.iconBack));
+    modal.appendChild(createColorRow("Контур блоков (Block Border)", "iconBorder", themeColors.iconBorder));
+    
+    if (themeColors.shadowColor !== undefined) {
+        modal.appendChild(createColorRow("Цвет тени (Shadow Color)", "shadowColor", themeColors.shadowColor));
+    }
+    
+    const lineRow = document.createElement("div");
+    lineRow.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; margin-top: 10px; border-top: 1px solid #3c3c3c; padding-top: 14px;";
+    
+    const lineLabel = document.createElement("span");
+    lineLabel.innerText = "Толщина линий (Line Width)";
+    lineLabel.style.cssText = "font-size: 13px; color: #bbbbbb;";
+    lineRow.appendChild(lineLabel);
+    
+    const lineInput = document.createElement("input");
+    lineInput.type = "range";
+    lineInput.min = "1";
+    lineInput.max = "4";
+    lineInput.value = themeColors.lineWidth || 1;
+    lineInput.style.cssText = "width: 100px; cursor: pointer;";
+    lineInput.addEventListener("input", (e) => {
+        themeColors.lineWidth = parseInt(e.target.value);
+        localStorage.setItem(currentThemeId, JSON.stringify(themeObj));
+        reloadCurrent();
+    });
+    lineRow.appendChild(lineInput);
+    modal.appendChild(lineRow);
+    
+    const isBuiltIn = [
+        "theme-bq", "theme-str", "theme-class", "theme-egg", 
+        "theme-green", "theme-greys", "theme-gow", "theme-white"
+    ].indexOf(currentThemeId) !== -1;
+    
+    const footer = document.createElement("div");
+    footer.style.cssText = `
+        display: flex;
+        justify-content: ${isBuiltIn ? "flex-end" : "space-between"};
+        align-items: center;
+        margin-top: 24px;
+        border-top: 1px solid #3c3c3c;
+        padding-top: 16px;
+    `;
+    
+    if (!isBuiltIn) {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Удалить тему";
+        deleteBtn.style.cssText = `
+            background: #d9534f;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.15s ease;
+        `;
+        deleteBtn.onmouseenter = () => deleteBtn.style.background = "#c9302c";
+        deleteBtn.onmouseleave = () => deleteBtn.style.background = "#d9534f";
+        deleteBtn.onclick = () => {
+            if (confirm(`Вы действительно хотите удалить тему "${themeObj.name || themeObj.id}"?`)) {
+                const list = getThemes() || [];
+                const index = list.indexOf(currentThemeId);
+                if (index !== -1) {
+                    list.splice(index, 1);
+                    localStorage.setItem("themes", JSON.stringify(list));
+                }
+                localStorage.removeItem(currentThemeId);
+                const combo = document.getElementById("themes-combobox");
+                if (combo) {
+                    for (let i = 0; i < combo.options.length; i++) {
+                        if (combo.options[i].value === currentThemeId) {
+                            combo.remove(i);
+                            break;
+                        }
+                    }
+                }
+                if (vscode) {
+                    vscode.postMessage({
+                        command: 'deleteCustomTheme',
+                        themeName: themeObj.name || themeObj.id
+                    });
+                }
+                localStorage.setItem("current-theme", "theme-class");
+                if (combo) {
+                    combo.value = "theme-class";
+                }
+                reloadCurrent();
+                document.body.removeChild(overlay);
+            }
+        };
+        footer.appendChild(deleteBtn);
+    }
+    
+    const rightButtons = document.createElement("div");
+    rightButtons.style.cssText = "display: flex; gap: 10px;";
+    
+    const cancelBtn = document.createElement("button");
+    cancelBtn.innerText = "Отмена";
+    cancelBtn.style.cssText = `
+        background: #3c3c3c;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    cancelBtn.onmouseenter = () => cancelBtn.style.background = "#4f4f4f";
+    cancelBtn.onmouseleave = () => cancelBtn.style.background = "#3c3c3c";
+    cancelBtn.onclick = () => {
+        themeObj.theme = backupColors;
+        localStorage.setItem(currentThemeId, JSON.stringify(themeObj));
+        reloadCurrent();
+        document.body.removeChild(overlay);
+    };
+    rightButtons.appendChild(cancelBtn);
+    
+    const saveBtn = document.createElement("button");
+    saveBtn.innerText = "Сохранить";
+    saveBtn.style.cssText = `
+        background: #0e639c;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 14px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: background 0.15s ease;
+    `;
+    saveBtn.onmouseenter = () => saveBtn.style.background = "#1177bb";
+    saveBtn.onmouseleave = () => saveBtn.style.background = "#0e639c";
+    saveBtn.onclick = () => {
+        if (vscode) {
+            vscode.postMessage({
+                command: 'saveCustomTheme',
+                themeName: themeObj.name || themeObj.id,
+                themeData: themeColors
+            });
+        }
+        document.body.removeChild(overlay);
+    };
+    rightButtons.appendChild(saveBtn);
+    
+    footer.appendChild(rightButtons);
+    modal.appendChild(footer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
 }
 
 main()

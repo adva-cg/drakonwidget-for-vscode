@@ -2,7 +2,7 @@
   "name": "drakonwidget-for-vscode",
   "displayName": "Drakonwidget for vscode",
   "description": "Расширение для работы с диаграммами Drakon в VS Code",
-  "version": "0.1.0",
+  "version": "0.1.8",
   "publisher": "VitalyAdadurov",
   "engines": {
     "vscode": "^1.99.0"
@@ -57,6 +57,11 @@
       {
         "command": "drakon.theme.reset",
         "title": "Установить тему из VScode",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.selectTheme",
+        "title": "Выбрать тему",
         "category": "ДРАКОН"
       },
       {

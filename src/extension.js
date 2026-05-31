@@ -459,97 +459,227 @@ async function openFile() {
 }
 
 function registerCommands(context) {
+    // Existing commands
     context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.newDiagram',
-            newDiagram
-        )
-    )
+        vscode.commands.registerCommand('drakon.newDiagram', newDiagram)
+    );
     context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.setLanguage',
-            setLanguage
-        )
-    )
+        vscode.commands.registerCommand('drakon.setLanguage', setLanguage)
+    );
     context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.toggleShowIds',
-            toggleShowIds
-        )
-    )
+        vscode.commands.registerCommand('drakon.toggleShowIds', toggleShowIds)
+    );
     context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.genPseudo',
-            async function () {
-                await generateOutput(
-                    'pseudo'
+        vscode.commands.registerCommand('drakon.genPseudo', async () => { await generateOutput('pseudo'); })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.generateAST', async () => { await generateOutput('ast'); })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.generateDrakon', async () => { await generateDrakon(); })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.openFile', openFile)
+    );
+    // Theme commands (light/dark/reset)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.theme.light', () => { setCustomTheme('drakon-light'); vscode.window.showInformationMessage('DRAKON: Light theme activated'); })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.theme.dark', () => { setCustomTheme('drakon-dark'); vscode.window.showInformationMessage('DRAKON: Dark theme activated'); })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.theme.reset', () => { setCustomTheme(null); vscode.window.showInformationMessage('DRAKON: Theme reset to VS Code default'); })
+    );
+    // New command: interactive theme selection / colour editing
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.selectTheme', selectTheme)
+    );
+    // Optional hidden command to clear manual override
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.resetThemeSync', async () => {
+            await context.globalState.update('drakon.manualTheme', undefined);
+            await updateThemeForAllPanels();
+            vscode.window.showInformationMessage('DRAKON: Manual theme override cleared');
+        })
+    );
+    // React to VS Code colour theme changes (only when no manual override)
+    context.subscriptions.push(
+        vscode.window.onDidChangeActiveColorTheme(async () => {
+            const manual = context.globalState.get('drakon.manualTheme');
+            if (!manual) {
+                const answer = await vscode.window.showInformationMessage(
+                    `VS Code switched theme. Apply matching Drakon theme?`,
+                    'Yes', 'No'
                 );
-            }
-        )
-    )
-    context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.generateAST',
-            async function () {
-                await generateOutput('ast');
-            }
-        )
-    )
-    context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.generateDrakon',
-            async function () {
-                await generateDrakon();
-            }
-        )
-    )
-    context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.openFile',
-            openFile
-        )
-    )
-    context.subscriptions.push(
-        vscode.commands.registerCommand(
-            'drakon.theme.light',
-            function () {
-                setCustomTheme(
-                    'drakon-light'
-                );
-                vscode.window.showInformationMessage(
-                    'DRAKON: Light theme activated'
-                );
-            }
-        ),
-        vscode.commands.registerCommand(
-            'drakon.theme.dark',
-            function () {
-                setCustomTheme('drakon-dark');
-                vscode.window.showInformationMessage(
-                    'DRAKON: Dark theme activated'
-                );
-            }
-        ),
-        vscode.commands.registerCommand(
-            'drakon.theme.reset',
-            function () {
-                setCustomTheme(null);
-                vscode.window.showInformationMessage(
-                    'DRAKON: Theme reset to VS Code default'
-                );
-            }
-        )
-    )
-    context.subscriptions.push(
-        vscode.window.onDidChangeActiveColorTheme(
-            function () {
-                if (!hasCustomTheme()) {
-                    updateThemeForAllPanels();
+                if (answer === 'Yes') {
+                    const widgetTheme = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark ? 'Dark' : 'Light';
+                    const themeData = await requestThemeData(widgetTheme);
+                    sendApplyTheme(widgetTheme, themeData);
+                    await context.globalState.update('drakon.manualTheme', widgetTheme);
                 }
             }
-        )
-    )
+        })
+    );
 }
+
+// ---------- Helper constants ----------
+const COMMON_COLOURS = [
+    '#ffffff', '#000000', '#ff0000', '#00ff00', '#0000ff',
+    '#ffea00', '#ff7f00', '#7f00ff', '#00ffff', '#ff00ff',
+    '#1976d2', '#ffdead'
+];
+
+// ---------- Theme selection command ----------
+async function selectTheme() {
+    log("selectTheme: command started");
+    const panel = getAnyActivePanel();
+    if (!panel) {
+        vscode.window.showWarningMessage("Пожалуйста, сначала откройте схему ДРАКОН (.drakon, .graf, .free), чтобы выбрать или настроить тему.");
+        log("selectTheme: no active panel found, exiting");
+        return;
+    }
+    const themeNames = await requestThemeList();
+    log("selectTheme: retrieved themeNames", themeNames);
+    
+    const options = ['[+] Создать новую тему...'].concat(themeNames);
+    const chosen = await vscode.window.showQuickPick(options, { placeHolder: 'Выберите тему DrakonWidget или создайте свою' });
+    if (!chosen) {
+        log("selectTheme: no theme chosen, exiting");
+        return;
+    }
+    
+    if (chosen === '[+] Создать новую тему...') {
+        const name = await vscode.window.showInputBox({
+            prompt: 'Введите имя для вашей новой темы:',
+            placeHolder: 'Моя Новая Тема',
+            validateInput: v => v && v.trim() ? null : 'Имя темы не может быть пустым'
+        });
+        if (!name) { return; }
+        
+        if (themeNames.includes(name)) {
+            vscode.window.showErrorMessage(`Тема с именем "${name}" уже существует.`);
+            return;
+        }
+        
+        const newThemeColors = {
+            lineWidth: 1,
+            background: "#ffffff",
+            iconBorder: "#000000",
+            iconBack: "#e0e0e0",
+            shadowColor: "rgba(0,0,0,0.1)"
+        };
+        
+        await sendApplyTheme(name, newThemeColors);
+        await editColoursInteractively(name, newThemeColors);
+        return;
+    }
+    
+    log(`selectTheme: chosen theme "${chosen}"`);
+    const action = await vscode.window.showQuickPick(
+        ['Применить без изменений', 'Редактировать colours'],
+        { placeHolder: `Что сделать с темой "${chosen}"?` }
+    );
+    if (!action) {
+        log("selectTheme: no action chosen, exiting");
+        return;
+    }
+    log(`selectTheme: chosen action "${action}"`);
+    let themeData = await requestThemeData(chosen);
+    log("selectTheme: retrieved themeData", themeData);
+    if (action === 'Редактировать colours') {
+        await editColoursInteractively(chosen, themeData);
+    } else {
+        await sendApplyTheme(chosen, themeData);
+        const context = exports.provider ? exports.provider.context : null;
+        if (context) {
+            await context.globalState.update('drakon.manualTheme', chosen);
+            await persistCustomTheme(chosen, themeData);
+        }
+        vscode.window.showInformationMessage(`Drakon theme "${chosen}" applied`);
+    }
+}
+
+// Request list of theme names from the WebView
+async function requestThemeList() {
+    const panel = getAnyActivePanel();
+    if (!panel) {
+        log("requestThemeList: no active panel found!");
+        return [];
+    }
+    log("requestThemeList: sending requestThemeList message to WebView");
+    return new Promise(resolve => {
+        const listener = panel.webview.onDidReceiveMessage(msg => {
+            log("requestThemeList: received message from WebView", msg);
+            if (msg.command === 'themeList') {
+                listener.dispose();
+                resolve(msg.themes);
+            }
+        });
+        panel.webview.postMessage({ command: 'requestThemeList' });
+    });
+}
+
+// Request full theme data for a given name
+async function requestThemeData(name) {
+    const panel = getAnyActivePanel();
+    if (!panel) { return {}; }
+    return new Promise(resolve => {
+        const listener = panel.webview.onDidReceiveMessage(msg => {
+            if (msg.command === 'themeData' && msg.theme === name) {
+                listener.dispose();
+                resolve(msg.data);
+            }
+        });
+        panel.webview.postMessage({ command: 'requestThemeData', theme: name });
+    });
+}
+
+// Tell the WebView to open the beautiful graphical Theme Color Editor dialog
+async function editColoursInteractively(themeName, themeObj) {
+    const panel = getAnyActivePanel();
+    if (panel) {
+        log(`editColoursInteractively: telling WebView to open graphical color editor for "${themeName}"`);
+        panel.webview.postMessage({ command: 'openThemeColorEditor' });
+    }
+}
+
+// Send applyTheme message to all active webviews
+async function sendApplyTheme(name, data) {
+    DEP.activeWebviews.forEach(panel => {
+        panel.webview.postMessage({ command: 'applyTheme', themeName: name, themeData: data });
+    });
+    // Also store in DEP.customTheme so future panels pick it up
+    DEP.customTheme = name;
+    updateThemeForAllPanels();
+}
+
+// Persist custom theme in VS Code globalState
+async function persistCustomTheme(name, data) {
+    const context = exports.provider ? exports.provider.context : null;
+    if (!context) { return; }
+    const stored = context.globalState.get('drakon.customThemes') || {};
+    stored[name] = data;
+    await context.globalState.update('drakon.customThemes', stored);
+}
+
+// Utility: get any active panel (first from the set)
+function getAnyActivePanel() {
+    for (const p of DEP.activeWebviews) { return p; }
+    return null;
+}
+
+// Load stored custom themes into the WebView when a panel is created
+function loadStoredCustomThemesIntoWebview(panel) {
+    const context = exports.provider ? exports.provider.context : null;
+    if (!context) { return; }
+    const stored = context.globalState.get('drakon.customThemes') || {};
+    panel.webview.postMessage({ command: 'loadCustomThemes', themes: stored });
+}
+
+// Modify resolveCustomTextEditor to call loadStoredCustomThemesIntoWebview after html is set
+// (Will be inserted later in the file)
+
 
 async function resolveCustomTextEditor(document, webviewPanel) {
     var content, currentTheme, diagram, fileName, fileNameWithoutExtension, resourcesUri;
@@ -586,13 +716,32 @@ async function resolveCustomTextEditor(document, webviewPanel) {
             this.context
         )
     )
-    webviewPanel.webview.postMessage(
-        {
-            command: 'applyTheme',
-            themeClass: currentTheme,
-            isCustom: !!DEP.customTheme
+    loadStoredCustomThemesIntoWebview(webviewPanel)
+    const manualTheme = this.context.globalState.get('drakon.manualTheme');
+    if (manualTheme) {
+        const customThemes = this.context.globalState.get('drakon.customThemes') || {};
+        if (customThemes[manualTheme]) {
+            webviewPanel.webview.postMessage({
+                command: 'applyTheme',
+                themeName: manualTheme,
+                themeData: customThemes[manualTheme]
+            });
+        } else {
+            webviewPanel.webview.postMessage({
+                command: 'applyTheme',
+                themeClass: manualTheme,
+                isCustom: true
+            });
         }
-    )
+    } else {
+        webviewPanel.webview.postMessage(
+            {
+                command: 'applyTheme',
+                themeClass: currentTheme,
+                isCustom: false
+            }
+        )
+    }
     DEP.activeWebviews.add(webviewPanel)
     fileName = fileName = document.fileName;
     fileNameWithoutExtension = path.basename(
@@ -626,6 +775,39 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 message
             );
             switch (message.command) {
+                case 'log':
+                    log("[WebView] " + message.message);
+                    return;
+                case 'saveCustomTheme':
+                    if (message.themeName && message.themeData) {
+                        log("Saving custom theme from webview:", message.themeName);
+                        await this.context.globalState.update('drakon.manualTheme', message.themeName);
+                        
+                        // Persist it in globalState
+                        const stored = this.context.globalState.get('drakon.customThemes') || {};
+                        stored[message.themeName] = message.themeData;
+                        await this.context.globalState.update('drakon.customThemes', stored);
+                        
+                        vscode.window.showInformationMessage(`Цветовая схема "${message.themeName}" успешно сохранена.`);
+                    }
+                    return;
+                case 'deleteCustomTheme':
+                    if (message.themeName) {
+                        log("Deleting custom theme:", message.themeName);
+                        const stored = this.context.globalState.get('drakon.customThemes') || {};
+                        delete stored[message.themeName];
+                        await this.context.globalState.update('drakon.customThemes', stored);
+                        
+                        // Clear manual theme if it was the deleted one
+                        const manualTheme = this.context.globalState.get('drakon.manualTheme');
+                        if (manualTheme === message.themeName) {
+                            await this.context.globalState.update('drakon.manualTheme', undefined);
+                        }
+                        
+                        vscode.window.showInformationMessage(`Цветовая схема "${message.themeName}" успешно удалена.`);
+                        updateThemeForAllPanels();
+                    }
+                    return;
                 case 'updateDiagram': if (
                     message.diagram
                 ) {
@@ -728,8 +910,11 @@ async function saveToNewFile(uri, diagram) {
     }
 }
 
-function setCustomTheme(theme) {
+async function setCustomTheme(theme) {
     DEP.customTheme = theme;
+    if (exports.provider && exports.provider.context) {
+        await exports.provider.context.globalState.update('drakon.manualTheme', theme || undefined);
+    }
     updateThemeForAllPanels()
 }
 
@@ -779,22 +964,38 @@ async function showSaveDialog(defaultName, type) {
     return result
 }
 
-function updateThemeForAllPanels() {
-    var theme;
-    theme = DEP.customTheme || (
-        vscode.window.activeColorTheme.kind ===
-        vscode.ColorThemeKind.Light ? 'vscode-light':
-        'vscode-dark'
-    );
+async function updateThemeForAllPanels() {
+    let manualTheme = null;
+    let customThemes = {};
+    if (exports.provider && exports.provider.context) {
+        manualTheme = exports.provider.context.globalState.get('drakon.manualTheme');
+        customThemes = exports.provider.context.globalState.get('drakon.customThemes') || {};
+    }
+    const activeTheme = manualTheme || DEP.customTheme;
     DEP.activeWebviews.forEach(
         function (webviewPanel) {
-            webviewPanel.webview.postMessage(
-                {
-                    command: 'applyTheme',
-                    themeClass: theme,
-                    isCustom: !!DEP.customTheme
+            if (activeTheme) {
+                if (customThemes[activeTheme]) {
+                    webviewPanel.webview.postMessage({
+                        command: 'applyTheme',
+                        themeName: activeTheme,
+                        themeData: customThemes[activeTheme]
+                    });
+                } else {
+                    webviewPanel.webview.postMessage({
+                        command: 'applyTheme',
+                        themeClass: activeTheme,
+                        isCustom: true
+                    });
                 }
-            );
+            } else {
+                const vsTheme = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark';
+                webviewPanel.webview.postMessage({
+                    command: 'applyTheme',
+                    themeClass: vsTheme,
+                    isCustom: false
+                });
+            }
         }
     )
 }
