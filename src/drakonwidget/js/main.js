@@ -398,7 +398,7 @@ function customBuildDom(core) {
             container
         )
         if (core.link) {
-            ontainer.style.paddingLeft = core.config.padding
+            container.style.paddingLeft = core.config.padding
             * 2 + m.iconSize + "px"
             icon = document.createElement("img")
             icon.src = extensionBaseUri + "/images/link.png"
