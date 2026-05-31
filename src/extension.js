@@ -491,10 +491,7 @@ function registerCommands(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.theme.reset', () => { setCustomTheme(null); vscode.window.showInformationMessage('DRAKON: Theme reset to VS Code default'); })
     );
-    // New command: interactive theme selection / colour editing
-    context.subscriptions.push(
-        vscode.commands.registerCommand('drakon.selectTheme', selectTheme)
-    );
+
     // Optional hidden command to clear manual override
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.resetThemeSync', async () => {
@@ -530,128 +527,14 @@ const COMMON_COLOURS = [
     '#1976d2', '#ffdead'
 ];
 
-// ---------- Theme selection command ----------
-async function selectTheme() {
-    log("selectTheme: command started");
-    const panel = getAnyActivePanel();
-    if (!panel) {
-        vscode.window.showWarningMessage("Пожалуйста, сначала откройте схему ДРАКОН (.drakon, .graf, .free), чтобы выбрать или настроить тему.");
-        log("selectTheme: no active panel found, exiting");
-        return;
-    }
-    const themeNames = await requestThemeList();
-    log("selectTheme: retrieved themeNames", themeNames);
-    
-    const options = ['[+] Создать новую тему...'].concat(themeNames);
-    const chosen = await vscode.window.showQuickPick(options, { placeHolder: 'Выберите тему DrakonWidget или создайте свою' });
-    if (!chosen) {
-        log("selectTheme: no theme chosen, exiting");
-        return;
-    }
-    
-    if (chosen === '[+] Создать новую тему...') {
-        const name = await vscode.window.showInputBox({
-            prompt: 'Введите имя для вашей новой темы:',
-            placeHolder: 'Моя Новая Тема',
-            validateInput: v => v && v.trim() ? null : 'Имя темы не может быть пустым'
-        });
-        if (!name) { return; }
-        
-        if (themeNames.includes(name)) {
-            vscode.window.showErrorMessage(`Тема с именем "${name}" уже существует.`);
-            return;
-        }
-        
-        const newThemeColors = {
-            lineWidth: 1,
-            background: "#ffffff",
-            iconBorder: "#000000",
-            iconBack: "#e0e0e0",
-            shadowColor: "rgba(0,0,0,0.1)"
-        };
-        
-        await sendApplyTheme(name, newThemeColors);
-        await editColoursInteractively(name, newThemeColors);
-        return;
-    }
-    
-    log(`selectTheme: chosen theme "${chosen}"`);
-    const action = await vscode.window.showQuickPick(
-        ['Применить без изменений', 'Редактировать colours'],
-        { placeHolder: `Что сделать с темой "${chosen}"?` }
-    );
-    if (!action) {
-        log("selectTheme: no action chosen, exiting");
-        return;
-    }
-    log(`selectTheme: chosen action "${action}"`);
-    let themeData = await requestThemeData(chosen);
-    log("selectTheme: retrieved themeData", themeData);
-    if (action === 'Редактировать colours') {
-        await editColoursInteractively(chosen, themeData);
-    } else {
-        await sendApplyTheme(chosen, themeData);
-        const context = exports.provider ? exports.provider.context : null;
-        if (context) {
-            await context.globalState.update('drakon.manualTheme', chosen);
-            await persistCustomTheme(chosen, themeData);
-        }
-        vscode.window.showInformationMessage(`Drakon theme "${chosen}" applied`);
-    }
-}
 
-// Request list of theme names from the WebView
-async function requestThemeList() {
-    const panel = getAnyActivePanel();
-    if (!panel) {
-        log("requestThemeList: no active panel found!");
-        return [];
-    }
-    log("requestThemeList: sending requestThemeList message to WebView");
-    return new Promise(resolve => {
-        const listener = panel.webview.onDidReceiveMessage(msg => {
-            log("requestThemeList: received message from WebView", msg);
-            if (msg.command === 'themeList') {
-                listener.dispose();
-                resolve(msg.themes);
-            }
-        });
-        panel.webview.postMessage({ command: 'requestThemeList' });
-    });
-}
-
-// Request full theme data for a given name
-async function requestThemeData(name) {
-    const panel = getAnyActivePanel();
-    if (!panel) { return {}; }
-    return new Promise(resolve => {
-        const listener = panel.webview.onDidReceiveMessage(msg => {
-            if (msg.command === 'themeData' && msg.theme === name) {
-                listener.dispose();
-                resolve(msg.data);
-            }
-        });
-        panel.webview.postMessage({ command: 'requestThemeData', theme: name });
-    });
-}
-
-// Tell the WebView to open the beautiful graphical Theme Color Editor dialog
-async function editColoursInteractively(themeName, themeObj) {
-    const panel = getAnyActivePanel();
-    if (panel) {
-        log(`editColoursInteractively: telling WebView to open graphical color editor for "${themeName}"`);
-        panel.webview.postMessage({ command: 'openThemeColorEditor' });
-    }
-}
 
 // Send applyTheme message to all active webviews
 async function sendApplyTheme(name, data) {
+    DEP.customTheme = name;
     DEP.activeWebviews.forEach(panel => {
         panel.webview.postMessage({ command: 'applyTheme', themeName: name, themeData: data });
     });
-    // Also store in DEP.customTheme so future panels pick it up
-    DEP.customTheme = name;
-    updateThemeForAllPanels();
 }
 
 // Persist custom theme in VS Code globalState
@@ -802,6 +685,9 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                         const manualTheme = this.context.globalState.get('drakon.manualTheme');
                         if (manualTheme === message.themeName) {
                             await this.context.globalState.update('drakon.manualTheme', undefined);
+                        }
+                        if (DEP.customTheme === message.themeName) {
+                            DEP.customTheme = null;
                         }
                         
                         vscode.window.showInformationMessage(`Цветовая схема "${message.themeName}" успешно удалена.`);

@@ -4,24 +4,15 @@
 
 (function() {
 
-    // Send console logs to the extension
-    const oldLog = console.log;
-    console.log = function(...args) {
-        oldLog.apply(console, args);
-        if (window.vscode) {
-            window.vscode.postMessage({
-                command: 'log',
-                message: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')
-            });
-        }
-    };
+    // Forward only errors to the extension (console.log flood blocks the webview on open)
     const oldError = console.error;
     console.error = function(...args) {
         oldError.apply(console, args);
         if (window.vscode) {
+            const message = '[ERROR] ' + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
             window.vscode.postMessage({
                 command: 'log',
-                message: '[ERROR] ' + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')
+                message: message.length > 500 ? message.slice(0, 500) + '…' : message
             });
         }
     };
@@ -40,15 +31,11 @@ m.currentMode = "write"
         setItem: (key, value) => {
             const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
             localStorage.setItem(namespacedKey, JSON.stringify(value));
-            console.log('setItem namespacedKey: ', namespacedKey);
-            console.log('setItem value: ' + JSON.stringify(value));
         },
 
         getItem: (key) => {
             const namespacedKey = `${WEBVIEW_NAMESPACE}:${key}`;
             const value = localStorage.getItem(namespacedKey);
-            console.log('getItem namespacedKey: ', namespacedKey);
-            console.log('getItem value: ' + value);
             return value ? JSON.parse(value) : null;
         },
 
@@ -69,10 +56,12 @@ m.currentMode = "write"
     window.isolatedStorage = isolatedStorage;
 
     document.getElementById('themes-combobox').addEventListener('change', function () {
-        vscode.postMessage({
-            command: 'changeTheme',
-            theme: this.value
-        });
+        if (window.vscode) {
+            window.vscode.postMessage({
+                command: 'changeTheme',
+                theme: this.value
+            });
+        }
     });
 
 function add(parent, child) {
@@ -206,16 +195,19 @@ function arrowUp(evt) {
 }
 
 function buildConfig() {
-    var canSelect, config, currentTheme;
+    var canSelect, config, currentTheme, themeStr;
     canSelect = (
         m.currentMode !== "no-select"
     );
     currentTheme = localStorage.getItem(
         "current-theme"
-    )
-    config = JSON.parse(
-        localStorage.getItem(currentTheme)
-    )
+    ) || "theme-class";
+    themeStr = localStorage.getItem(currentTheme);
+    if (!themeStr) {
+        currentTheme = "theme-class";
+        themeStr = localStorage.getItem(currentTheme);
+    }
+    config = JSON.parse(themeStr) || {};
     config.startEditContent = startEditContent
     config.startEditSecondary = startEditSecondary
     config.startEditLink = startEditLink
@@ -500,6 +492,35 @@ async function editDescription(ign, evt) {
         }
     }
 }
+function showConfirmDialog(message) {
+    return new Promise(resolve => {
+        const dlg = document.createElement('div');
+        dlg.style.cssText = `
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center; z-index: 10001;
+        `;
+        const box = document.createElement('div');
+        box.style.cssText = `
+            background: #2d2d2d; color: #eee; padding: 20px; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); max-width: 320px; text-align: center;
+        `;
+        const msg = document.createElement('p');
+        msg.style.marginBottom = '16px';
+        msg.innerText = message;
+        const yes = document.createElement('button');
+        yes.innerText = 'Да';
+        yes.style.cssText = 'margin-right:12px;background:#4caf50;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;';
+        const no = document.createElement('button');
+        no.innerText = 'Нет';
+        no.style.cssText = 'background:#c33;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;';
+        yes.onclick = () => { document.body.removeChild(dlg); resolve(true); };
+        no.onclick = () => { document.body.removeChild(dlg); resolve(false); };
+        box.append(msg, yes, no);
+        dlg.appendChild(box);
+        document.body.appendChild(dlg);
+    });
+}
+
 
 function eventListener(event) {
     var _sw_9, currentDiagram, diagram, diagramStr;
@@ -519,10 +540,6 @@ function eventListener(event) {
             )
             if (m.drakon) {
                 openDiagram(diagram.id)
-                console.log(
-                    'loadDiagram. Diagram: ',
-                    JSON.stringify(diagram, null, 2)
-                )
             } else {
                 console.error(
                     "Drakon widget not initialized!"
@@ -581,7 +598,7 @@ function eventListener(event) {
                                         }
                                     }
                                     console.log("WebView sending themeList: " + JSON.stringify(names));
-                                    vscode.postMessage({
+                                    window.vscode.postMessage({
                                         command: 'themeList',
                                         themes: names
                                     });
@@ -602,7 +619,7 @@ function eventListener(event) {
                                         }
                                     }
                                     console.log("WebView sending themeData for " + name + ": " + JSON.stringify(themeData));
-                                    vscode.postMessage({
+                                    window.vscode.postMessage({
                                         command: 'themeData',
                                         theme: name,
                                         data: themeData
@@ -612,11 +629,11 @@ function eventListener(event) {
                                     if (event.data.themes) {
                                         // Ensure default themes are initialized first
                                         loadThemes();
-                                        
-                                        // Read existing theme IDs from localStorage
+
                                         const currentIds = getThemes() || [];
                                         console.log("Current theme IDs before merge:", JSON.stringify(currentIds));
                                         
+                                        const incomingIds = [];
                                         for (const [name, data] of Object.entries(event.data.themes)) {
                                             let themeObj = data;
                                             let themeId = name;
@@ -632,6 +649,7 @@ function eventListener(event) {
                                             } else {
                                                 themeId = themeObj.id;
                                             }
+                                            incomingIds.push(themeId);
                                             
                                             console.log("Saving custom theme: " + themeId + " -> " + JSON.stringify(themeObj));
                                             localStorage.setItem(themeId, JSON.stringify(themeObj));
@@ -641,8 +659,25 @@ function eventListener(event) {
                                             }
                                         }
                                         
-                                        console.log("Saving updated theme list after merge:", JSON.stringify(currentIds));
-                                        localStorage.setItem('themes', JSON.stringify(currentIds));
+                                        // Clean up custom themes that are in currentIds but not in incomingIds
+                                        const builtInIds = [
+                                            "theme-bq", "theme-str", "theme-class", "theme-egg", 
+                                            "theme-green", "theme-greys", "theme-gow", "theme-white"
+                                        ];
+                                        
+                                        const finalIds = currentIds.filter(id => {
+                                            const isBuiltIn = builtInIds.indexOf(id) !== -1;
+                                            const isIncoming = incomingIds.indexOf(id) !== -1;
+                                            if (!isBuiltIn && !isIncoming) {
+                                                console.log("Cleaning up deleted custom theme from localStorage:", id);
+                                                localStorage.removeItem(id);
+                                                return false;
+                                            }
+                                            return true;
+                                        });
+                                        
+                                        console.log("Saving updated theme list after cleanup:", JSON.stringify(finalIds));
+                                        localStorage.setItem('themes', JSON.stringify(finalIds));
                                     }
                                 } else if (_sw_9 === 'openThemeColorEditor') {
                                     console.log("WebView received openThemeColorEditor");
@@ -755,19 +790,22 @@ function fillModes(modes) {
 }
 
 function fillThemes(combo) {
-    var _6_col, _6_it, _6_length, theme, themeId, themes;
+    var _6_col, _6_it, _6_length, theme, themeId, themes, themeStr;
     combo.innerHTML = ""
-    themes = getThemes()
+    themes = getThemes() || []
     _6_it = 0;
     _6_col = themes;
     _6_length = _6_col.length;
     while (true) {
         if (_6_it < _6_length) {
             themeId = _6_col[_6_it];
-            theme = JSON.parse(
-                localStorage.getItem(themeId)
-            )
-            addOption(combo, themeId, theme.name)
+            themeStr = localStorage.getItem(themeId);
+            if (themeStr) {
+                theme = JSON.parse(themeStr);
+                if (theme) {
+                    addOption(combo, themeId, theme.name || theme.id || themeId)
+                }
+            }
             _6_it++;
         } else {
             break;
@@ -878,18 +916,14 @@ function getThemeValue(core, name) {
 function getThemes() {
     var str;
     str = localStorage.getItem("themes")
-    console.log("getThemes() raw string from localStorage: " + str);
     if (str) {
         try {
-            const parsed = JSON.parse(str);
-            console.log("getThemes() parsed list: " + JSON.stringify(parsed));
-            return parsed;
+            return JSON.parse(str);
         } catch (e) {
             console.error("getThemes() parse error: " + e.message);
             return undefined;
         }
     } else {
-        console.log("getThemes() - 'themes' key not found in localStorage");
         return undefined;
     }
 }
@@ -1303,8 +1337,8 @@ function main() {
         )
     }
     registerClick(
-        "set-theme-json-button",
-        setThemeJson
+        "create-theme-button",
+        showCreateThemeDialog
     )
     registerClick(
         "edit-theme-colors-button",
@@ -1735,8 +1769,8 @@ function saveThemesInStorage() {
 }
 
 function sendUpdateToVSCode(diagram) {
-    if (vscode) {
-        vscode.postMessage(
+    if (window.vscode) {
+        window.vscode.postMessage(
             {
                 command: 'updateDiagram',
                 diagram: diagram
@@ -1799,53 +1833,174 @@ async function setDiagramJson(evt) {
     }
 }
 
-async function setThemeJson(evt) {
-    var beautiful, current, errTry, newContent, newDiagram, theme;
-    current = localStorage.getItem(
-        "current-theme"
-    )
-    theme = JSON.parse(
-        localStorage.getItem(current)
-    )
-    beautiful = JSON.stringify(
-        theme,
-        null,
-        4
-    )
-    newContent = await m.widgets.largeBox(
-        evt.clientX,
-        evt.clientY,
-        "Theme",
-        beautiful,
-        undefined
-    )
-    if (newContent === undefined) {
-    } else {
-        try {
-            newDiagram = JSON.parse(newContent)
-            errTry = false
-        } catch (ex) {
-            errTry = true
-            m.widgets.showErrorSnack(
-                "Error in JSON: " + ex.message
-            )
+function showCreateThemeDialog() {
+    closeMenu();
+    
+    const overlay = document.createElement("div");
+    overlay.id = "theme-creator-overlay";
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    `;
+    
+    const modal = document.createElement("div");
+    modal.style.cssText = `
+        background: #252526;
+        color: #cccccc;
+        border: 1px solid #454545;
+        border-radius: 8px;
+        padding: 24px;
+        width: 320px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    `;
+    
+    const title = document.createElement("h3");
+    title.innerText = "Создать новую тему";
+    title.style.cssText = "margin: 0 0 16px 0; font-size: 15px; font-weight: 600; color: #ffffff;";
+    modal.appendChild(title);
+    
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Имя новой темы";
+    input.style.cssText = `
+        width: 100%;
+        background: #3c3c3c;
+        color: #ffffff;
+        border: 1px solid #555555;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 13px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        outline: none;
+    `;
+    modal.appendChild(input);
+    
+    const buttons = document.createElement("div");
+    buttons.style.cssText = "display: flex; justify-content: flex-end; gap: 8px;";
+    
+    const cancelBtn = document.createElement("button");
+    cancelBtn.innerText = "Отмена";
+    cancelBtn.style.cssText = `
+        background: #3c3c3c;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background 0.15s;
+    `;
+    cancelBtn.onmouseenter = () => cancelBtn.style.background = "#4f4f4f";
+    cancelBtn.onmouseleave = () => cancelBtn.style.background = "#3c3c3c";
+    cancelBtn.onclick = () => document.body.removeChild(overlay);
+    buttons.appendChild(cancelBtn);
+    
+    const createBtn = document.createElement("button");
+    createBtn.innerText = "Создать";
+    createBtn.style.cssText = `
+        background: #0e639c;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: background 0.15s;
+    `;
+    createBtn.onmouseenter = () => createBtn.style.background = "#1177bb";
+    createBtn.onmouseleave = () => createBtn.style.background = "#0e639c";
+    
+    createBtn.onclick = () => {
+        const name = input.value ? input.value.trim() : "";
+        if (!name) {
+            alert("Имя темы не может быть пустым!");
+            return;
         }
-        if (errTry) {
-        } else {
-            if ((newDiagram.name) && (newDiagram.id)) {
-                isolatedStorage.setItem(
-                    current,
-                    newContent
-                )
-                reloadCurrent()
-                closeMenu()
-            } else {
-                m.widgets.showErrorSnack(
-                    "Error in theme structure"
-                )
+        
+        // Check duplication
+        const list = getThemes() || [];
+        let duplicate = false;
+        for (const tid of list) {
+            const tstr = localStorage.getItem(tid);
+            if (tstr) {
+                const tobj = JSON.parse(tstr);
+                if (tobj.name === name) {
+                    duplicate = true;
+                    break;
+                }
             }
         }
-    }
+        if (duplicate) {
+            alert("Тема с таким именем уже существует!");
+            return;
+        }
+        
+        const newThemeId = "theme-custom-" + Date.now();
+        const themeObj = {
+            name: name,
+            id: newThemeId,
+            theme: {
+                lineWidth: 1,
+                background: "#ffffff",
+                iconBorder: "#000000",
+                iconBack: "#e0e0e0",
+                shadowColor: "rgba(0,0,0,0.1)",
+                icons: {
+                    question: {
+                        iconBack: "#e0e0e0",
+                        color: "#000000"
+                    },
+                    loopbegin: {
+                        iconBack: "#e0e0e0",
+                        color: "#000000"
+                    },
+                    loopend: {
+                        iconBack: "#e0e0e0",
+                        color: "#000000"
+                    }
+                }
+            }
+        };
+        
+        localStorage.setItem(newThemeId, JSON.stringify(themeObj));
+        list.push(newThemeId);
+        localStorage.setItem("themes", JSON.stringify(list));
+        localStorage.setItem("current-theme", newThemeId);
+        
+        const combo = document.getElementById("themes-combobox");
+        if (combo) {
+            fillThemes(combo);
+        }
+        
+        if (window.vscode) {
+            window.vscode.postMessage({
+                command: 'saveCustomTheme',
+                themeName: name,
+                themeData: themeObj.theme
+            });
+        }
+        
+        reloadCurrent();
+        document.body.removeChild(overlay);
+        
+        // Open color editor for this brand-new theme
+        showThemeColorEditor();
+    };
+    buttons.appendChild(createBtn);
+    
+    modal.appendChild(buttons);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
 }
 
 function setZoom(zoom) {
@@ -2179,6 +2334,35 @@ function showThemeColorEditor() {
     
     closeMenu();
     
+    // Inject custom styling for tabs
+    let styleTag = document.getElementById("theme-editor-styles");
+    if (!styleTag) {
+        styleTag = document.createElement("style");
+        styleTag.id = "theme-editor-styles";
+        styleTag.innerHTML = `
+            .color-editor-tab {
+                background: none;
+                border: none;
+                color: #888888;
+                padding: 6px 12px;
+                cursor: pointer;
+                font-size: 13px;
+                font-weight: 500;
+                border-bottom: 2px solid transparent;
+                transition: all 0.15s ease;
+                outline: none;
+            }
+            .color-editor-tab.active {
+                color: #ffffff;
+                border-bottom: 2px solid #0e639c;
+            }
+            .color-editor-tab:hover {
+                color: #ffffff;
+            }
+        `;
+        document.head.appendChild(styleTag);
+    }
+    
     const overlay = document.createElement("div");
     overlay.id = "theme-editor-overlay";
     overlay.style.cssText = `
@@ -2206,14 +2390,101 @@ function showThemeColorEditor() {
         box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     `;
     
+    // Map theme names
+    const themeDisplayNameMap = {
+        "theme-class": "Классическая (Classic)",
+        "theme-greys": "Оттенки серого (Greys)",
+        "theme-bq": "Яркие вопросы (Bright questions)",
+        "theme-str": "Строгая (Strict)",
+        "theme-egg": "Яичная (Egg)",
+        "theme-green": "Зеленая (Green)",
+        "theme-gow": "Серый на белом (Grey on white)",
+        "theme-white": "Белая (White)"
+    };
+    
+    const isBuiltIn = [
+        "theme-bq", "theme-str", "theme-class", "theme-egg", 
+        "theme-green", "theme-greys", "theme-gow", "theme-white"
+    ].indexOf(currentThemeId) !== -1;
+    
+    let displayName = themeObj.name || themeObj.id;
+    if (themeDisplayNameMap[currentThemeId]) {
+        displayName = themeDisplayNameMap[currentThemeId];
+    }
+    if (isBuiltIn) {
+        displayName += " (Встроенная)";
+    }
+    
     const title = document.createElement("h3");
-    title.innerText = `Редактор цвета: ${themeObj.name || themeObj.id}`;
-    title.style.cssText = "margin: 0 0 20px 0; font-size: 16px; font-weight: 600; color: #ffffff; border-bottom: 1px solid #3c3c3c; padding-bottom: 12px;";
+    title.innerText = `Редактор цвета: ${displayName}`;
+    title.style.cssText = "margin: 0 0 16px 0; font-size: 15px; font-weight: 600; color: #ffffff;";
     modal.appendChild(title);
     
-    function createColorRow(label, property, initialValue) {
+    // Create tabs container
+    const tabsContainer = document.createElement("div");
+    tabsContainer.style.cssText = "display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid #3c3c3c; padding-bottom: 6px;";
+    
+    const tabGeneral = document.createElement("button");
+    tabGeneral.className = "color-editor-tab active";
+    tabGeneral.innerText = "Общие";
+    
+    const tabQuestion = document.createElement("button");
+    tabQuestion.className = "color-editor-tab";
+    tabQuestion.innerText = "Вопрос";
+    
+    const tabLoops = document.createElement("button");
+    tabLoops.className = "color-editor-tab";
+    tabLoops.innerText = "Циклы";
+    
+    tabsContainer.appendChild(tabGeneral);
+    tabsContainer.appendChild(tabQuestion);
+    tabsContainer.appendChild(tabLoops);
+    modal.appendChild(tabsContainer);
+    
+    // Create tab panels
+    const panelGeneral = document.createElement("div");
+    const panelQuestion = document.createElement("div");
+    const panelLoops = document.createElement("div");
+    
+    panelQuestion.style.display = "none";
+    panelLoops.style.display = "none";
+    
+    modal.appendChild(panelGeneral);
+    modal.appendChild(panelQuestion);
+    modal.appendChild(panelLoops);
+    
+    // Tab switching logic
+    tabGeneral.onclick = () => {
+        tabGeneral.className = "color-editor-tab active";
+        tabQuestion.className = "color-editor-tab";
+        tabLoops.className = "color-editor-tab";
+        panelGeneral.style.display = "block";
+        panelQuestion.style.display = "none";
+        panelLoops.style.display = "none";
+    };
+    
+    tabQuestion.onclick = () => {
+        tabGeneral.className = "color-editor-tab";
+        tabQuestion.className = "color-editor-tab active";
+        tabLoops.className = "color-editor-tab";
+        panelGeneral.style.display = "none";
+        panelQuestion.style.display = "block";
+        panelLoops.style.display = "none";
+    };
+    
+    tabLoops.onclick = () => {
+        tabGeneral.className = "color-editor-tab";
+        tabQuestion.className = "color-editor-tab";
+        tabLoops.className = "color-editor-tab active";
+        panelGeneral.style.display = "none";
+        panelQuestion.style.display = "none";
+        panelLoops.style.display = "block";
+    };
+    
+    // Helper to create color row with 24px circle swatches
+    function createColorRow(label, initialValue, onChange) {
         const row = document.createElement("div");
-        row.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;";
+        row.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;";
         
         const textLabel = document.createElement("span");
         textLabel.innerText = label;
@@ -2222,14 +2493,14 @@ function showThemeColorEditor() {
         
         const swatch = document.createElement("div");
         swatch.style.cssText = `
-            width: 34px;
-            height: 34px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             border: 2px solid #555555;
             background: ${initialValue || "#ffffff"};
             cursor: pointer;
             position: relative;
-            box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 3px rgba(0,0,0,0.3);
             transition: transform 0.15s ease;
         `;
         swatch.onmouseenter = () => swatch.style.transform = "scale(1.1)";
@@ -2243,8 +2514,7 @@ function showThemeColorEditor() {
         colorInput.addEventListener("input", (e) => {
             const newColor = e.target.value;
             swatch.style.background = newColor;
-            
-            themeColors[property] = newColor;
+            onChange(newColor);
             localStorage.setItem(currentThemeId, JSON.stringify(themeObj));
             reloadCurrent();
         });
@@ -2254,16 +2524,32 @@ function showThemeColorEditor() {
         return row;
     }
     
-    modal.appendChild(createColorRow("Цвет фона (Canvas Background)", "background", themeColors.background));
-    modal.appendChild(createColorRow("Фон блоков (Block Background)", "iconBack", themeColors.iconBack));
-    modal.appendChild(createColorRow("Контур блоков (Block Border)", "iconBorder", themeColors.iconBorder));
+    // ---------------- General Tab Content ----------------
+    panelGeneral.appendChild(createColorRow("Цвет фона (Canvas Background)", themeColors.background, (val) => {
+        themeColors.background = val;
+    }));
+    panelGeneral.appendChild(createColorRow("Фон блоков (Block Background)", themeColors.iconBack, (val) => {
+        themeColors.iconBack = val;
+    }));
+    panelGeneral.appendChild(createColorRow("Контур блоков (Block Border)", themeColors.iconBorder, (val) => {
+        themeColors.iconBorder = val;
+    }));
     
-    if (themeColors.shadowColor !== undefined) {
-        modal.appendChild(createColorRow("Цвет тени (Shadow Color)", "shadowColor", themeColors.shadowColor));
-    }
+    // Text color
+    const textColor = themeColors.color || "#000000";
+    panelGeneral.appendChild(createColorRow("Цвет текста (Text Color)", textColor, (val) => {
+        themeColors.color = val;
+    }));
     
+    // Shadow color
+    const shadowColor = themeColors.shadowColor || "rgba(0,0,0,0.1)";
+    panelGeneral.appendChild(createColorRow("Цвет тени (Shadow Color)", shadowColor, (val) => {
+        themeColors.shadowColor = val;
+    }));
+    
+    // Line width slider
     const lineRow = document.createElement("div");
-    lineRow.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; margin-top: 10px; border-top: 1px solid #3c3c3c; padding-top: 14px;";
+    lineRow.style.cssText = "display: flex; align-items: center; justify-content: space-between; margin-top: 14px; border-top: 1px solid #3c3c3c; padding-top: 12px;";
     
     const lineLabel = document.createElement("span");
     lineLabel.innerText = "Толщина линий (Line Width)";
@@ -2275,28 +2561,54 @@ function showThemeColorEditor() {
     lineInput.min = "1";
     lineInput.max = "4";
     lineInput.value = themeColors.lineWidth || 1;
-    lineInput.style.cssText = "width: 100px; cursor: pointer;";
+    lineInput.style.cssText = "width: 80px; cursor: pointer;";
     lineInput.addEventListener("input", (e) => {
         themeColors.lineWidth = parseInt(e.target.value);
         localStorage.setItem(currentThemeId, JSON.stringify(themeObj));
         reloadCurrent();
     });
     lineRow.appendChild(lineInput);
-    modal.appendChild(lineRow);
+    panelGeneral.appendChild(lineRow);
     
-    const isBuiltIn = [
-        "theme-bq", "theme-str", "theme-class", "theme-egg", 
-        "theme-green", "theme-greys", "theme-gow", "theme-white"
-    ].indexOf(currentThemeId) !== -1;
+    // Ensure nested objects are initialized safely
+    themeColors.icons = themeColors.icons || {};
+    themeColors.icons.question = themeColors.icons.question || {};
+    themeColors.icons.loopbegin = themeColors.icons.loopbegin || {};
+    themeColors.icons.loopend = themeColors.icons.loopend || {};
     
+    // ---------------- Question Tab Content ----------------
+    const qBack = themeColors.icons.question.iconBack || themeColors.iconBack || "#ffffff";
+    const qColor = themeColors.icons.question.color || themeColors.color || "#000000";
+    
+    panelQuestion.appendChild(createColorRow("Фон вопроса (Question Back)", qBack, (val) => {
+        themeColors.icons.question.iconBack = val;
+    }));
+    panelQuestion.appendChild(createColorRow("Текст вопроса (Question Text)", qColor, (val) => {
+        themeColors.icons.question.color = val;
+    }));
+    
+    // ---------------- Loops Tab Content ----------------
+    const loopBack = themeColors.icons.loopbegin.iconBack || themeColors.iconBack || "#ffffff";
+    const loopColor = themeColors.icons.loopbegin.color || themeColors.color || "#000000";
+    
+    panelLoops.appendChild(createColorRow("Фон циклов (Loops Back)", loopBack, (val) => {
+        themeColors.icons.loopbegin.iconBack = val;
+        themeColors.icons.loopend.iconBack = val;
+    }));
+    panelLoops.appendChild(createColorRow("Текст циклов (Loops Text)", loopColor, (val) => {
+        themeColors.icons.loopbegin.color = val;
+        themeColors.icons.loopend.color = val;
+    }));
+    
+    // Footer button setup
     const footer = document.createElement("div");
     footer.style.cssText = `
         display: flex;
         justify-content: ${isBuiltIn ? "flex-end" : "space-between"};
         align-items: center;
-        margin-top: 24px;
+        margin-top: 20px;
         border-top: 1px solid #3c3c3c;
-        padding-top: 16px;
+        padding-top: 14px;
     `;
     
     if (!isBuiltIn) {
@@ -2315,8 +2627,11 @@ function showThemeColorEditor() {
         `;
         deleteBtn.onmouseenter = () => deleteBtn.style.background = "#c9302c";
         deleteBtn.onmouseleave = () => deleteBtn.style.background = "#d9534f";
-        deleteBtn.onclick = () => {
-            if (confirm(`Вы действительно хотите удалить тему "${themeObj.name || themeObj.id}"?`)) {
+        // Delete custom theme with async confirmation
+        deleteBtn.onclick = async () => {
+            document.body.removeChild(overlay);
+            const ok = await showConfirmDialog(`Вы действительно хотите удалить тему "${themeObj.name || themeObj.id}"?`);
+            if (ok) {
                 const list = getThemes() || [];
                 const index = list.indexOf(currentThemeId);
                 if (index !== -1) {
@@ -2333,8 +2648,8 @@ function showThemeColorEditor() {
                         }
                     }
                 }
-                if (vscode) {
-                    vscode.postMessage({
+                if (window.vscode) {
+                    window.vscode.postMessage({
                         command: 'deleteCustomTheme',
                         themeName: themeObj.name || themeObj.id
                     });
@@ -2344,10 +2659,50 @@ function showThemeColorEditor() {
                     combo.value = "theme-class";
                 }
                 reloadCurrent();
-                document.body.removeChild(overlay);
+            } else {
+                document.body.appendChild(overlay);
             }
         };
         footer.appendChild(deleteBtn);
+    } else {
+        const resetBtn = document.createElement("button");
+        resetBtn.innerText = "Сбросить настройки";
+        resetBtn.style.cssText = `
+            background: #b09030;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: background 0.15s ease;
+        `;
+        resetBtn.onmouseenter = () => resetBtn.style.background = "#c0a040";
+        resetBtn.onmouseleave = () => resetBtn.style.background = "#b09030";
+        // Reset built‑in theme with async confirmation
+        resetBtn.onclick = async () => {
+            console.log('Reset‑clicked', displayName);
+            // Close the editor before asking
+            document.body.removeChild(overlay);
+            const ok = await showConfirmDialog(`Вы действительно хотите сбросить тему "${displayName}" к настройкам по умолчанию?`);
+            if (ok) {
+                // Restore default colors for built‑in theme by looking it up in createThemes()
+                const defaultThemes = createThemes();
+                const defaultTheme = defaultThemes.find(t => t.id === currentThemeId);
+                if (defaultTheme) {
+                    localStorage.setItem(currentThemeId, JSON.stringify(defaultTheme));
+                } else {
+                    localStorage.removeItem(currentThemeId);
+                }
+                // Reload (overlay already removed)
+                reloadCurrent();
+            } else {
+                // User cancelled – reopen editor
+                document.body.appendChild(overlay);
+            }
+        };
+        footer.appendChild(resetBtn);
     }
     
     const rightButtons = document.createElement("div");
@@ -2392,8 +2747,8 @@ function showThemeColorEditor() {
     saveBtn.onmouseenter = () => saveBtn.style.background = "#1177bb";
     saveBtn.onmouseleave = () => saveBtn.style.background = "#0e639c";
     saveBtn.onclick = () => {
-        if (vscode) {
-            vscode.postMessage({
+        if (window.vscode) {
+            window.vscode.postMessage({
                 command: 'saveCustomTheme',
                 themeName: themeObj.name || themeObj.id,
                 themeData: themeColors
