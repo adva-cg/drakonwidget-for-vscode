@@ -670,7 +670,8 @@ function eventListener(event) {
                                         // Clean up custom themes that are in currentIds but not in incomingIds
                                         const builtInIds = [
                                             "theme-bq", "theme-str", "theme-class", "theme-egg", 
-                                            "theme-green", "theme-greys", "theme-gow", "theme-white"
+                                            "theme-green", "theme-greys", "theme-gow", "theme-white",
+                                            "theme-black", "theme-space"
                                         ];
                                         
                                         const finalIds = currentIds.filter(id => {
@@ -750,7 +751,17 @@ function eventListener(event) {
                                             }
                                             reloadCurrent();
                                         } else if (event.data.themeClass) {
-                                            console.log("applyTheme (themeClass) applying vs theme class: " + event.data.themeClass);
+                                            console.log("applyTheme (themeClass) applying theme class: " + event.data.themeClass);
+                                            if (event.data.themeClass.startsWith("theme-")) {
+                                                localStorage.setItem("current-theme", event.data.themeClass);
+                                                const combo = document.getElementById("themes-combobox");
+                                                if (combo) {
+                                                    combo.value = event.data.themeClass;
+                                                }
+                                                reloadCurrent();
+                                                return;
+                                            }
+                                            
                                             document.body.classList.remove(
                                                 'vscode-light',
                                                 'vscode-dark',
@@ -760,7 +771,7 @@ function eventListener(event) {
                                             document.body.classList.add(event.data.themeClass);
                                             let themeKey = "theme-class";
                                             if (event.data.themeClass.includes('dark')) {
-                                                themeKey = "theme-greys";
+                                                themeKey = "theme-black";
                                             } else if (event.data.themeClass === 'drakon-light') {
                                                 themeKey = "theme-bq";
                                             }
@@ -1319,7 +1330,17 @@ function loadThemes() {
     console.log("loadThemes() started");
     list = getThemes()
     missing = false;
+    const defaultThemes = createThemes();
     if (list) {
+        // Check if all default themes are present in the list
+        for (i = 0; i < defaultThemes.length; i++) {
+            if (list.indexOf(defaultThemes[i].id) === -1) {
+                console.log("loadThemes() default theme ID missing from list: " + defaultThemes[i].id);
+                missing = true;
+                break;
+            }
+        }
+        // Also check if they exist in localStorage
         for (i = 0; i < list.length; i++) {
             if (!localStorage.getItem(list[i])) {
                 console.log("loadThemes() theme missing from storage: " + list[i]);
@@ -1327,6 +1348,8 @@ function loadThemes() {
                 break;
             }
         }
+    } else {
+        missing = true;
     }
     if (list && list.length > 0 && !missing) {
         console.log("loadThemes() all themes are already present");
@@ -1761,17 +1784,29 @@ function saveStateDrakon() {
 function saveThemesInStorage() {
     console.log("saveThemesInStorage() called. Writing default themes.");
     var _7_col, _7_it, _7_length, ids, theme, themes;
+    const currentTheme = localStorage.getItem("current-theme") || "theme-class";
     themes = createThemes()
     ids = themes.map(
         function (theme) {
             return theme.id
         }
     )
+    
+    // Merge existing custom themes to preserve them
+    const existingThemes = getThemes();
+    if (existingThemes) {
+        existingThemes.forEach(id => {
+            if (id.startsWith("theme-custom-") && ids.indexOf(id) === -1) {
+                ids.push(id);
+            }
+        });
+    }
+    
     localStorage.setItem(
         "themes",
         JSON.stringify(ids)
     )
-    console.log("saveThemesInStorage() wrote default theme IDs: " + JSON.stringify(ids));
+    console.log("saveThemesInStorage() wrote theme list: " + JSON.stringify(ids));
     _7_it = 0;
     _7_col = themes;
     _7_length = _7_col.length;
@@ -1789,7 +1824,7 @@ function saveThemesInStorage() {
     }
     localStorage.setItem(
         "current-theme",
-        "theme-class"
+        currentTheme
     )
     console.log("saveThemesInStorage() finished");
 }
@@ -2425,12 +2460,15 @@ function showThemeColorEditor() {
         "theme-egg": "Яичная (Egg)",
         "theme-green": "Зеленая (Green)",
         "theme-gow": "Серый на белом (Grey on white)",
-        "theme-white": "Белая (White)"
+        "theme-white": "Белая (White)",
+        "theme-black": "Черная (Black)",
+        "theme-space": "Темный космос (Space)"
     };
     
     const isBuiltIn = [
         "theme-bq", "theme-str", "theme-class", "theme-egg", 
-        "theme-green", "theme-greys", "theme-gow", "theme-white"
+        "theme-green", "theme-greys", "theme-gow", "theme-white",
+        "theme-black", "theme-space"
     ].indexOf(currentThemeId) !== -1;
     
     let displayName = themeObj.name || themeObj.id;

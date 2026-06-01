@@ -138,7 +138,61 @@ function createThemes() {
                 "iconBack": "white",
                 "shadowColor": ""
             }
+        },
+        {
+            "name": "Черная",
+            "id": "theme-black",
+            "maxWidth": 300,
+            "theme": {
+                "lineWidth": 1,
+                "background": "#1e1e1e",
+                "iconBorder": "#569cd6",
+                "iconBack": "#252526",
+                "color": "#d4d4d4",
+                "shadowColor": "rgba(0, 0, 0, 0.4)",
+                "icons": {
+                    "question": {
+                        "iconBack": "#3b2b4c",
+                        "color": "#e5c07b"
+                    },
+                    "loopbegin": {
+                        "iconBack": "#1b3a3c",
+                        "color": "#4ec9b0"
+                    },
+                    "loopend": {
+                        "iconBack": "#1b3a3c",
+                        "color": "#4ec9b0"
+                    }
+                }
+            }
+        },
+        {
+            "name": "Темный космос",
+            "id": "theme-space",
+            "maxWidth": 300,
+            "theme": {
+                "lineWidth": 1,
+                "background": "#0a0e17",
+                "iconBorder": "#00adb5",
+                "iconBack": "#141a29",
+                "color": "#ffffff",
+                "shadowColor": "rgba(0, 173, 181, 0.3)",
+                "icons": {
+                    "question": {
+                        "iconBack": "#2a1e35",
+                        "color": "#ffb74d"
+                    },
+                    "loopbegin": {
+                        "iconBack": "#14292b",
+                        "color": "#81c784"
+                    },
+                    "loopend": {
+                        "iconBack": "#14292b",
+                        "color": "#81c784"
+                    }
+                }
+            }
         }
-
     ]
 }
+

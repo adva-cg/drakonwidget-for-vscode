@@ -501,20 +501,40 @@ function registerCommands(context) {
             vscode.window.showInformationMessage('DRAKON: Manual theme override cleared');
         })
     );
-    // React to VS Code colour theme changes (only when no manual override)
+    // React to VS Code colour theme changes
     context.subscriptions.push(
         vscode.window.onDidChangeActiveColorTheme(async () => {
             const manual = context.globalState.get('drakon.manualTheme');
-            if (!manual) {
+            const vsTheme = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Light ? 'vscode-light' : 'vscode-dark';
+            
+            const isSyncMode = !manual || manual === 'vscode-light' || manual === 'vscode-dark';
+            
+            if (isSyncMode) {
+                // Silently auto-switch theme
+                DEP.customTheme = vsTheme;
+                DEP.activeWebviews.forEach(webviewPanel => {
+                    webviewPanel.webview.postMessage({
+                        command: 'applyTheme',
+                        themeClass: vsTheme,
+                        isCustom: false
+                    });
+                });
+            } else {
+                // Prompt user to reset manual settings and apply the new theme
                 const answer = await vscode.window.showInformationMessage(
-                    `VS Code switched theme. Apply matching Drakon theme?`,
-                    'Yes', 'No'
+                    `Цветовая тема VS Code изменилась. Сбросить ручные настройки и применить соответствующую тему ДРАКОН?`,
+                    'Да', 'Нет'
                 );
-                if (answer === 'Yes') {
-                    const widgetTheme = vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark ? 'Dark' : 'Light';
-                    const themeData = await requestThemeData(widgetTheme);
-                    sendApplyTheme(widgetTheme, themeData);
-                    await context.globalState.update('drakon.manualTheme', widgetTheme);
+                if (answer === 'Да') {
+                    await context.globalState.update('drakon.manualTheme', undefined);
+                    DEP.customTheme = vsTheme;
+                    DEP.activeWebviews.forEach(webviewPanel => {
+                        webviewPanel.webview.postMessage({
+                            command: 'applyTheme',
+                            themeClass: vsTheme,
+                            isCustom: false
+                        });
+                    });
                 }
             }
         })
@@ -741,6 +761,14 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                     return;
                 case 'log':
                     log("[WebView] " + message.message);
+                    return;
+                case 'changeTheme':
+                    if (message.theme) {
+                        log("Theme changed from webview combobox:", message.theme);
+                        await this.context.globalState.update('drakon.manualTheme', message.theme);
+                        DEP.customTheme = message.theme;
+                        updateThemeForAllPanels();
+                    }
                     return;
                 case 'saveCustomTheme':
                     if (message.themeName && message.themeData) {
