@@ -198,8 +198,17 @@
             transition: background 0.15s ease, color 0.15s ease !important;
         }
 
+        .vscode-dark .context-menu-item-text, .drakon-dark .context-menu-item-text {
+            color: var(--widget-modal-fg) !important;
+            transition: color 0.15s ease !important;
+        }
+
         .vscode-dark .context-menu-item:hover, .drakon-dark .context-menu-item:hover {
             background: var(--widget-btn-primary-bg) !important;
+            color: #ffffff !important;
+        }
+
+        .vscode-dark .context-menu-item:hover .context-menu-item-text, .drakon-dark .context-menu-item:hover .context-menu-item-text {
             color: #ffffff !important;
         }
 
