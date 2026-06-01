@@ -85,6 +85,152 @@
             width: 100%;
             height: 100%;
         }
+
+        /* Переопределения стилей simplewidgets для темной темы */
+        .vscode-dark, .drakon-dark {
+            --widget-modal-bg: #252526;
+            --widget-modal-fg: #cccccc;
+            --widget-modal-border: #454545;
+            --widget-input-bg: #1e1e1e;
+            --widget-input-fg: #ffffff;
+            --widget-input-border: #555555;
+            --widget-btn-bg: #3c3c3c;
+            --widget-btn-hover: #4f4f4f;
+            --widget-btn-border: #555555;
+            --widget-btn-primary-bg: #0e639c;
+            --widget-btn-primary-hover: #1177bb;
+            --widget-btn-bad-bg: #c9302c;
+            --widget-btn-bad-hover: #d9534f;
+        }
+
+        .vscode-dark .question-body, .drakon-dark .question-body {
+            background-color: var(--widget-modal-bg) !important;
+            color: var(--widget-modal-fg) !important;
+            border: 1px solid var(--widget-modal-border) !important;
+            border-radius: 8px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+            padding: 20px !important;
+        }
+
+        .vscode-dark .question-body input[type="text"],
+        .vscode-dark .question-body textarea,
+        .drakon-dark .question-body input[type="text"],
+        .drakon-dark .question-body textarea {
+            background: var(--widget-input-bg) !important;
+            color: var(--widget-input-fg) !important;
+            border: 1px solid var(--widget-input-border) !important;
+            border-radius: 4px !important;
+            padding: 8px 12px !important;
+            box-sizing: border-box !important;
+            outline: none !important;
+            font-family: inherit !important;
+        }
+
+        .vscode-dark .question-body input[type="text"]:focus,
+        .vscode-dark .question-body textarea:focus,
+        .drakon-dark .question-body input[type="text"]:focus,
+        .drakon-dark .question-body textarea:focus {
+            border-color: var(--widget-btn-primary-bg) !important;
+            box-shadow: 0 0 5px rgba(14, 99, 156, 0.5) !important;
+        }
+
+        .vscode-dark .question-body .simple-button,
+        .drakon-dark .question-body .simple-button {
+            background: var(--widget-btn-bg) !important;
+            color: var(--widget-input-fg) !important;
+            border: 1px solid var(--widget-btn-border) !important;
+            border-radius: 4px !important;
+            padding: 6px 14px !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease !important;
+        }
+
+        .vscode-dark .question-body .simple-button:hover,
+        .drakon-dark .question-body .simple-button:hover {
+            background: var(--widget-btn-hover) !important;
+        }
+
+        .vscode-dark .question-body .default-button,
+        .drakon-dark .question-body .default-button {
+            background: var(--widget-btn-primary-bg) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 6px 14px !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease !important;
+        }
+
+        .vscode-dark .question-body .default-button:hover,
+        .drakon-dark .question-body .default-button:hover {
+            background: var(--widget-btn-primary-hover) !important;
+        }
+
+        .vscode-dark .question-body .bad-button,
+        .drakon-dark .question-body .bad-button {
+            background: var(--widget-btn-bad-bg) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 6px 14px !important;
+            cursor: pointer !important;
+            transition: background 0.15s ease !important;
+        }
+
+        .vscode-dark .question-body .bad-button:hover,
+        .drakon-dark .question-body .bad-button:hover {
+            background: var(--widget-btn-bad-hover) !important;
+        }
+
+        .vscode-dark .context-menu, .drakon-dark .context-menu {
+            background: var(--widget-modal-bg) !important;
+            color: var(--widget-modal-fg) !important;
+            border: 1px solid var(--widget-modal-border) !important;
+            border-radius: 6px !important;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
+            padding: 6px !important;
+        }
+
+        .vscode-dark .context-menu-item, .drakon-dark .context-menu-item {
+            color: var(--widget-modal-fg) !important;
+            border-radius: 4px !important;
+            padding: 6px 12px !important;
+            transition: background 0.15s ease, color 0.15s ease !important;
+        }
+
+        .vscode-dark .context-menu-item:hover, .drakon-dark .context-menu-item:hover {
+            background: var(--widget-btn-primary-bg) !important;
+            color: #ffffff !important;
+        }
+
+        .vscode-dark .context-menu-separator, .drakon-dark .context-menu-separator {
+            background: var(--widget-modal-border) !important;
+            margin: 4px 0 !important;
+        }
+
+        .vscode-dark .snack-container, .drakon-dark .snack-container {
+            background: var(--widget-modal-bg) !important;
+            color: var(--widget-modal-fg) !important;
+            border: 1px solid var(--widget-modal-border) !important;
+            border-radius: 6px !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        }
+
+        /* Инверсия цвета иконок для темной темы на панели инструментов и в меню */
+        .vscode-dark #left-toolbar img,
+        .drakon-dark #left-toolbar img,
+        .vscode-dark .main-menu img,
+        .drakon-dark .main-menu img {
+            filter: invert(0.85) brightness(1.2);
+            transition: filter 0.15s ease;
+        }
+
+        .vscode-dark #left-toolbar img:hover,
+        .drakon-dark #left-toolbar img:hover,
+        .vscode-dark .main-menu img:hover,
+        .drakon-dark .main-menu img:hover {
+            filter: invert(1) brightness(1.4);
+        }
     </style>
     <link rel="stylesheet" href="${extPathUri}/styles/reset.css" />
     <link rel="stylesheet" href="${extPathUri}/styles/main.css" />
@@ -125,11 +271,11 @@
                     <option value="dark">Dark</option>
                 </select>
             </div>
-            <div class="menu-block" style="height: 46px; display: flex; gap: 8px;">
+            <div class="menu-block" style="min-height: 46px; display: flex; gap: 8px;">
                 <div id="create-theme-button" class="generic-button simple-button"
-                    style="margin-right: 0px; flex: 1; text-align: center; padding: 4px 8px; font-size: 11px;">Создать тему...</div>
+                    style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center;">Создать тему...</div>
                 <div id="edit-theme-colors-button" class="generic-button simple-button"
-                    style="margin-right: 0px; flex: 1; text-align: center; padding: 4px 8px; font-size: 11px; white-space: nowrap;">Редактировать цвета...</div>
+                    style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; white-space: nowrap;">Редактировать цвета...</div>
             </div>
             <div class="menu-block">
                 <div class="menu-label">Editor mode</div>
