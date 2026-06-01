@@ -223,6 +223,8 @@ function buildConfig() {
     config.canvasIcons = false
     config.centerContent = false
     config.textFormat = "plain"
+    config.font = "14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+    config.canvasLabels = "12px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
     config.showIds = localStorage.getItem("showIds") === "true"
     return config
 }
@@ -1359,6 +1361,97 @@ function loadThemes() {
     }
 }
 
+function exportToPNG() {
+    exportDiagramImage(10000, "PNG");
+}
+
+function exportToHDPNG() {
+    exportDiagramImage(20000, "HD_PNG");
+}
+
+function exportDiagramImage(zoom, label) {
+    closeMenu();
+    if (!m.drakon) {
+        m.widgets.showErrorSnack("Диаграмма не инициализирована");
+        return;
+    }
+    
+    // Включаем режим Canvas-иконок для отрисовки текста непосредственно на холсте
+    const oldCanvasIcons = m.drakon.config.canvasIcons;
+    m.drakon.config.canvasIcons = true;
+    m.drakon.redraw();
+    
+    // Даем браузеру 100мс на применение режима canvas-текста и инициализацию шрифтов
+    setTimeout(() => {
+        let canvas = null;
+        try {
+            let logMsg = `CanvasIcons: ${m.drakon.config.canvasIcons}\n`;
+            if (m.drakon.visuals && m.drakon.visuals.nodes) {
+                for (const nid in m.drakon.visuals.nodes) {
+                    const node = m.drakon.visuals.nodes[nid];
+                    if (node.content) {
+                        logMsg += `Node [${nid}] (${node.type}) "${node.content}":\n`;
+                        if (node.flowBlock) {
+                            logMsg += `  - lines: ${node.flowBlock.lines ? node.flowBlock.lines.length : 0}\n`;
+                            logMsg += `  - color: ${node.flowBlock.options ? node.flowBlock.options.color : 'none'}\n`;
+                            logMsg += `  - font: ${node.flowBlock.options ? node.flowBlock.options.font : 'none'}\n`;
+                        } else {
+                            logMsg += `  - flowBlock is missing!\n`;
+                        }
+                    }
+                }
+            }
+            if (window.vscode) {
+                window.vscode.postMessage({
+                    command: 'log',
+                    message: "Export debug:\n" + logMsg
+                });
+            }
+            
+            canvas = m.drakon.exportCanvas(zoom);
+        } catch (err) {
+            console.error("exportCanvas error:", err);
+        } finally {
+            // Мгновенно возвращаем интерактивный HTML-режим
+            m.drakon.config.canvasIcons = oldCanvasIcons;
+            m.drakon.redraw();
+        }
+        
+        try {
+            if (!canvas) {
+                m.widgets.showErrorSnack("Не удалось экспортировать холст");
+                return;
+            }
+            
+            const dataUrl = canvas.toDataURL("image/png");
+            const diagramName = m.drakon.edit.diagram.name || "diagram";
+            const suffix = (label === "HD_PNG" ? "_HD" : "");
+            const fileName = diagramName + suffix + ".png";
+            
+            if (window.vscode) {
+                window.vscode.postMessage({
+                    command: 'exportImage',
+                    dataUrl: dataUrl,
+                    fileName: fileName
+                });
+            } else {
+                // Fallback for standalone browser testing
+                const link = document.createElement("a");
+                link.download = fileName;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                m.widgets.showErrorSnack(`Схема успешно экспортирована в ${label === "HD_PNG" ? "HD PNG (2x)" : "PNG (1x)"}!`);
+            }
+        } catch (e) {
+            console.error("Image export failed", e);
+            m.widgets.showErrorSnack("Ошибка экспорта изображения: " + e.message);
+        }
+    }, 100);
+}
+
+
 function main() {
     var actualVersion, closeButton, currentVersion;
     m.widgets = createSimpleWidgets()
@@ -1392,6 +1485,14 @@ function main() {
     registerClick(
         "edit-theme-colors-button",
         showThemeColorEditor
+    )
+    registerClick(
+        "export-png-button",
+        exportToPNG
+    )
+    registerClick(
+        "export-hd-png-button",
+        exportToHDPNG
     )
     registerChange(
         "themes-combobox",

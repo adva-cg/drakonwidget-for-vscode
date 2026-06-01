@@ -762,6 +762,31 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 case 'log':
                     log("[WebView] " + message.message);
                     return;
+                case 'exportImage':
+                    if (message.dataUrl && message.fileName) {
+                        log("Exporting diagram image to file:", message.fileName);
+                        try {
+                            const parentPath = document.uri.path.substring(0, document.uri.path.lastIndexOf('/'));
+                            const docDir = document.uri.with({ path: parentPath });
+                            const defaultUri = vscode.Uri.joinPath(docDir, message.fileName);
+                                
+                            const uri = await vscode.window.showSaveDialog({
+                                defaultUri: defaultUri,
+                                filters: { 'Images (*.png)': ['png'] },
+                                title: 'Сохранить схему как изображение'
+                            });
+                            
+                            if (uri) {
+                                const base64Data = message.dataUrl.replace(/^data:image\/png;base64,/, "");
+                                const buffer = Buffer.from(base64Data, 'base64');
+                                await vscode.workspace.fs.writeFile(uri, buffer);
+                                vscode.window.showInformationMessage(`Изображение успешно сохранено в: ${uri.fsPath}`);
+                            }
+                        } catch (err) {
+                            vscode.window.showErrorMessage('Не удалось сохранить изображение: ' + err.message);
+                        }
+                    }
+                    return;
                 case 'changeTheme':
                     if (message.theme) {
                         log("Theme changed from webview combobox:", message.theme);

@@ -2,7 +2,7 @@
   "name": "drakonwidget-for-vscode",
   "displayName": "Drakonwidget for vscode",
   "description": "Расширение для работы с диаграммами Drakon в VS Code",
-  "version": "0.1.12",
+  "version": "0.1.16",
   "publisher": "VitalyAdadurov",
   "engines": {
     "vscode": "^1.99.0"
