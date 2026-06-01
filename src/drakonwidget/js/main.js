@@ -1362,14 +1362,141 @@ function loadThemes() {
 }
 
 function exportToPNG() {
-    exportDiagramImage(10000, "PNG");
+    exportDiagramImage(20000, "PNG", false);
 }
 
-function exportToHDPNG() {
-    exportDiagramImage(20000, "HD_PNG");
+function copyPNGToClipboard() {
+    exportDiagramImage(20000, "PNG", true);
 }
 
-function exportDiagramImage(zoom, label) {
+function exportToSVG() {
+    closeMenu();
+    if (!m.drakon) {
+        m.widgets.showErrorSnack("Диаграмма не инициализирована");
+        return;
+    }
+    
+    // Включаем режим Canvas-иконок для правильной разметки текста
+    const oldCanvasIcons = m.drakon.config.canvasIcons;
+    m.drakon.config.canvasIcons = true;
+    m.drakon.redraw();
+    
+    // Даем браузеру 100мс на инициализацию шрифтов и перерасчет текстовых блоков
+    setTimeout(() => {
+        let svgCode = null;
+        try {
+            if (typeof C2S === "undefined") {
+                throw new Error("Библиотека canvas2svg не загружена");
+            }
+            
+            const box = m.drakon.getDiagramBox();
+            const width = box.right - box.left;
+            const height = box.bottom - box.top;
+            
+            const ctx = new C2S(width, height);
+            
+            // Нативно рендерим всю схему на векторный оффскрин-контекст C2S
+            m.drakon.exportToContext(box, 10000, ctx);
+            
+            // Сериализуем в чистый XML-текст
+            svgCode = ctx.getSerializedSvg(true);
+        } catch (err) {
+            console.error("exportToSVG error:", err);
+            m.widgets.showErrorSnack("Ошибка экспорта в SVG: " + err.message);
+        } finally {
+            // Мгновенно возвращаем интерактивный HTML-режим
+            m.drakon.config.canvasIcons = oldCanvasIcons;
+            m.drakon.redraw();
+        }
+        
+        if (svgCode) {
+            const diagramName = m.drakon.edit.diagram.name || "diagram";
+            const fileName = diagramName + ".svg";
+            
+            if (window.vscode) {
+                window.vscode.postMessage({
+                    command: 'exportSvg',
+                    svgCode: svgCode,
+                    fileName: fileName
+                });
+            } else {
+                // Fallback for standalone browser testing
+                const blob = new Blob([svgCode], { type: "image/svg+xml;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.download = fileName;
+                link.href = url;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                m.widgets.showErrorSnack("Схема успешно экспортирована в SVG!");
+            }
+        }
+    }, 100);
+}
+
+function copySVGToClipboard() {
+    closeMenu();
+    if (!m.drakon) {
+        m.widgets.showErrorSnack("Диаграмма не инициализирована");
+        return;
+    }
+    
+    // Включаем режим Canvas-иконок для правильной разметки текста
+    const oldCanvasIcons = m.drakon.config.canvasIcons;
+    m.drakon.config.canvasIcons = true;
+    m.drakon.redraw();
+    
+    // Даем браузеру 100мс на инициализацию шрифтов и перерасчет текстовых блоков
+    setTimeout(() => {
+        let svgCode = null;
+        try {
+            if (typeof C2S === "undefined") {
+                throw new Error("Библиотека canvas2svg не загружена");
+            }
+            
+            const box = m.drakon.getDiagramBox();
+            const width = box.right - box.left;
+            const height = box.bottom - box.top;
+            
+            const ctx = new C2S(width, height);
+            
+            // Нативно рендерим всю схему на векторный оффскрин-контекст C2S
+            m.drakon.exportToContext(box, 10000, ctx);
+            
+            // Сериализуем в чистый XML-текст
+            svgCode = ctx.getSerializedSvg(true);
+        } catch (err) {
+            console.error("copySVGToClipboard error:", err);
+            m.widgets.showErrorSnack("Ошибка копирования в буфер: " + err.message);
+        } finally {
+            // Мгновенно возвращаем интерактивный HTML-режим
+            m.drakon.config.canvasIcons = oldCanvasIcons;
+            m.drakon.redraw();
+        }
+        
+        if (svgCode) {
+            if (window.vscode) {
+                window.vscode.postMessage({
+                    command: 'copyToClipboard',
+                    text: svgCode,
+                    message: 'Код SVG успешно скопирован в буфер обмена!'
+                });
+            } else {
+                // Standalone browser clipboard copying fallback
+                navigator.clipboard.writeText(svgCode).then(() => {
+                    m.widgets.showErrorSnack("Код SVG успешно скопирован в буфер обмена!");
+                }).catch(err => {
+                    console.error("Clipboard copy failed:", err);
+                    m.widgets.showErrorSnack("Не удалось скопировать в буфер.");
+                });
+            }
+        }
+    }, 100);
+}
+
+function exportDiagramImage(zoom, label, isCopy) {
     closeMenu();
     if (!m.drakon) {
         m.widgets.showErrorSnack("Диаграмма не инициализирована");
@@ -1423,10 +1550,28 @@ function exportDiagramImage(zoom, label) {
                 return;
             }
             
+            if (isCopy) {
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        navigator.clipboard.write([
+                            new ClipboardItem({ "image/png": blob })
+                        ]).then(() => {
+                            m.widgets.showErrorSnack("Изображение успешно скопировано в буфер обмена!");
+                        }).catch((err) => {
+                            console.error("Copy PNG failed:", err);
+                            m.widgets.showErrorSnack("Ошибка копирования PNG: " + err.message);
+                        });
+                    } else {
+                        m.widgets.showErrorSnack("Не удалось создать Blob для копирования");
+                    }
+                }, "image/png");
+                return;
+            }
+            
             const dataUrl = canvas.toDataURL("image/png");
             const diagramName = m.drakon.edit.diagram.name || "diagram";
-            const suffix = (label === "HD_PNG" ? "_HD" : "");
-            const fileName = diagramName + suffix + ".png";
+            const suffix = "";
+            const fileName = diagramName + ".png";
             
             if (window.vscode) {
                 window.vscode.postMessage({
@@ -1442,7 +1587,7 @@ function exportDiagramImage(zoom, label) {
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                m.widgets.showErrorSnack(`Схема успешно экспортирована в ${label === "HD_PNG" ? "HD PNG (2x)" : "PNG (1x)"}!`);
+                m.widgets.showErrorSnack("Схема успешно экспортирована в PNG!");
             }
         } catch (e) {
             console.error("Image export failed", e);
@@ -1491,8 +1636,16 @@ function main() {
         exportToPNG
     )
     registerClick(
-        "export-hd-png-button",
-        exportToHDPNG
+        "copy-png-button",
+        copyPNGToClipboard
+    )
+    registerClick(
+        "export-svg-button",
+        exportToSVG
+    )
+    registerClick(
+        "copy-svg-button",
+        copySVGToClipboard
     )
     registerChange(
         "themes-combobox",

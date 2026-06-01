@@ -787,6 +787,42 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                         }
                     }
                     return;
+                case 'exportSvg':
+                    if (message.svgCode && message.fileName) {
+                        log("Exporting diagram SVG to file:", message.fileName);
+                        try {
+                            const parentPath = document.uri.path.substring(0, document.uri.path.lastIndexOf('/'));
+                            const docDir = document.uri.with({ path: parentPath });
+                            const defaultUri = vscode.Uri.joinPath(docDir, message.fileName);
+                                
+                            const uri = await vscode.window.showSaveDialog({
+                                defaultUri: defaultUri,
+                                filters: { 'Vector Graphics (*.svg)': ['svg'] },
+                                title: 'Сохранить схему как SVG'
+                            });
+                            
+                            if (uri) {
+                                const buffer = Buffer.from(message.svgCode, 'utf8');
+                                await vscode.workspace.fs.writeFile(uri, buffer);
+                                vscode.window.showInformationMessage(`Векторная схема успешно сохранена в: ${uri.fsPath}`);
+                            }
+                        } catch (err) {
+                            vscode.window.showErrorMessage('Не удалось сохранить SVG: ' + err.message);
+                        }
+                    }
+                    return;
+                case 'copyToClipboard':
+                    if (message.text) {
+                        try {
+                            await vscode.env.clipboard.writeText(message.text);
+                            if (message.message) {
+                                vscode.window.showInformationMessage(message.message);
+                            }
+                        } catch (err) {
+                            vscode.window.showErrorMessage('Не удалось скопировать в буфер обмена: ' + err.message);
+                        }
+                    }
+                    return;
                 case 'changeTheme':
                     if (message.theme) {
                         log("Theme changed from webview combobox:", message.theme);

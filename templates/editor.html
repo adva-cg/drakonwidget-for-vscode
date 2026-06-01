@@ -288,11 +288,19 @@
             </div>
             <div class="menu-block">
                 <div class="menu-label">Экспорт схемы</div>
-                <div style="display: flex; gap: 8px;">
-                    <div id="export-png-button" class="generic-button simple-button"
-                        style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center;">Экспорт в PNG</div>
-                    <div id="export-hd-png-button" class="generic-button simple-button"
-                        style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; white-space: nowrap;">Экспорт в HD PNG</div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div style="display: flex; gap: 8px;">
+                        <div id="export-png-button" class="generic-button simple-button"
+                            style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; white-space: nowrap;">Изображение PNG</div>
+                        <div id="copy-png-button" class="generic-button simple-button"
+                            style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; white-space: nowrap;">Копировать PNG</div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <div id="export-svg-button" class="generic-button simple-button"
+                            style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; font-weight: bold; background: var(--widget-btn-primary-bg) !important; color: white !important; border: none !important; white-space: nowrap;">Векторный SVG</div>
+                        <div id="copy-svg-button" class="generic-button simple-button"
+                            style="margin-right: 0px; flex: 1; text-align: center; padding: 6px 8px; font-size: 12.5px; line-height: 1.4; display: flex; align-items: center; justify-content: center; white-space: nowrap;">Копировать SVG</div>
+                    </div>
                 </div>
             </div>
             <div class="menu-block">
@@ -306,6 +314,7 @@
         <div id="popup-root"></div>
 
     </div>
+    <script src="${extPathUri}/libs/canvas2svg.js"></script>
     <script src="${extPathUri}/libs/drakonwidget.js"></script>
     <script src="${extPathUri}/libs/mousetrap.min.js"></script>
     <script src="${extPathUri}/libs/simplewidgets.js"></script>
