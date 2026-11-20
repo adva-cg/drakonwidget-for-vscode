@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const { notationToDrakon } = require('../notation');
 
 describe('notation → drakon', () => {
-	it('строит цепочку действий между заголовком и концом', () => {
+	it('строит цепочку действий от ветки до конца', () => {
 		const result = notationToDrakon([
 			'([ Схема ])',
 			'[ Первое ]',
@@ -16,11 +16,11 @@ describe('notation → drakon', () => {
 		const items = result.items;
 		assert.strictEqual(items['1'].type, 'branch');
 		assert.strictEqual(items['1'].one, '2');
-		assert.strictEqual(items['2'].type, 'header');
+		assert.strictEqual(items['2'].content, 'Первое');
+		assert.strictEqual(items['2'].one, '3');
 		assert.strictEqual(items['3'].one, '4');
-		assert.strictEqual(items['4'].one, '5');
-		assert.strictEqual(items['5'].type, 'end');
-		assert.strictEqual(items['5'].one, undefined);
+		assert.strictEqual(items['4'].type, 'end');
+		assert.strictEqual(items['4'].one, undefined);
 	});
 
 	it('ведёт one вопроса в ветку да, two в ветку нет', () => {
@@ -37,7 +37,7 @@ describe('notation → drakon', () => {
 		assert.deepStrictEqual(result.errors, []);
 		const items = result.items;
 		assert.strictEqual(items['2'].type, 'question');
-		assert.strictEqual(items['2'].flag1, 0);
+		assert.strictEqual(items['2'].flag1, 1);
 		assert.strictEqual(items['2'].one, '3');
 		assert.strictEqual(items['2'].two, '4');
 		assert.strictEqual(items['3'].content, 'Да');

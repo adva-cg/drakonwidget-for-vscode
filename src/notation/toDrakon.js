@@ -3,9 +3,9 @@
 // Сборка фрагмента диаграммы .drakon из разобранного дерева.
 // Координаты не считаются: силуэт раскладывает сам виджет.
 
-// Направление выходов вопроса: 0 — one идёт вниз (на шампуре), two вправо.
-// При 1 выходы меняются местами (см. swapYesNo в libs/drakonwidget.js).
-const QUESTION_FLAG1 = 0;
+// Направление выходов вопроса: при 1 one идёт вниз (на шампуре) с подписью «Да»,
+// two вправо — «Нет». При 0 подписи меняются местами (см. swapYesNo в libs/drakonwidget.js).
+const QUESTION_FLAG1 = 1;
 
 /**
  * Превращает узел дерева в элемент диаграммы.
@@ -15,6 +15,9 @@ const QUESTION_FLAG1 = 0;
 function toItem(node) {
 	if (node.kind === 'jump' || node.kind === 'label') {
 		return { type: 'address', content: node.name || node.target };
+	}
+	if (node.type === 'end') {
+		return { type: 'end' };
 	}
 	if (node.type === 'action' && node.secondary) {
 		return { type: 'shelf', content: node.text, secondary: node.secondary };
@@ -40,6 +43,13 @@ function convert(parsed) {
 	let endId = null;
 
 	const nextId = () => String(++counter);
+
+	// Заголовок не является иконой items: виджет строит его сам из поля name.
+	// Поэтому икона заголовка в начале схемы просто отбрасывается.
+	if (parsed.blocks.length && parsed.blocks[0].items.length
+		&& parsed.blocks[0].items[0].type === 'header') {
+		parsed.blocks[0].items.shift();
+	}
 
 	for (let blockIndex = 0; blockIndex < parsed.blocks.length; blockIndex++) {
 		const block = parsed.blocks[blockIndex];
@@ -74,10 +84,8 @@ function convert(parsed) {
 					labelByName.set(node.name, node.id);
 				}
 				if (node.type === 'header') {
-					node.type = blockIndex === 0 && index === 0 ? 'header' : 'end';
-					if (node.type === 'end') {
-						endId = node.id;
-					}
+					node.type = 'end';
+					endId = node.id;
 				}
 				items[node.id] = toItem(node);
 			}
