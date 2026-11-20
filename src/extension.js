@@ -14,6 +14,7 @@ const DEP = {}
 DEP.activeFilename = '';
 DEP.isChangeView = false;
 DEP.activeWebviews = new Set();
+DEP.updateQueue = new Map();
 DEP.customTheme = null;
 DEP.outputContent = '';
 DEP.outputChannel
@@ -289,6 +290,9 @@ async function handleDiagramUpdate(document, diagram, webviewPanel) {
             document.fileName,
             '.' + diagram.type
         );
+        log("handleDiagramUpdate: имя файла", currentName);
+        log("handleDiagramUpdate: имя схемы", diagram.name);
+        log("handleDiagramUpdate: икон", Object.keys(diagram.items || {}).length);
         if (currentName !== diagram.name) {
             newUri = vscode.Uri.file(
                 path.join(
@@ -327,6 +331,10 @@ async function handleDiagramUpdate(document, diagram, webviewPanel) {
                         filename: currentName
                     }
                 );
+                log(
+                    "handleDiagramUpdate: переименование не удалось, сохранение пропущено",
+                    errorMessage
+                );
                 return ;
             };
             log(
@@ -360,7 +368,13 @@ async function handleDiagramUpdate(document, diagram, webviewPanel) {
             edit
         );
         await document.save();
-        log("Diagram updated and saved");
+        log(
+            "handleDiagramUpdate: сохранено",
+            {
+                uri: document.uri.toString(),
+                items: Object.keys(diagram.items || {}).length
+            }
+        );
     } catch (error) {
         errorMessage = error && error.message
         ? error.message: 'Failed to save diagram';
@@ -922,11 +936,27 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 case 'updateDiagram': if (
                     message.diagram
                 ) {
-                    await this.handleDiagramUpdate(
-                        document,
-                        message.diagram,
-                        webviewPanel
+                    // Сохранения одного документа идут строго по очереди:
+                    // иначе более старое сохранение может завершиться позже
+                    // и затереть свежую схему.
+                    const updateKey = document.uri.toString();
+                    const previousUpdate = DEP.updateQueue.get(
+                        updateKey
+                    ) || Promise.resolve();
+                    const currentUpdate = previousUpdate.then(
+                        () => this.handleDiagramUpdate(
+                            document,
+                            message.diagram,
+                            webviewPanel
+                        )
+                    ).catch(
+                        (error) => log(
+                            "updateDiagram error",
+                            error && error.message
+                        )
                     );
+                    DEP.updateQueue.set(updateKey, currentUpdate);
+                    await currentUpdate;
                 }
                 return ;
                 case 'checkReady': webviewPanel
