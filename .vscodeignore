@@ -16,3 +16,5 @@ node_modules/drakongen/
 src/drakonwidget/dtsrc
 src/drakongen/examples
 src/drakonwidget-for-vscode.zip
+scratch/**
+*.vsix

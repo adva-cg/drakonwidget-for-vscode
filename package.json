@@ -2,7 +2,7 @@
   "name": "drakonwidget-for-vscode",
   "displayName": "Drakonwidget for vscode",
   "description": "Расширение для работы с диаграммами Drakon в VS Code",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "publisher": "VitalyAdadurov",
   "engines": {
     "vscode": "^1.99.0"
@@ -72,6 +72,11 @@
       {
         "command": "drakon.toggleShowIds",
         "title": "Отобразить/скрыть ID",
+        "category": "ДРАКОН"
+      },
+      {
+        "command": "drakon.insertFromNotation",
+        "title": "Вставить из нотации",
         "category": "ДРАКОН"
       }
     ],

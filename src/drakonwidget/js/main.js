@@ -524,6 +524,36 @@ function showConfirmDialog(message) {
 }
 
 
+function insertNotationBlock(payload) {
+    var model, offset;
+    if (!m.drakon) {
+        console.error(
+            "Drakon widget not initialized!"
+        )
+        return
+    }
+    model = m.drakon.model
+    offset = 0
+    if (model && model.items) {
+        Object.keys(model.items).forEach(function (id) {
+            var item = model.items[id]
+            if (item.type === 'branch' && typeof item.branchId === 'number') {
+                if (item.branchId >= offset) {
+                    offset = item.branchId + 1
+                }
+            }
+        })
+    }
+    payload.items.forEach(function (item) {
+        if (item.type === 'branch' && typeof item.branchId === 'number') {
+            item.branchId = item.branchId + offset
+        }
+    })
+    localStorage.setItem('clipboard-type', 'block')
+    localStorage.setItem('clipboard', JSON.stringify(payload))
+    m.drakon.showPaste()
+}
+
 function eventListener(event) {
     var _sw_9, currentDiagram, diagram, diagramStr;
     if (event.data) {
@@ -555,6 +585,8 @@ function eventListener(event) {
                     "Drakon widget not initialized!"
                 )
             }
+        } else if (_sw_9 === 'notationInsert') {
+            insertNotationBlock(event.data.payload)
         } else {
             if (_sw_9 === 'updateFilename') {
                 updateFilename(event.data.filename)

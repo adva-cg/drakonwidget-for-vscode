@@ -183,4 +183,43 @@ function convert(parsed) {
 	return { items: items, errors: errors, endId: endId };
 }
 
-module.exports = { convert: convert };
+/**
+ * Превращает результат convert() в payload буфера вставки виджета.
+ * Выход фрагмента наружу кодируется литералом 'finish' (см. replaceIds в виджете).
+ * @param {{items: Object, endId: (string|null)}} converted
+ * @returns {{start: (string|undefined), items: Array<Object>}}
+ */
+function toPastePayload(converted) {
+	const items = [];
+	const dropped = new Set();
+	let start;
+
+	for (const id of Object.keys(converted.items)) {
+		const item = converted.items[id];
+		if (item.type === 'end') {
+			dropped.add(id);
+			continue;
+		}
+		if (item.type === 'branch' && item.branchId === 0 && !start) {
+			start = id;
+		}
+		items.push(Object.assign({ id: id }, item));
+	}
+
+	if (!start && items.length) {
+		start = items[0].id;
+	}
+
+	for (const item of items) {
+		if (dropped.has(item.one)) {
+			item.one = 'finish';
+		}
+		if (dropped.has(item.two)) {
+			item.two = 'finish';
+		}
+	}
+
+	return { start: start, items: items };
+}
+
+module.exports = { convert: convert, toPastePayload: toPastePayload };

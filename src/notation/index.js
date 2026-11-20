@@ -1,7 +1,7 @@
 'use strict';
 
 const { parse } = require('./parser');
-const { convert } = require('./toDrakon');
+const { convert, toPastePayload } = require('./toDrakon');
 
 /**
  * Переводит текст в нотации ДРАКОН в фрагмент диаграммы .drakon.
@@ -18,4 +18,21 @@ function notationToDrakon(source) {
 	};
 }
 
-module.exports = { notationToDrakon: notationToDrakon };
+/**
+ * Переводит текст в нотации в payload для буфера вставки виджета.
+ * @param {string} source текст схемы
+ * @returns {{payload: {start: (string|undefined), items: Array<Object>}, errors: Array<string>}}
+ */
+function notationToPastePayload(source) {
+	const parsed = parse(source);
+	const built = convert(parsed);
+	return {
+		payload: toPastePayload(built),
+		errors: parsed.errors.concat(built.errors)
+	};
+}
+
+module.exports = {
+	notationToDrakon: notationToDrakon,
+	notationToPastePayload: notationToPastePayload
+};

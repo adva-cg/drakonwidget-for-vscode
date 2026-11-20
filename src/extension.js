@@ -4,6 +4,7 @@ const path = require('path');
 const drakongen = require(
     '../src/drakongen/src/index.js'
 );
+const { notationToPastePayload } = require('./notation');
 const DRAKON_EDITOR_VIEW_TYPE = 'drakonEditor';
 const DOCUMENT_IDS_KEY = 'documentCustomIds';
 const pendingNavigation = {};
@@ -459,6 +460,51 @@ async function openFile() {
     }
 }
 
+/**
+ * Разбирает текст нотации и кладёт фрагмент в буфер вставки открытой схемы.
+ * Дальше работает штатная вставка виджета: он показывает точки вставки,
+ * а по клику раскладывает иконки и сохраняет схему.
+ */
+async function insertFromNotation() {
+    var clipboardText, converted, text;
+    clipboardText = '';
+    try {
+        clipboardText = await vscode.env.clipboard.readText();
+    } catch (error) {
+        clipboardText = '';
+    }
+    text = await vscode.window.showInputBox({
+        title: 'Вставить из нотации',
+        prompt: 'Текст схемы в нотации ДРАКОН',
+        value: clipboardText,
+        ignoreFocusOut: true
+    });
+    if (!text) {
+        return;
+    }
+    converted = notationToPastePayload(text);
+    if (converted.errors.length) {
+        vscode.window.showErrorMessage(
+            'Нотация: ' + converted.errors.join('; ')
+        );
+        return;
+    }
+    if (!converted.payload.start) {
+        vscode.window.showErrorMessage('Нотация: в тексте нет ни одной иконы');
+        return;
+    }
+    if (DEP.activeWebviews.size === 0) {
+        vscode.window.showErrorMessage('Откройте схему .drakon');
+        return;
+    }
+    DEP.activeWebviews.forEach(function (panel) {
+        panel.webview.postMessage({
+            command: 'notationInsert',
+            payload: converted.payload
+        });
+    });
+}
+
 function registerCommands(context) {
     // Existing commands
     context.subscriptions.push(
@@ -481,6 +527,9 @@ function registerCommands(context) {
     );
     context.subscriptions.push(
         vscode.commands.registerCommand('drakon.openFile', openFile)
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('drakon.insertFromNotation', insertFromNotation)
     );
     // Theme commands (light/dark/reset)
     context.subscriptions.push(

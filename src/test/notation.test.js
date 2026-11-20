@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('node:assert');
-const { notationToDrakon } = require('../notation');
+const { notationToDrakon, notationToPastePayload } = require('../notation');
 
 describe('notation → drakon', () => {
 	it('строит цепочку действий от ветки до конца', () => {
@@ -92,5 +92,29 @@ describe('notation → drakon', () => {
 
 		assert.strictEqual(result.errors.length, 1);
 		assert.match(result.errors[0], /НЕТ_ТАКОЙ/);
+	});
+
+	it('во фрагмент вставки не попадает только конец', () => {
+		const result = notationToPastePayload([
+			'([ Схема ])',
+			'[ Шаг ]',
+			'{ Вопрос? }',
+			'|да',
+			'|нет',
+			'[ Нет ]',
+			'}',
+			'([ Конец ])'
+		].join('\n'));
+
+		assert.deepStrictEqual(result.errors, []);
+		const items = result.payload.items;
+		assert.ok(items.every((item) => item.type !== 'end'), 'икон end быть не должно');
+		assert.strictEqual(items.length, 4);
+		assert.strictEqual(result.payload.start, '1');
+		assert.strictEqual(items[0].type, 'branch');
+
+		const question = items.find((item) => item.type === 'question');
+		assert.strictEqual(question.one, 'finish');
+		assert.strictEqual(question.two, '4');
 	});
 });
