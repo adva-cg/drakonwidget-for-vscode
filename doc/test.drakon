@@ -1,0 +1,74 @@
+{
+  "type": "drakon",
+  "items": {
+    "1": {
+      "type": "end"
+    },
+    "2": {
+      "type": "branch",
+      "branchId": 0,
+      "one": "3"
+    },
+    "3": {
+      "type": "branch",
+      "branchId": 1,
+      "one": "4"
+    },
+    "4": {
+      "type": "comment",
+      "content": "Схема шага обновления таблицы БКИ",
+      "one": "5"
+    },
+    "5": {
+      "type": "shelf",
+      "content": "Прочитать штатный текст",
+      "secondary": "CRE_ОбновлениеДанных",
+      "one": "6"
+    },
+    "6": {
+      "type": "action",
+      "content": "Снять хэш с формы",
+      "one": "7"
+    },
+    "7": {
+      "type": "question",
+      "content": "Хэш заполнен?",
+      "flag1": 1,
+      "one": "9",
+      "two": "8"
+    },
+    "8": {
+      "type": "action",
+      "content": "Записать подмену вручную",
+      "one": "9"
+    },
+    "9": {
+      "type": "action",
+      "content": "Сравнить хэш со штатным",
+      "one": "10"
+    },
+    "10": {
+      "type": "question",
+      "content": "Совпало?",
+      "flag1": 1,
+      "one": "11",
+      "two": "12"
+    },
+    "11": {
+      "type": "shelf",
+      "content": "Очистить таблицу",
+      "secondary": "ОчиститьТаблицу(Имя, Хэш)",
+      "one": "13"
+    },
+    "12": {
+      "type": "action",
+      "content": "Оставить как есть",
+      "one": "13"
+    },
+    "13": {
+      "type": "simpleoutput",
+      "content": "Результат очистки",
+      "one": "1"
+    }
+  }
+}

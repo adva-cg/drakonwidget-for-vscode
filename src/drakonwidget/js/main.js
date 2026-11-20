@@ -585,8 +585,12 @@ function eventListener(event) {
                     "Drakon widget not initialized!"
                 )
             }
-        } else if (_sw_9 === 'notationInsert') {
+        } else if (_sw_9 === 'notationInput') {
+            insertFromNotationClick()
+        } else if (_sw_9 === 'notationParsed') {
             insertNotationBlock(event.data.payload)
+        } else if (_sw_9 === 'notationError') {
+            m.widgets.showErrorSnack(event.data.errors.join('; '))
         } else {
             if (_sw_9 === 'updateFilename') {
                 updateFilename(event.data.filename)
@@ -1147,7 +1151,31 @@ function initToolbar(typeDiagram) {
     add(toolbar, below)
 }
 
+async function insertFromNotationClick() {
+    var text;
+    text = await m.widgets.largeBox(
+        window.innerWidth / 2 - 200,
+        window.innerHeight / 3,
+        'Вставить из нотации',
+        ''
+    )
+    if (!text) {
+        return
+    }
+    window.vscode.postMessage({
+        command: 'notationParse',
+        text: text
+    })
+}
+
 function initToolbarDrakon(toolbar) {
+    addToolbarRow(
+        toolbar,
+        'code.png',
+        insertFromNotationClick,
+        'Вставить из нотации'
+    )
+    addVSpace(toolbar)
     addToolbarRow(
         toolbar,
         'action.png',

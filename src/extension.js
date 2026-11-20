@@ -461,47 +461,47 @@ async function openFile() {
 }
 
 /**
- * Разбирает текст нотации и кладёт фрагмент в буфер вставки открытой схемы.
- * Дальше работает штатная вставка виджета: он показывает точки вставки,
- * а по клику раскладывает иконки и сохраняет схему.
+ * Открывает в схеме окно ввода нотации — диалог показывает сам виджет.
  */
-async function insertFromNotation() {
-    var clipboardText, converted, text;
-    clipboardText = '';
-    try {
-        clipboardText = await vscode.env.clipboard.readText();
-    } catch (error) {
-        clipboardText = '';
-    }
-    text = await vscode.window.showInputBox({
-        title: 'Вставить из нотации',
-        prompt: 'Текст схемы в нотации ДРАКОН',
-        value: clipboardText,
-        ignoreFocusOut: true
-    });
-    if (!text) {
-        return;
-    }
-    converted = notationToPastePayload(text);
-    if (converted.errors.length) {
-        vscode.window.showErrorMessage(
-            'Нотация: ' + converted.errors.join('; ')
-        );
-        return;
-    }
-    if (!converted.payload.start) {
-        vscode.window.showErrorMessage('Нотация: в тексте нет ни одной иконы');
-        return;
-    }
+function insertFromNotation() {
     if (DEP.activeWebviews.size === 0) {
         vscode.window.showErrorMessage('Откройте схему .drakon');
         return;
     }
-    DEP.activeWebviews.forEach(function (panel) {
-        panel.webview.postMessage({
-            command: 'notationInsert',
-            payload: converted.payload
+    DEP.activeWebviews.forEach(function (webviewPanel) {
+        webviewPanel.webview.postMessage({
+            command: 'notationInput'
         });
+    });
+}
+
+/**
+ * Разбирает текст нотации и отдаёт фрагмент обратно в вебвью схемы.
+ */
+function parseNotationForWebview(webviewPanel, text) {
+    var converted, source;
+    source = String(text || '');
+    converted = notationToPastePayload(source);
+    log("insertFromNotation: строк в тексте", source.split('\n').length);
+    log("insertFromNotation: ошибки разбора", converted.errors);
+    log("insertFromNotation: икон во фрагменте", converted.payload.items.length);
+    if (converted.errors.length) {
+        webviewPanel.webview.postMessage({
+            command: 'notationError',
+            errors: converted.errors
+        });
+        return;
+    }
+    if (!converted.payload.start) {
+        webviewPanel.webview.postMessage({
+            command: 'notationError',
+            errors: ['в тексте нет ни одной иконы']
+        });
+        return;
+    }
+    webviewPanel.webview.postMessage({
+        command: 'notationParsed',
+        payload: converted.payload
     });
 }
 
@@ -737,6 +737,12 @@ async function resolveCustomTextEditor(document, webviewPanel) {
                 message
             );
             switch (message.command) {
+                case 'insertFromNotation':
+                    await insertFromNotation();
+                    return;
+                case 'notationParse':
+                    parseNotationForWebview(webviewPanel, message.text);
+                    return;
                 case 'globalSearchText':
                     if (message.query === undefined) { return; }
                     log("Global search query received:", message.query);
